@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"paths": {"*": ["types/*"]},
+		"moduleResolution": "node",
+		"noEmit": true,
+		"sourceMap": true,
+		"jsx": "react",
+		"module": "commonjs",
+		"target": "esnext",
+		"strict": true,
+		"noImplicitAny": false,
+		"strictNullChecks": false,
+		"baseUrl": "src"
+	},
+	"include": ["src/**/*"],
+	"exclude": ["dist", "node_modules"]
+}
