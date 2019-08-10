@@ -31,7 +31,7 @@ const Index = props => {
 	}
 
 	return (
-		<SignInContainer>
+		<SignInContainer data-testid="signin-page">
 			<h1>{t('appName')}</h1>
 			<SignInForm>
 				<Form.Item>{renderEmail()}</Form.Item>

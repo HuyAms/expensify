@@ -1,7 +1,7 @@
 import React from 'react'
 import 'jest-dom/extend-expect'
 import {render} from 'react-testing-library'
-import About from '../About'
+import About from '../index'
 
 describe('<About/>', () => {
 	it('should render About text', () => {

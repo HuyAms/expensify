@@ -2,26 +2,28 @@ import * as React from 'react'
 import 'jest-dom/extend-expect'
 import {wait} from 'dom-testing-library'
 import {render} from '../../utils/testUtils'
-import Router, {RouterPath} from '../Router'
+import AuthenticatedRouter, {
+	AuthenticatedRoutePath,
+} from '../AuthenticatedRouter'
 import * as faker from 'faker'
 import 'react-testing-library/cleanup-after-each'
 
-describe('<Router/>', () => {
-	it('should render Home page by default', async () => {
+describe('<AuthenticatedRouter/>', () => {
+	it('should render Index page by default', async () => {
 		// Action
-		const {getByTestId} = render(<Router />)
+		const {getByTestId} = render(<AuthenticatedRouter />)
 
 		// Assert
 		expect(getByTestId('suspense')).toBeInTheDocument()
 		await wait(() => expect(getByTestId('home-page')).toBeInTheDocument())
 	})
 
-	it('should render Home page when go to not found path', () => {
+	it('should render Index page when go to not found path', () => {
 		// Arrange
 		const notFoundPath = '/' + faker.lorem.word()
 
 		// Action
-		const {getByTestId} = render(<Router />, {
+		const {getByTestId} = render(<AuthenticatedRouter />, {
 			route: notFoundPath,
 		})
 
@@ -31,8 +33,8 @@ describe('<Router/>', () => {
 
 	it('should render About page when go to path /about', async () => {
 		// Action
-		const {getByTestId} = render(<Router />, {
-			route: RouterPath.about,
+		const {getByTestId} = render(<AuthenticatedRouter />, {
+			route: AuthenticatedRoutePath.about,
 		})
 
 		// Assert

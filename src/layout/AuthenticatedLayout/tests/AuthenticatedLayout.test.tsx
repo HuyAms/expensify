@@ -1,12 +1,12 @@
 import React from 'react'
 import 'jest-dom/extend-expect'
 import {render} from '../../../utils/testUtils'
-import CoreLayout from '../CoreLayout'
+import Index from '../index'
 
-describe('<CoreLayout/>', () => {
-	it('should render Nav in CoreLayout', () => {
+describe('<Index/>', () => {
+	it('should render Nav in Index', () => {
 		// Act
-		const {getByTestId} = render(<CoreLayout />)
+		const {getByTestId} = render(<Index />)
 
 		// Assert
 		expect(getByTestId('nav-component')).toBeInTheDocument()

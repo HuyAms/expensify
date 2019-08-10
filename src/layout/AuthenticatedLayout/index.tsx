@@ -12,7 +12,7 @@ import React from 'react'
 // Component
 import Nav from '../../components/Nav/Nav'
 
-const CoreLayout = (props: any) => {
+const Index = props => {
 	return (
 		<>
 			<header>
@@ -23,4 +23,4 @@ const CoreLayout = (props: any) => {
 	)
 }
 
-export default CoreLayout
+export default Index

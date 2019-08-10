@@ -13,7 +13,15 @@ import {initialize, tearDown} from './modules/App'
 
 // Components
 import ErrorBoundaries from './components/ErrorBoundaries/ErrorBoundaries'
-import Router from './router/Router'
+import {getToken} from './services/localStorage'
+
+const AuthenticatedRouter = React.lazy(() =>
+	import(/* webpackChunkName: "AuthenticatedRouter" */ './router/AuthenticatedRouter'),
+)
+
+const UnAuthenticatedRouter = React.lazy(() =>
+	import(/* webpackChunkName: "UnAuthenticatedRouter" */ './router/UnAuthenticatedRouter'),
+)
 
 interface Props {
 	initialize: () => any
@@ -27,9 +35,10 @@ export const App: React.FunctionComponent<Props> = ({initialize, tearDown}) => {
 		return () => tearDown()
 	}, [])
 
+	const token = getToken()
 	return (
 		<ErrorBoundaries>
-			<Router />
+			{token ? <AuthenticatedRouter /> : <UnAuthenticatedRouter />}
 		</ErrorBoundaries>
 	)
 }

@@ -85,7 +85,7 @@ const Index = props => {
 	}
 
 	return (
-		<SignUpContainer>
+		<SignUpContainer data-testid="signup-page">
 			<h1>{t('appName')}</h1>
 			<SignUpForm>
 				<Form.Item>{renderFirstName()}</Form.Item>
