@@ -6,7 +6,7 @@
  *
  */
 
-import * as React from 'react'
+import React from 'react'
 import i18next from 'i18next'
 import {withTranslation} from 'react-i18next'
 import {Details} from './style'

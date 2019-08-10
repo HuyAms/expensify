@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import 'jest-dom/extend-expect'
 import {render} from '../../../utils/testUtils'
 import CoreLayout from '../CoreLayout'

@@ -1,5 +1,7 @@
 import * as React from 'react'
 import {Redirect, Route, Switch} from 'react-router-dom'
+import SignIn from '../pages/Auth/SignIn'
+import SignUp from '../pages/Auth/SignUp'
 
 // Code splitting
 const Home = React.lazy(() =>
@@ -12,12 +14,16 @@ const About = React.lazy(() =>
 export enum RouterPath {
 	home = '/',
 	about = '/about',
+	signin = '/auth/signin',
+	signup = '/auth/signup',
 }
 
 const Router = () => {
 	return (
 		<Switch>
 			<Route exact path={RouterPath.home} component={Home} />
+			<Route exact path={RouterPath.signin} component={SignIn} />
+			<Route exact path={RouterPath.signup} component={SignUp} />
 			<Route path={RouterPath.about} component={About} />
 			<Redirect to={RouterPath.home} />
 		</Switch>

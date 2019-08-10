@@ -7,7 +7,7 @@
  *
  */
 
-import * as React from 'react'
+import React from 'react'
 
 // Component
 import Nav from '../../components/Nav/Nav'

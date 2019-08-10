@@ -3,6 +3,10 @@ import {media} from './utils'
 
 export const GlobalStyle = createGlobalStyle`
 
+#root {
+	height: 100%;
+}
+
 :root {
 	font-size: 62.5%;
 		
@@ -25,8 +29,6 @@ export const GlobalStyle = createGlobalStyle`
 		line-height: 1.7;
 		color: ${props => props.theme.appColors.text} ;
 		font-size: ${props => props.theme.fontSizes.md} ;
-		
-		padding: ${props => props.theme.space[2]}
 	}
 
 	h1 {

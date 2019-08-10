@@ -1,0 +1,20 @@
+{
+	"welcome": "Welcome to TypeScript Boilerplate",
+	"appName": "Expensify",
+	"en": "English",
+	"nav": {
+		"home": "Home",
+		"about": "About"
+	},
+	"error": {
+		"unexpectedError": "Something went wrong",
+		"missingFirstName": "Please input your first name",
+		"missingLastName": "Please input your last name",
+		"missingPassword": "Please input your password",
+		"missingConfirmPassword": "Please confirm your password",
+		"invalidPassword": "Password must be at least 6 characters",
+		"confirmNotMatchPassword": "Two passwords that you enter is inconsistent!",
+		"missingEmail": "Please input your email",
+		"invalidEmail": "Email is not valid"
+	}
+}

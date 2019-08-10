@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import {render as rtlRender} from 'react-testing-library'
 import {createMemoryHistory} from 'history'
 import {Router} from 'react-router'

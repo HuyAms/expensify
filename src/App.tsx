@@ -5,14 +5,13 @@
  *
  */
 
-import * as React from 'react'
+import React from 'react'
 import {useEffect} from 'react'
 import {hot} from 'react-hot-loader/root'
 import {connect} from 'react-redux'
 import {initialize, tearDown} from './modules/App'
 
 // Components
-import CoreLayout from './layout/CoreLayout/CoreLayout'
 import ErrorBoundaries from './components/ErrorBoundaries/ErrorBoundaries'
 import Router from './router/Router'
 
@@ -30,9 +29,7 @@ export const App: React.FunctionComponent<Props> = ({initialize, tearDown}) => {
 
 	return (
 		<ErrorBoundaries>
-			<CoreLayout>
-				<Router />
-			</CoreLayout>
+			<Router />
 		</ErrorBoundaries>
 	)
 }
