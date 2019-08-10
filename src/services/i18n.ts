@@ -5,7 +5,6 @@ import {initReactI18next} from 'react-i18next'
 
 export enum Language {
 	en = 'en',
-	de = 'de',
 }
 
 i18n
@@ -22,12 +21,16 @@ i18n
 	.init({
 		fallbackLng: Language.en,
 
+		ns: 'common',
+		defaultNS: 'common',
+
 		interpolation: {
 			escapeValue: false, // not needed for react as it escapes by default
 		},
 
 		react: {
 			wait: true,
+			nsMode: 'fallback',
 			useSuspense: process.env.NODE_ENV !== 'test',
 		},
 	})
