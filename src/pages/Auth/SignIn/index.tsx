@@ -6,8 +6,6 @@ import {useTranslation} from 'react-i18next'
 import {authenticateUser, cancelAuthenticateUser} from '../../../modules/Auth'
 import ModelState from '../../../models/bases/ModelState'
 import Auth from '../../../models/Auth'
-import {Redirect} from 'react-router'
-import {AuthenticatedRoutePath} from '../../../router/AuthenticatedRouter'
 import ErrorText from '../../../components/ErrorText'
 
 interface Props {
@@ -68,9 +66,7 @@ const SignIn: React.FunctionComponent<Props> = props => {
 		}
 	}
 
-	return auth.data ? (
-		<Redirect to={AuthenticatedRoutePath.home} />
-	) : (
+	return (
 		<SignInContainer data-testid="signin-page">
 			<h1>{t('appName')}</h1>
 			<SignInForm onSubmit={handleSubmit}>

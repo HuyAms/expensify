@@ -21,7 +21,7 @@ import {
 	updateData,
 } from './commons/common'
 import {postRequest} from '../services/api'
-import {setToken} from '../services/localStorage'
+import {getToken, setToken} from '../services/localStorage'
 
 // ------------------------------------
 // Const
@@ -49,8 +49,13 @@ export const cancelAuthenticateUser = () => authAsync.cancel()
 
 export type AuthState = ModelState<Auth>
 
+const initialAuth: Auth = {
+	token: getToken(),
+	userId: null, // TODO: update userId when backend ready
+}
+
 const initialState: AuthState = {
-	data: null,
+	data: initialAuth,
 	status: 'idle',
 	error: null,
 }
