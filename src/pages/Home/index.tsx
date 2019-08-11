@@ -1,7 +1,7 @@
 import React from 'react'
 import {useTranslation} from 'react-i18next'
 
-const Index = () => {
+const Home = () => {
 	const [t] = useTranslation()
 
 	return (
@@ -11,4 +11,4 @@ const Index = () => {
 	)
 }
 
-export default Index
+export default Home

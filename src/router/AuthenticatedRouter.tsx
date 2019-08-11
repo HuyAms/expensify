@@ -3,10 +3,10 @@ import {Redirect, Route, Switch} from 'react-router-dom'
 import AuthenticatedLayout from '../layout/AuthenticatedLayout'
 
 const Home = React.lazy(() =>
-	import(/* webpackChunkName: "Index" */ '../pages/Home'),
+	import(/* webpackChunkName: "Home" */ '../pages/Home'),
 )
 const About = React.lazy(() =>
-	import(/* webpackChunkName: "Index" */ '../pages/About'),
+	import(/* webpackChunkName: "About" */ '../pages/About'),
 )
 
 export enum AuthenticatedRoutePath {

@@ -1,5 +1,5 @@
 import React from 'react'
-import {render as rtlRender} from 'react-testing-library'
+import {render as rtlRender} from '@testing-library/react'
 import {createMemoryHistory} from 'history'
 import {Router} from 'react-router'
 import {Provider} from 'react-redux'

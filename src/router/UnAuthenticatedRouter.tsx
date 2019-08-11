@@ -10,7 +10,7 @@ const SignUp = React.lazy(() =>
 )
 
 export enum UnAuthenticatedRoutePath {
-	signin = '/sigin',
+	signin = '/signin',
 	signup = '/signup',
 }
 
