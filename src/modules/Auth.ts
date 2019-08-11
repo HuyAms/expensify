@@ -28,12 +28,19 @@ import {
 	updateData,
 } from './commons/common'
 import {postRequest} from '../services/api'
-import {clearLocalStorage, getToken, setToken} from '../services/localStorage'
+import {
+	clearLocalStorage,
+	getToken,
+	getUserId,
+	setToken,
+	setUserId,
+} from '../services/localStorage'
 
 // ------------------------------------
 // Const
 // ------------------------------------
 const moduleName = 'auth'
+const path = '/auth'
 
 // ------------------------------------
 // Actions
@@ -60,7 +67,7 @@ export type AuthState = ModelState<Auth>
 
 const initialAuth: Auth = {
 	token: getToken(),
-	userId: null, // TODO: update userId when backend ready
+	userId: getUserId(),
 }
 
 const initialState: AuthState = {
@@ -69,7 +76,7 @@ const initialState: AuthState = {
 	error: null,
 }
 
-const auth = (state = initialState, action: any) =>
+export const authReducer = (state = initialState, action: any) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(authAsync.request):
@@ -89,8 +96,6 @@ const auth = (state = initialState, action: any) =>
 		}
 	})
 
-export const reducer = auth
-
 // ------------------------------------
 // Epics
 // ------------------------------------
@@ -102,7 +107,10 @@ const authenticateUserEpic: Epic<Action, Action, RootState> = action$ => {
 			const {body, isSignIn} = action.payload
 			const path = isSignIn ? '/auth/signin' : '/auth/signup'
 			return from(postRequest(path, body)).pipe(
-				tap(res => setToken(res.data.token)),
+				tap(res => {
+					setToken(res.data.token)
+					setUserId(res.data.userId)
+				}),
 				map(res => authAsync.success(res)),
 				catchError(error => {
 					return of(authAsync.failure(error.response.data))

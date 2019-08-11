@@ -35,7 +35,7 @@ const initialState: AppState = {
 	language: undefined,
 }
 
-const app = (state = initialState, action) =>
+export const appReducer = (state = initialState, action) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(changeLanguage):
@@ -43,8 +43,6 @@ const app = (state = initialState, action) =>
 				break
 		}
 	})
-
-export const reducer = app
 
 // ------------------------------------
 // Epics

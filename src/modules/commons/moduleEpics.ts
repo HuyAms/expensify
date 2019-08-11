@@ -25,7 +25,7 @@ const useModuleEpic = <T>(moduleName: string, path: string) => {
 		`@@${moduleName}/POST_CANCEL`,
 	)<{body: object; params?: string; query?: object}, T, Error, void>()
 
-	const actions = {
+	const moduleActions = {
 		getAsync,
 		postAsync,
 	}
@@ -64,7 +64,7 @@ const useModuleEpic = <T>(moduleName: string, path: string) => {
 
 	const moduleEpics = [getModelEpic, postModelEpic]
 
-	return {actions, moduleEpics}
+	return {moduleActions, moduleEpics}
 }
 
 export default useModuleEpic

@@ -1,7 +1,7 @@
 import React from 'react'
 
-const Index = props => {
+const UnAuthenticatedLayout = props => {
 	return <>{props.children}</>
 }
 
-export default Index
+export default UnAuthenticatedLayout

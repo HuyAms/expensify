@@ -6,7 +6,7 @@ interface ServerResponse<T> {
 }
 
 interface ErrorResponse {
-	errorCode: number
+	errorCode?: number
 	message: string
 	status: number
 }
@@ -26,8 +26,9 @@ export const endWithError = <T>(
 	state: ModelState<T>,
 	errorResponse: ErrorResponse,
 ) => {
+	console.log('ERROR RESPONSE: ', errorResponse)
 	state.status = 'error'
-	state.error = parseErrorCode(errorResponse.errorCode)
+	state.error = parseError(errorResponse)
 }
 
 export const endCanceling = <T>(state: ModelState<T>) => {
@@ -60,19 +61,25 @@ export enum ErrorCode {
 	notHasPermission = 107,
 }
 
-const parseErrorCode = (errorCode: ErrorCode): string => {
-	switch (errorCode) {
-		case ErrorCode.passwordNotCorrect:
-			return 'error.passwordNotCorrect'
-		case ErrorCode.emailNotCorrect:
-			return 'error.emailNotCorrect'
-		case ErrorCode.emailNotUnique:
-			return 'error.emailNotUnique'
-		case ErrorCode.notActiveUser:
-			return 'error.notActiveUser'
-		case ErrorCode.notHasPermission:
-			return 'error.notHasPermission'
-		default:
-			return 'error.unknown'
+const parseError = (error: ErrorResponse): string => {
+	const {errorCode, message} = error
+
+	if (errorCode) {
+		switch (errorCode) {
+			case ErrorCode.passwordNotCorrect:
+				return 'error.passwordNotCorrect'
+			case ErrorCode.emailNotCorrect:
+				return 'error.emailNotCorrect'
+			case ErrorCode.emailNotUnique:
+				return 'error.emailNotUnique'
+			case ErrorCode.notActiveUser:
+				return 'error.notActiveUser'
+			case ErrorCode.notHasPermission:
+				return 'error.notHasPermission'
+			default:
+				return 'error.unknown'
+		}
 	}
+
+	return message
 }
