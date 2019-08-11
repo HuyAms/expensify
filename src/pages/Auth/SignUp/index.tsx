@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 import {Form, Icon, Input} from 'antd'
 import {SignUpForm, SignUpContainer, SignUpButton} from './style'
 import {useTranslation} from 'react-i18next'
@@ -138,7 +139,7 @@ const SignUp: React.FunctionComponent<Props> = props => {
 					>
 						{t('signUp')}
 					</SignUpButton>
-					{t('or')} <a href="">{t('signUpNow')}</a>
+					{t('or')} <Link to="/signIn">{t('signInNow')}</Link>
 				</Form.Item>
 			</SignUpForm>
 		</SignUpContainer>

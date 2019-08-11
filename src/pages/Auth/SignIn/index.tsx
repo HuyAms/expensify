@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 import {Form, Icon, Input} from 'antd'
 import {SignInForm, SignInContainer, LoginButton} from './style'
 import {useTranslation} from 'react-i18next'
@@ -82,7 +83,7 @@ const SignIn: React.FunctionComponent<Props> = props => {
 					>
 						{t('signIn')}
 					</LoginButton>
-					{t('or')} <a href="">{t('signUpNow')}</a>
+					{t('or')} <Link to="/signup">{t('signUpNow')}</Link>
 				</Form.Item>
 			</SignInForm>
 		</SignInContainer>
