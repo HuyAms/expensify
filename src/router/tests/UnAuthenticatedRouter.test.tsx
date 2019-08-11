@@ -1,12 +1,11 @@
-import * as React from 'react'
+import React from 'react'
 import 'jest-dom/extend-expect'
 import {wait} from 'dom-testing-library'
 import {render} from '../../utils/testUtils'
 import UnAuthenticatedRouter, {
 	UnAuthenticatedRoutePath,
 } from '../UnAuthenticatedRouter'
-import * as faker from 'faker'
-import 'react-testing-library/cleanup-after-each'
+import faker from 'faker'
 
 describe('<UnAuthenticatedRouter/>', () => {
 	it('should render SignIn page by default', async () => {
@@ -31,7 +30,7 @@ describe('<UnAuthenticatedRouter/>', () => {
 		expect(getByTestId('signin-page')).toBeInTheDocument()
 	})
 
-	it('should render SignUp page when go to path /about', async () => {
+	it('should render SignUp page when go to path /signup', async () => {
 		// Action
 		const {getByTestId} = render(<UnAuthenticatedRouter />, {
 			route: UnAuthenticatedRoutePath.signup,

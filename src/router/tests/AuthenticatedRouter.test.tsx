@@ -1,12 +1,11 @@
-import * as React from 'react'
+import React from 'react'
 import 'jest-dom/extend-expect'
 import {wait} from 'dom-testing-library'
 import {render} from '../../utils/testUtils'
 import AuthenticatedRouter, {
 	AuthenticatedRoutePath,
 } from '../AuthenticatedRouter'
-import * as faker from 'faker'
-import 'react-testing-library/cleanup-after-each'
+import faker from 'faker'
 
 describe('<AuthenticatedRouter/>', () => {
 	it('should render Index page by default', async () => {
