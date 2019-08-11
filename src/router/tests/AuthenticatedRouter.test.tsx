@@ -40,4 +40,15 @@ describe('<AuthenticatedRouter/>', () => {
 		expect(getByTestId('suspense')).toBeInTheDocument()
 		await wait(() => expect(getByTestId('about-page')).toBeInTheDocument())
 	})
+
+	it('should render Logut page when go to path /logout', async () => {
+		// Action
+		const {getByTestId} = render(<AuthenticatedRouter />, {
+			route: AuthenticatedRoutePath.logout,
+		})
+
+		// Assert
+		expect(getByTestId('suspense')).toBeInTheDocument()
+		await wait(() => expect(getByTestId('logout-page')).toBeInTheDocument())
+	})
 })

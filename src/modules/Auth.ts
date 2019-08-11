@@ -1,5 +1,10 @@
 import produce from 'immer'
-import {createAsyncAction, getType, isActionOf} from 'typesafe-actions'
+import {
+	createAsyncAction,
+	getType,
+	isActionOf,
+	createAction,
+} from 'typesafe-actions'
 import {Epic} from 'redux-observable'
 import {Action} from 'redux'
 import {RootState} from './reducers'
@@ -10,6 +15,7 @@ import {
 	map,
 	catchError,
 	takeUntil,
+	ignoreElements,
 } from 'rxjs/operators'
 import {from, of} from 'rxjs'
 import ModelState from '../models/bases/ModelState'
@@ -17,11 +23,12 @@ import Auth from '../models/Auth'
 import {
 	endCanceling,
 	endWithError,
+	resetData,
 	startLoading,
 	updateData,
 } from './commons/common'
 import {postRequest} from '../services/api'
-import {getToken, setToken} from '../services/localStorage'
+import {clearLocalStorage, getToken, setToken} from '../services/localStorage'
 
 // ------------------------------------
 // Const
@@ -38,6 +45,8 @@ const authAsync = createAsyncAction(
 	`@@${moduleName}/POST_FAILURE`,
 	`@@${moduleName}/POST_CANCEL`,
 )<{body: object; isSignIn: boolean}, Auth, Error, void>()
+
+export const logOut = createAction(`@@${moduleName}/LOG_OUT`)
 
 export const authenticateUser = (user: object, isSignIn: boolean) =>
 	authAsync.request({body: user, isSignIn})
@@ -75,6 +84,8 @@ const auth = (state = initialState, action: any) =>
 			case getType(authAsync.cancel):
 				endCanceling(draft)
 				break
+			case getType(logOut):
+				resetData(draft)
 		}
 	})
 
@@ -102,4 +113,12 @@ const authenticateUserEpic: Epic<Action, Action, RootState> = action$ => {
 	)
 }
 
-export const authEpics = [authenticateUserEpic]
+const logOutEpic: Epic<Action, Action, RootState> = action$ => {
+	return action$.pipe(
+		filter(isActionOf(logOut)),
+		tap(() => clearLocalStorage()),
+		ignoreElements(),
+	)
+}
+
+export const authEpics = [authenticateUserEpic, logOutEpic]

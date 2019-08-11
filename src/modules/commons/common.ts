@@ -44,3 +44,9 @@ export const updateData = <T>(
 	state.error = null
 	state.data = data
 }
+
+export const resetData = <T>(state: ModelState<T>) => {
+	state.status = 'idle'
+	state.error = null
+	state.data = null
+}
