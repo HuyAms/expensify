@@ -6,10 +6,11 @@
  */
 
 import {combineEpics} from 'redux-observable'
-import {moduleEpics as postEpics} from '../modules/Post'
-import {moduleEpics as postsEpics} from '../modules/Posts'
+import {postEpics} from '../modules/Post'
+import {postsEpics} from '../modules/Posts'
+import {authEpics} from '../modules/Auth'
 import {appEpics} from '../modules/App'
 
 export const createRootEpic = () => {
-	return combineEpics(...postEpics, ...postsEpics, ...appEpics)
+	return combineEpics(...postEpics, ...postsEpics, ...authEpics, ...appEpics)
 }

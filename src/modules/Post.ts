@@ -1,7 +1,7 @@
 import produce from 'immer'
 import {getType} from 'typesafe-actions'
 import {
-	startFetching,
+	startLoading,
 	updateData,
 	endWithError,
 	endCanceling,
@@ -18,7 +18,7 @@ import ModelState from '../models/bases/ModelState'
 const moduleName = 'post'
 const path = '/posts'
 
-export const {actions, moduleEpics} = useModuleEpic(moduleName, path)
+export const {actions, moduleEpics: postEpics} = useModuleEpic(moduleName, path)
 const {getAsync} = actions
 
 // ------------------------------------
@@ -37,7 +37,7 @@ const post = (state = initialState, action: any) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(getAsync.request):
-				startFetching(draft)
+				startLoading(draft)
 				break
 			case getType(getAsync.success):
 				updateData(draft, action.payload)

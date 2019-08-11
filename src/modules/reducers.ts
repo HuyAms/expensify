@@ -11,11 +11,13 @@ import {connectRouter, RouterState} from 'connected-react-router'
 import {PostsState, reducer as postsReducer} from './Posts'
 import {PostState, reducer as postReducer} from './Post'
 import {AppState, reducer as appReducer} from './App'
+import {AuthState, reducer as authReducer} from './Auth'
 
 export interface RootState {
 	posts: PostsState
 	post: PostState
 	app: AppState
+	auth: AuthState
 	router: RouterState
 }
 
@@ -24,6 +26,7 @@ const rootReducer = (history: History) =>
 		posts: postsReducer,
 		post: postReducer,
 		app: appReducer,
+		auth: authReducer,
 		router: connectRouter(history),
 	})
 
