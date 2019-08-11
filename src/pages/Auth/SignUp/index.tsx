@@ -116,7 +116,7 @@ const SignUp: React.FunctionComponent<Props> = props => {
 
 	const renderError = () => {
 		if (auth.status === 'error') {
-			return <ErrorText>{auth.error}</ErrorText>
+			return <ErrorText>{t(auth.error)}</ErrorText>
 		}
 	}
 

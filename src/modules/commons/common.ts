@@ -27,7 +27,7 @@ export const endWithError = <T>(
 	errorResponse: ErrorResponse,
 ) => {
 	state.status = 'error'
-	state.error = errorResponse.message
+	state.error = parseErrorCode(errorResponse.errorCode)
 }
 
 export const endCanceling = <T>(state: ModelState<T>) => {
@@ -49,4 +49,30 @@ export const resetData = <T>(state: ModelState<T>) => {
 	state.status = 'idle'
 	state.error = null
 	state.data = null
+}
+
+export enum ErrorCode {
+	// Auth: 1xx
+	passwordNotCorrect = 101,
+	emailNotCorrect = 102,
+	emailNotUnique = 104,
+	notActiveUser = 106,
+	notHasPermission = 107,
+}
+
+const parseErrorCode = (errorCode: ErrorCode): string => {
+	switch (errorCode) {
+		case ErrorCode.passwordNotCorrect:
+			return 'error.passwordNotCorrect'
+		case ErrorCode.emailNotCorrect:
+			return 'error.emailNotCorrect'
+		case ErrorCode.emailNotUnique:
+			return 'error.emailNotUnique'
+		case ErrorCode.notActiveUser:
+			return 'error.notActiveUser'
+		case ErrorCode.notHasPermission:
+			return 'error.notHasPermission'
+		default:
+			return 'error.unknown'
+	}
 }
