@@ -24,7 +24,7 @@ import {
 	endCanceling,
 	endWithError,
 	resetData,
-	startLoading,
+	startSaving,
 	updateData,
 } from './commons/common'
 import {postRequest} from '../services/api'
@@ -80,7 +80,7 @@ export const authReducer = (state = initialState, action: any) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(authAsync.request):
-				startLoading(draft)
+				startSaving(draft)
 				break
 			case getType(authAsync.success):
 				updateData(draft, action.payload)
@@ -93,6 +93,7 @@ export const authReducer = (state = initialState, action: any) =>
 				break
 			case getType(logOut):
 				resetData(draft)
+				break
 		}
 	})
 

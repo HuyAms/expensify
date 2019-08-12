@@ -1,4 +1,4 @@
-export type RequestStatus = 'idle' | 'loading' | 'saving' | 'success' | 'error'
+export type RequestStatus = 'idle' | 'fetching' | 'saving' | 'success' | 'error'
 
 export default interface ModelState<T> {
 	data: T

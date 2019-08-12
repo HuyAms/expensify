@@ -11,8 +11,8 @@ interface ErrorResponse {
 	status: number
 }
 
-export const startLoading = <T>(state: ModelState<T>) => {
-	state.status = 'loading'
+export const startFetching = <T>(state: ModelState<T>) => {
+	state.status = 'fetching'
 	state.error = null
 	state.data = null
 }

@@ -78,8 +78,8 @@ const SignIn: React.FunctionComponent<Props> = props => {
 					<LoginButton
 						type="primary"
 						htmlType="submit"
-						disabled={auth.status === 'loading' || hasErrors(getFieldsError())}
-						loading={auth.status === 'loading'}
+						disabled={auth.status === 'saving' || hasErrors(getFieldsError())}
+						loading={auth.status === 'saving'}
 					>
 						{t('signIn')}
 					</LoginButton>

@@ -132,8 +132,8 @@ const SignUp: React.FunctionComponent<Props> = props => {
 				{renderError()}
 				<Form.Item>
 					<SignUpButton
-						disabled={auth.status === 'loading' || hasErrors(getFieldsError())}
-						loading={auth.status === 'loading'}
+						disabled={auth.status === 'saving' || hasErrors(getFieldsError())}
+						loading={auth.status === 'saving'}
 						type="primary"
 						htmlType="submit"
 					>

@@ -1,7 +1,7 @@
 import produce from 'immer'
 import {getType} from 'typesafe-actions'
 import {
-	startLoading,
+	startFetching,
 	updateData,
 	endWithError,
 	endCanceling,
@@ -40,7 +40,7 @@ export const userReducer = (state = initialState, action: any) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(getAsync.request):
-				startLoading(draft)
+				startFetching(draft)
 				break
 			case getType(getAsync.success):
 				updateData(draft, action.payload)
