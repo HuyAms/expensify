@@ -105,8 +105,8 @@ const authenticateUserEpic: Epic<Action, Action, RootState> = action$ => {
 		filter(isActionOf(authAsync.request)),
 		switchMap(action => {
 			const {body, isSignIn} = action.payload
-			const path = isSignIn ? '/auth/signin' : '/auth/signup'
-			return from(postRequest(path, body)).pipe(
+			const endpoint = isSignIn ? `${path}/signin` : `${path}/signup`
+			return from(postRequest(endpoint, body)).pipe(
 				tap(res => {
 					setToken(res.data.token)
 					setUserId(res.data.userId)
