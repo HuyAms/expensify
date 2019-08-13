@@ -1,20 +1,14 @@
-/**
- * Core Layout component
- * Wrap the root component with layout UI components
- * e.g Navigation, Footer, Modal, Alert...
- *
- * @author Vinh Le <lethanhvinh95@gmail.com>
- *
- */
-
 import React from 'react'
-import Nav from '../../components/Nav/Nav'
+import {Layout} from 'antd'
+import SiderMenu from '../../components/SiderMenu'
 import {connect} from 'react-redux'
 import {Alert} from 'antd'
 import {getMe} from '../../modules/User'
 import ModelState from '../../models/bases/ModelState'
 import User, {UserStatus} from '../../models/User'
 import {useTranslation} from 'react-i18next'
+import MainHeader from '../../components/MainHeader'
+import {Wrapper, AppContainer, AppContent} from './style'
 
 interface Props {
 	user: ModelState<User>
@@ -37,13 +31,16 @@ const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
 		}
 	}
 	return (
-		<>
+		<Wrapper>
 			{renderAlert()}
-			<header>
-				<Nav />
-			</header>
-			<main>{props.children}</main>
-		</>
+			<AppContainer>
+				<SiderMenu />
+				<Layout>
+					<MainHeader />
+					<AppContent>{props.children}</AppContent>
+				</Layout>
+			</AppContainer>
+		</Wrapper>
 	)
 }
 

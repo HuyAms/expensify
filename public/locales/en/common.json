@@ -4,7 +4,8 @@
 	"en": "English",
 	"nav": {
 		"home": "Home",
-		"about": "About"
+		"about": "About",
+		"logout": "Log out"
 	},
 	"error": {
 		"unknown": "Unkwown error",
