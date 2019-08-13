@@ -26,7 +26,6 @@ export const endWithError = <T>(
 	state: ModelState<T>,
 	errorResponse: ErrorResponse,
 ) => {
-	console.log('ERROR RESPONSE: ', errorResponse)
 	state.status = 'error'
 	state.error = parseError(errorResponse)
 }
@@ -62,24 +61,20 @@ export enum ErrorCode {
 }
 
 const parseError = (error: ErrorResponse): string => {
-	const {errorCode, message} = error
+	const {errorCode} = error
 
-	if (errorCode) {
-		switch (errorCode) {
-			case ErrorCode.passwordNotCorrect:
-				return 'error.passwordNotCorrect'
-			case ErrorCode.emailNotCorrect:
-				return 'error.emailNotCorrect'
-			case ErrorCode.emailNotUnique:
-				return 'error.emailNotUnique'
-			case ErrorCode.notActiveUser:
-				return 'error.notActiveUser'
-			case ErrorCode.notHasPermission:
-				return 'error.notHasPermission'
-			default:
-				return 'error.unknown'
-		}
+	switch (errorCode) {
+		case ErrorCode.passwordNotCorrect:
+			return 'error.passwordNotCorrect'
+		case ErrorCode.emailNotCorrect:
+			return 'error.emailNotCorrect'
+		case ErrorCode.emailNotUnique:
+			return 'error.emailNotUnique'
+		case ErrorCode.notActiveUser:
+			return 'error.notActiveUser'
+		case ErrorCode.notHasPermission:
+			return 'error.notHasPermission'
+		default:
+			return 'error.unknown'
 	}
-
-	return message
 }
