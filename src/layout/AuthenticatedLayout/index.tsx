@@ -25,11 +25,10 @@ const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
 
 	const renderAlert = () => {
 		if (user.status === 'success' && user.data.status === UserStatus.Initial) {
-			return (
-				alert && <Alert message={t('error.notActiveUser')} type="warning" />
-			)
+			return <Alert message={t('error.notActiveUser')} type="warning" />
 		}
 	}
+
 	return (
 		<Wrapper>
 			{renderAlert()}
