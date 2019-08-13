@@ -6,7 +6,7 @@ import {
 	createAction,
 } from 'typesafe-actions'
 import {Epic} from 'redux-observable'
-import {Action} from 'redux'
+import {Action, AnyAction} from 'redux'
 import {RootState} from './reducers'
 import {
 	filter,
@@ -16,6 +16,7 @@ import {
 	catchError,
 	takeUntil,
 	ignoreElements,
+	mapTo,
 } from 'rxjs/operators'
 import {from, of} from 'rxjs'
 import ModelState from '../models/bases/ModelState'
@@ -23,6 +24,7 @@ import Auth from '../models/Auth'
 import {
 	endCanceling,
 	endWithError,
+	ErrorResponse,
 	resetData,
 	startSaving,
 	updateData,
@@ -51,7 +53,7 @@ const authAsync = createAsyncAction(
 	`@@${moduleName}/POST_SUCCESS`,
 	`@@${moduleName}/POST_FAILURE`,
 	`@@${moduleName}/POST_CANCEL`,
-)<{body: object; isSignIn: boolean}, Auth, Error, void>()
+)<{body: object; isSignIn: boolean}, Auth, ErrorResponse, void>()
 
 export const logOut = createAction(`@@${moduleName}/LOG_OUT`)
 
@@ -76,7 +78,7 @@ const initialState: AuthState = {
 	error: null,
 }
 
-export const authReducer = (state = initialState, action: any) =>
+export const authReducer = (state = initialState, action: AnyAction) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(authAsync.request):
@@ -130,4 +132,19 @@ const logOutEpic: Epic<Action, Action, RootState> = action$ => {
 	)
 }
 
-export const authEpics = [authenticateUserEpic, logOutEpic]
+const handleUnauthenticatedUserEpic: Epic<
+	AnyAction,
+	Action,
+	RootState
+> = action$ => {
+	return action$.pipe(
+		filter(action => action.payload && action.payload.status === 401),
+		mapTo(logOut()),
+	)
+}
+
+export const authEpics = [
+	authenticateUserEpic,
+	logOutEpic,
+	handleUnauthenticatedUserEpic,
+]

@@ -28,6 +28,7 @@ const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
 	return (
 		<>
 			{renderAlert()}
+			<p>{t(user.error)}</p>
 			<header>
 				<Nav />
 			</header>

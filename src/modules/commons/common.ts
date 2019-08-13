@@ -1,11 +1,11 @@
 import ModelState from '../../models/bases/ModelState'
 
-interface ServerResponse<T> {
+export interface ServerResponse<T> {
 	data: T
 	status: number
 }
 
-interface ErrorResponse {
+export interface ErrorResponse {
 	errorCode?: number
 	message: string
 	status: number
@@ -61,20 +61,33 @@ export enum ErrorCode {
 }
 
 const parseError = (error: ErrorResponse): string => {
-	const {errorCode} = error
+	const {errorCode, status} = error
 
-	switch (errorCode) {
-		case ErrorCode.passwordNotCorrect:
-			return 'error.passwordNotCorrect'
-		case ErrorCode.emailNotCorrect:
-			return 'error.emailNotCorrect'
-		case ErrorCode.emailNotUnique:
-			return 'error.emailNotUnique'
-		case ErrorCode.notActiveUser:
-			return 'error.notActiveUser'
-		case ErrorCode.notHasPermission:
-			return 'error.notHasPermission'
-		default:
-			return 'error.unknown'
+	if (errorCode) {
+		switch (errorCode) {
+			case ErrorCode.passwordNotCorrect:
+				return 'error.passwordNotCorrect'
+			case ErrorCode.emailNotCorrect:
+				return 'error.emailNotCorrect'
+			case ErrorCode.emailNotUnique:
+				return 'error.emailNotUnique'
+			case ErrorCode.notActiveUser:
+				return 'error.notActiveUser'
+			case ErrorCode.notHasPermission:
+				return 'error.notHasPermission'
+			default:
+				return 'error.unexpectedError'
+		}
+	} else {
+		switch (status) {
+			case 401:
+				return 'error.unauthorized'
+			case 403:
+				return 'error.forbidden'
+			case 404:
+				return 'error.notFound'
+			default:
+				return 'error.unexpectedError'
+		}
 	}
 }
