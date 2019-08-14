@@ -138,7 +138,12 @@ const handleUnauthenticatedUserEpic: Epic<
 	RootState
 > = action$ => {
 	return action$.pipe(
-		filter(action => action.payload && action.payload.status === 401),
+		filter(
+			action =>
+				!isActionOf(authAsync.failure) &&
+				action.payload &&
+				action.payload.status === 401,
+		),
 		mapTo(logOut()),
 	)
 }
