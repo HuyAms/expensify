@@ -5,8 +5,8 @@ import AuthenticatedRouter from '../AuthenticatedRouter'
 import faker from 'faker'
 import {AuthenticatedRoutePath} from '../../models/Route'
 
-jest.mock('../../modules/User', () => {
-	const userModule = jest.requireActual('../../modules/User')
+jest.mock('../../modules/AuthenticatedUser', () => {
+	const userModule = jest.requireActual('../../modules/AuthenticatedUser')
 	return {
 		...userModule,
 		getMe: jest.fn(() => ({type: ''})),
