@@ -5,6 +5,7 @@ import {of, from} from 'rxjs'
 import {createAsyncAction, isActionOf} from 'typesafe-actions'
 import {getRequest, postRequest} from '../../services/api'
 import {RootState} from '../reducers'
+import {ErrorResponse} from './common'
 
 const useModuleEpic = <T>(moduleName: string, path: string) => {
 	// ------------------------------------
@@ -23,7 +24,7 @@ const useModuleEpic = <T>(moduleName: string, path: string) => {
 		`@@${moduleName}/POST_SUCCESS`,
 		`@@${moduleName}/POST_FAILURE`,
 		`@@${moduleName}/POST_CANCEL`,
-	)<{body: object; params?: string; query?: object}, T, Error, void>()
+	)<{body: object; params?: string; query?: object}, T, ErrorResponse, void>()
 
 	const moduleActions = {
 		getAsync,

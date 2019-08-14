@@ -1,11 +1,11 @@
 import ModelState from '../../models/bases/ModelState'
 
-interface ServerResponse<T> {
+export interface ServerResponse<T> {
 	data: T
 	status: number
 }
 
-interface ErrorResponse {
+export interface ErrorResponse {
 	errorCode?: number
 	message: string
 	status: number
@@ -26,7 +26,6 @@ export const endWithError = <T>(
 	state: ModelState<T>,
 	errorResponse: ErrorResponse,
 ) => {
-	console.log('ERROR RESPONSE: ', errorResponse)
 	state.status = 'error'
 	state.error = parseError(errorResponse)
 }
@@ -62,7 +61,7 @@ export enum ErrorCode {
 }
 
 const parseError = (error: ErrorResponse): string => {
-	const {errorCode, message} = error
+	const {errorCode, status} = error
 
 	if (errorCode) {
 		switch (errorCode) {
@@ -77,9 +76,18 @@ const parseError = (error: ErrorResponse): string => {
 			case ErrorCode.notHasPermission:
 				return 'error.notHasPermission'
 			default:
-				return 'error.unknown'
+				return 'error.unexpectedError'
+		}
+	} else {
+		switch (status) {
+			case 401:
+				return 'error.unauthorized'
+			case 403:
+				return 'error.forbidden'
+			case 404:
+				return 'error.notFound'
+			default:
+				return 'error.unexpectedError'
 		}
 	}
-
-	return message
 }

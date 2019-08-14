@@ -1,12 +1,3 @@
-/**
- * Core Layout component
- * Wrap the root component with layout UI components
- * e.g Navigation, Footer, Modal, Alert...
- *
- * @author Vinh Le <lethanhvinh95@gmail.com>
- *
- */
-
 import React from 'react'
 import Nav from '../../components/Nav/Nav'
 import {connect} from 'react-redux'
@@ -31,14 +22,13 @@ const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
 
 	const renderAlert = () => {
 		if (user.status === 'success' && user.data.status === UserStatus.Initial) {
-			return (
-				alert && <Alert message={t('error.notActiveUser')} type="warning" />
-			)
+			return <Alert message={t('error.notActiveUser')} type="warning" />
 		}
 	}
 	return (
 		<>
 			{renderAlert()}
+			<p>{t(user.error)}</p>
 			<header>
 				<Nav />
 			</header>

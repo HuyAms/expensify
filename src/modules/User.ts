@@ -10,6 +10,7 @@ import useModuleEpic from './commons/moduleEpics'
 
 import User from '../models/User'
 import ModelState from '../models/bases/ModelState'
+import {AnyAction} from 'redux'
 
 // ------------------------------------
 // Const
@@ -36,7 +37,7 @@ const initialState: ModelState<User> = {
 	error: null,
 }
 
-export const userReducer = (state = initialState, action: any) =>
+export const userReducer = (state = initialState, action: AnyAction) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(getAsync.request):
@@ -46,7 +47,7 @@ export const userReducer = (state = initialState, action: any) =>
 				updateData(draft, action.payload)
 				break
 			case getType(getAsync.failure):
-				endWithError(draft, action.payload.message)
+				endWithError(draft, action.payload)
 				break
 			case getType(getAsync.cancel):
 				endCanceling(draft)

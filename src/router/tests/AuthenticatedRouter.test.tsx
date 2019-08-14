@@ -15,7 +15,7 @@ jest.mock('../../modules/User', () => {
 })
 
 describe('<AuthenticatedRouter/>', () => {
-	it('should render Index page by default', async () => {
+	it('should render Home page by default', async () => {
 		// Action
 		const {getByTestId} = render(<AuthenticatedRouter />)
 
@@ -24,7 +24,7 @@ describe('<AuthenticatedRouter/>', () => {
 		await wait(() => expect(getByTestId('home-page')).toBeInTheDocument())
 	})
 
-	it('should render Index page when go to not found path', () => {
+	it('should render Home page when go to not found path', () => {
 		// Arrange
 		const notFoundPath = '/' + faker.lorem.word()
 
@@ -48,7 +48,7 @@ describe('<AuthenticatedRouter/>', () => {
 		await wait(() => expect(getByTestId('about-page')).toBeInTheDocument())
 	})
 
-	it('should render Logut page when go to path /logout', async () => {
+	it('should render Logout page when go to path /logout', async () => {
 		// Action
 		const {getByTestId} = render(<AuthenticatedRouter />, {
 			route: AuthenticatedRoutePath.logout,
