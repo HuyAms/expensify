@@ -1,5 +1,4 @@
 import React from 'react'
-import 'jest-dom/extend-expect'
 import {wait} from 'dom-testing-library'
 import {render} from '../../utils/testUtils'
 import UnAuthenticatedRouter, {

@@ -1,11 +1,18 @@
 import React from 'react'
-import 'jest-dom/extend-expect'
 import {wait} from 'dom-testing-library'
 import {render} from '../../utils/testUtils'
 import AuthenticatedRouter, {
 	AuthenticatedRoutePath,
 } from '../AuthenticatedRouter'
 import faker from 'faker'
+
+jest.mock('../../modules/User', () => {
+	const userModule = jest.requireActual('../../modules/User')
+	return {
+		...userModule,
+		getMe: jest.fn(() => ({type: ''})),
+	}
+})
 
 describe('<AuthenticatedRouter/>', () => {
 	it('should render Index page by default', async () => {

@@ -20,7 +20,7 @@ export const api = ({
 		baseURL: baseUrl,
 		...axiosOptions,
 		headers: {
-			authorization: token ? `Bearer ${token}` : undefined,
+			authorization: token ? `Bearer ${token}` : null,
 			...axiosOptions.headers,
 		},
 	})

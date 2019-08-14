@@ -1,5 +1,4 @@
 import * as React from 'react'
-import 'jest-dom/extend-expect'
 import {render} from '../../../utils/testUtils'
 import Nav from '../Nav'
 import {AuthenticatedRoutePath} from '../../../router/AuthenticatedRouter'
