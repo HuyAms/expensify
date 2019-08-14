@@ -3,7 +3,7 @@ import {Layout} from 'antd'
 import SiderMenu from '../../components/SiderMenu'
 import {connect} from 'react-redux'
 import {Alert} from 'antd'
-import {getMe} from '../../modules/User'
+import {getMe} from '../../modules/AuthenticatedUser'
 import ModelState from '../../models/bases/ModelState'
 import User, {UserStatus} from '../../models/User'
 import {useTranslation} from 'react-i18next'
@@ -11,12 +11,12 @@ import MainHeader from '../../components/MainHeader'
 import {Wrapper, AppContainer, AppContent} from './style'
 
 interface Props {
-	user: ModelState<User>
+	authenticatedUser: ModelState<User>
 	getMe: () => any
 }
 
 const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
-	const {getMe, user} = props
+	const {getMe, authenticatedUser} = props
 	const [t] = useTranslation()
 
 	React.useEffect(() => {
@@ -24,7 +24,10 @@ const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
 	}, [])
 
 	const renderAlert = () => {
-		if (user.status === 'success' && user.data.status === UserStatus.Initial) {
+		if (
+			authenticatedUser.status === 'success' &&
+			authenticatedUser.data.status === UserStatus.Initial
+		) {
 			return <Alert message={t('error.notActiveUser')} type="warning" />
 		}
 	}
@@ -35,7 +38,12 @@ const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
 			<AppContainer>
 				<SiderMenu />
 				<Layout>
-					<MainHeader />
+					<MainHeader
+						loading={authenticatedUser.status === 'fetching'}
+						username={
+							authenticatedUser.data && authenticatedUser.data.firstName
+						}
+					/>
 					<AppContent>{props.children}</AppContent>
 				</Layout>
 			</AppContainer>
@@ -43,9 +51,9 @@ const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
 	)
 }
 
-const mapStateToProps = ({user}) => {
+const mapStateToProps = ({authenticatedUser}) => {
 	return {
-		user,
+		authenticatedUser,
 	}
 }
 

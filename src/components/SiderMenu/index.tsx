@@ -34,7 +34,7 @@ const SiderMenu: React.FunctionComponent<Props> = ({pathname}) => {
 	const [t] = useTranslation()
 
 	return (
-		<Sider breakpoint="sm" collapsedWidth="0">
+		<Sider breakpoint="md" collapsedWidth="0">
 			<Logo>{t('appName')}</Logo>
 			<Menu theme="dark" mode="inline" selectedKeys={[pathname]}>
 				{menuItems.map(({path, iconType, name}) => (

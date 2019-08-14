@@ -1,11 +1,16 @@
 import React from 'react'
-import {Menu, Icon, Layout} from 'antd'
+import {Menu, Icon, Layout, Spin} from 'antd'
 import {Link} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
 
 const {Header} = Layout
 
-const MainHeader = () => {
+interface Props {
+	username: string
+	loading: boolean
+}
+
+const MainHeader: React.FunctionComponent<Props> = ({username, loading}) => {
 	const [t] = useTranslation()
 
 	return (
@@ -16,10 +21,14 @@ const MainHeader = () => {
 						float: 'right',
 					}}
 					title={
-						<span>
-							<Icon type="user" />
-							Huy
-						</span>
+						loading ? (
+							<Spin size="small" />
+						) : (
+							<span>
+								<Icon type="user" />
+								{username}
+							</span>
+						)
 					}
 				>
 					<Menu.Item key="logout">
