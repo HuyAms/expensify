@@ -1,5 +1,4 @@
 import React from 'react'
-import 'jest-dom/extend-expect'
 import {render} from '../../../../utils/testUtils'
 import SignUp from '../index'
 
