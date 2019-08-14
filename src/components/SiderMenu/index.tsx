@@ -1,36 +1,60 @@
 import React from 'react'
+import {connect} from 'react-redux'
 import {Layout, Menu, Icon} from 'antd'
 import {Logo} from './style'
 import {useTranslation} from 'react-i18next'
-
+import {AuthenticatedRoutePath} from '../../models/Route'
+import {Link} from 'react-router-dom'
 const {Sider} = Layout
 
-const SiderMenu = () => {
+interface MenuItem {
+	path: string
+	name: string
+	iconType: string
+}
+
+const menuItems: MenuItem[] = [
+	{
+		path: AuthenticatedRoutePath.home,
+		name: 'nav.home',
+		iconType: 'home',
+	},
+	{
+		path: AuthenticatedRoutePath.report,
+		name: 'nav.report',
+		iconType: 'bar-chart',
+	},
+]
+
+interface Props {
+	pathname: string
+}
+
+const SiderMenu: React.FunctionComponent<Props> = ({pathname}) => {
 	const [t] = useTranslation()
 
 	return (
-		<Sider breakpoint="lg" collapsedWidth="0">
+		<Sider breakpoint="sm" collapsedWidth="0">
 			<Logo>{t('appName')}</Logo>
-			<Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-				<Menu.Item key="1">
-					<Icon type="user" />
-					<span className="nav-text">nav 1</span>
-				</Menu.Item>
-				<Menu.Item key="2">
-					<Icon type="video-camera" />
-					<span className="nav-text">nav 2</span>
-				</Menu.Item>
-				<Menu.Item key="3">
-					<Icon type="upload" />
-					<span className="nav-text">nav 3</span>
-				</Menu.Item>
-				<Menu.Item key="4">
-					<Icon type="user" />
-					<span className="nav-text">nav 4</span>
-				</Menu.Item>
+			<Menu theme="dark" mode="inline" selectedKeys={[pathname]}>
+				{menuItems.map(({path, iconType, name}) => (
+					<Menu.Item key={path}>
+						<Link to={path}>
+							<Icon type={iconType} />
+							<span>{t(name)}</span>
+						</Link>
+					</Menu.Item>
+				))}
 			</Menu>
 		</Sider>
 	)
 }
 
-export default SiderMenu
+const mapStateToProps = ({router}) => {
+	return {
+		pathname: router.location.pathname,
+	}
+}
+export default connect(mapStateToProps)(SiderMenu)
+
+// <StyledLink className='nav-text' to={path}>{t(name)}</StyledLink>
