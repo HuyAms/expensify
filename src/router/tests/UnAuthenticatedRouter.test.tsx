@@ -1,10 +1,9 @@
 import React from 'react'
 import {wait} from 'dom-testing-library'
 import {render} from '../../utils/testUtils'
-import UnAuthenticatedRouter, {
-	UnAuthenticatedRoutePath,
-} from '../UnAuthenticatedRouter'
+import UnAuthenticatedRouter from '../UnAuthenticatedRouter'
 import faker from 'faker'
+import {UnAuthenticatedRoutePath} from '../../models/Route'
 
 describe('<UnAuthenticatedRouter/>', () => {
 	it('should render SignIn page by default', async () => {

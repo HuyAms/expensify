@@ -1,11 +1,11 @@
-import * as React from 'react'
+import React from 'react'
 
-const About = () => {
+const Report = () => {
 	return (
-		<div data-testid="about-page">
-			<p>About page</p>
+		<div data-testid="report-page">
+			<p>Report page</p>
 		</div>
 	)
 }
 
-export default About
+export default Report

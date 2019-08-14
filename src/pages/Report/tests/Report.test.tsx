@@ -1,13 +1,13 @@
 import React from 'react'
 import {render} from '@testing-library/react'
-import About from '../index'
+import Report from '../index'
 
-describe('<About/>', () => {
-	it('should render About text', () => {
+describe('<Report/>', () => {
+	it('should render Report text', () => {
 		// Act
-		const {getByText} = render(<About />)
+		const {getByText} = render(<Report />)
 
 		// Assert
-		expect(getByText('About page')).toBeInTheDocument()
+		expect(getByText('Report page')).toBeInTheDocument()
 	})
 })
