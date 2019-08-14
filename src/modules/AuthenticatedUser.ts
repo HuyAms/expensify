@@ -16,20 +16,20 @@ import {AnyAction} from 'redux'
 // Const
 // ------------------------------------
 
-const moduleName = 'user'
+const moduleName = 'authenticatedUser'
 const path = '/api/users'
 
-export const {moduleActions, moduleEpics: userEpics} = useModuleEpic(
-	moduleName,
-	path,
-)
+export const {
+	moduleActions,
+	moduleEpics: authenticatedUserEpics,
+} = useModuleEpic(moduleName, path)
 const {getAsync} = moduleActions
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 
-export type UserState = ModelState<User>
+export type AuthenticatedUserState = ModelState<User>
 
 const initialState: ModelState<User> = {
 	data: null,
@@ -37,7 +37,7 @@ const initialState: ModelState<User> = {
 	error: null,
 }
 
-export const userReducer = (state = initialState, action: AnyAction) =>
+export const authenticatedReducer = (state = initialState, action: AnyAction) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(getAsync.request):
