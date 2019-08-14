@@ -16,7 +16,7 @@ jest.mock('../../modules/AuthenticatedUser', () => {
 describe('<AuthenticatedRouter/>', () => {
 	it('should render Home page by default', async () => {
 		// Action
-		const {getByTestId} = render(<AuthenticatedRouter />)
+		const {getByTestId, getByText} = render(<AuthenticatedRouter />)
 
 		// Assert
 		expect(getByTestId('suspense')).toBeInTheDocument()
