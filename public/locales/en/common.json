@@ -1,0 +1,28 @@
+{
+	"welcome": "Welcome to TypeScript Boilerplate",
+	"appName": "Expensify",
+	"en": "English",
+	"nav": {
+		"home": "Home",
+		"about": "About"
+	},
+	"error": {
+		"unauthorized": "Unauthorized",
+		"forbidden": "You do not have permission to perform this action",
+		"notFound": "We can't find the resource you're looking for",
+		"unexpectedError": "Something went wrong",
+		"missingFirstName": "Please enter your first name",
+		"missingLastName": "Please enter your last name",
+		"missingPassword": "Please enter your password",
+		"missingConfirmPassword": "Please confirm your password",
+		"invalidPassword": "Password must be at least 6 characters",
+		"confirmNotMatchPassword": "Two passwords that you enter are inconsistent!",
+		"missingEmail": "Please enter your email",
+		"invalidEmail": "Email is not valid",
+		"passwordNotCorrect": "Password is not correct",
+		"emailNotCorrect": "Email is not correct",
+		"emailNotUnique": "This email has already been used",
+		"notActiveUser": "Please check your email to activate this account",
+		"notHasPermission": "You do not have permission to perform this action"
+	}
+}

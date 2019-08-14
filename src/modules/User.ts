@@ -8,32 +8,36 @@ import {
 } from './commons/common'
 import useModuleEpic from './commons/moduleEpics'
 
-import Post from '../models/Post'
+import User from '../models/User'
 import ModelState from '../models/bases/ModelState'
+import {AnyAction} from 'redux'
 
 // ------------------------------------
 // Const
 // ------------------------------------
 
-const moduleName = 'post'
-const path = '/posts'
+const moduleName = 'user'
+const path = '/api/users'
 
-export const {actions, moduleEpics} = useModuleEpic(moduleName, path)
-const {getAsync} = actions
+export const {moduleActions, moduleEpics: userEpics} = useModuleEpic(
+	moduleName,
+	path,
+)
+const {getAsync} = moduleActions
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 
-export type PostState = ModelState<Post>
+export type UserState = ModelState<User>
 
-const initialState: ModelState<Post> = {
+const initialState: ModelState<User> = {
 	data: null,
 	status: 'idle',
 	error: null,
 }
 
-const post = (state = initialState, action: any) =>
+export const userReducer = (state = initialState, action: AnyAction) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(getAsync.request):
@@ -43,7 +47,7 @@ const post = (state = initialState, action: any) =>
 				updateData(draft, action.payload)
 				break
 			case getType(getAsync.failure):
-				endWithError(draft, action.payload.message)
+				endWithError(draft, action.payload)
 				break
 			case getType(getAsync.cancel):
 				endCanceling(draft)
@@ -51,11 +55,8 @@ const post = (state = initialState, action: any) =>
 		}
 	})
 
-export const reducer = post
-
 // ------------------------------------
 // Actions
 // ------------------------------------
 
-export const getPost = (id: string) => getAsync.request({params: id})
-export const cancelGetPost = () => getAsync.cancel()
+export const getMe = () => getAsync.request({params: 'me'})

@@ -8,7 +8,7 @@
 
 import * as React from 'react'
 import {useTranslation} from 'react-i18next'
-import {RouterPath} from '../../router/Router'
+import {AuthenticatedRoutePath} from '../../router/AuthenticatedRouter'
 import {NavList} from './style'
 import {NavItem, NavItemProps} from './NavItem/NavItem'
 
@@ -17,12 +17,12 @@ const Nav = () => {
 
 	const navItems: NavItemProps[] = [
 		{
-			path: RouterPath.home,
+			path: AuthenticatedRoutePath.home,
 			name: t('nav.home'),
 			exact: true,
 		},
 		{
-			path: RouterPath.about,
+			path: AuthenticatedRoutePath.about,
 			name: t('nav.about'),
 		},
 	]

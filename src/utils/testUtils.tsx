@@ -1,12 +1,11 @@
-import * as React from 'react'
-import {render as rtlRender} from 'react-testing-library'
+import React from 'react'
+import {render as rtlRender} from '@testing-library/react'
 import {createMemoryHistory} from 'history'
 import {Router} from 'react-router'
 import {Provider} from 'react-redux'
 import {configureStore} from '../configStore'
-import CoreLayout from '../layout/CoreLayout/CoreLayout'
-import {ThemeProvider} from 'styled-components'
 import {theme} from '../styles/theme'
+import {ThemeProvider} from 'styled-components'
 
 export const render = (
 	ui,
@@ -19,9 +18,7 @@ export const render = (
 			<Provider store={store}>
 				<Router history={history}>
 					<React.Suspense fallback={<div data-testid="suspense">Loading</div>}>
-						<ThemeProvider theme={theme}>
-							<CoreLayout>{ui}</CoreLayout>
-						</ThemeProvider>
+						<ThemeProvider theme={theme}>{ui}</ThemeProvider>
 					</React.Suspense>
 				</Router>
 			</Provider>,

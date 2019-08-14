@@ -5,23 +5,41 @@
  *
  */
 
-import * as React from 'react'
+import React from 'react'
 import {useEffect} from 'react'
 import {hot} from 'react-hot-loader/root'
 import {connect} from 'react-redux'
 import {initialize, tearDown} from './modules/App'
 
 // Components
-import CoreLayout from './layout/CoreLayout/CoreLayout'
 import ErrorBoundaries from './components/ErrorBoundaries/ErrorBoundaries'
-import Router from './router/Router'
+
+const loadAuthenticatedRouter = () =>
+	import(/* webpackChunkName: "AuthenticatedRouter" */ './router/AuthenticatedRouter')
+
+const AuthenticatedRouter = React.lazy(loadAuthenticatedRouter)
+
+const UnAuthenticatedRouter = React.lazy(() =>
+	import(/* webpackChunkName: "UnAuthenticatedRouter" */ './router/UnAuthenticatedRouter'),
+)
 
 interface Props {
+	isAuthenticated: boolean
 	initialize: () => any
 	tearDown: () => any
 }
 
-export const App: React.FunctionComponent<Props> = ({initialize, tearDown}) => {
+export const App: React.FunctionComponent<Props> = ({
+	initialize,
+	tearDown,
+	isAuthenticated,
+}) => {
+	// pre-load the authenticated side in the background while the user's
+	// filling out the login form.
+	React.useEffect(() => {
+		loadAuthenticatedRouter()
+	}, [])
+
 	useEffect(() => {
 		initialize()
 
@@ -30,11 +48,15 @@ export const App: React.FunctionComponent<Props> = ({initialize, tearDown}) => {
 
 	return (
 		<ErrorBoundaries>
-			<CoreLayout>
-				<Router />
-			</CoreLayout>
+			{isAuthenticated ? <AuthenticatedRouter /> : <UnAuthenticatedRouter />}
 		</ErrorBoundaries>
 	)
+}
+
+const mapStateToProps = ({auth}) => {
+	return {
+		isAuthenticated: auth.data && auth.data.token,
+	}
 }
 
 const mapDispatchToProps = {
@@ -44,7 +66,7 @@ const mapDispatchToProps = {
 
 export default hot(
 	connect(
-		null,
+		mapStateToProps,
 		mapDispatchToProps,
 	)(App),
 )
