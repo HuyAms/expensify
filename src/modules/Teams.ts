@@ -50,5 +50,5 @@ const moduleName = 'teams'
 export const {moduleActions, moduleEpics: teamsEpic} = useModuleEpic(moduleName)
 const {getAsync} = moduleActions
 
-export const getTeams = () => getAsync.request({path: 'api/user'})
+export const getMyTeams = () => getAsync.request({path: 'api/users/me/teams'})
 export const cancelGetTeams = () => getAsync.cancel()

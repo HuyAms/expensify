@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {TeamItem, TeamList} from './style'
-import {getTeams, cancelGetTeams} from '../../modules/Teams'
+import {getMyTeams, cancelGetTeams} from '../../modules/Teams'
 
 interface Props {
 	getTeams: () => any
@@ -40,7 +40,7 @@ const mapStateToProps = ({teams}) => {
 }
 
 const mapDispatchToProps = {
-	getTeams,
+	getTeams: getMyTeams,
 	cancelGetTeams,
 }
 
