@@ -1,0 +1,62 @@
+import produce from 'immer'
+import {getType} from 'typesafe-actions'
+import {
+	startFetching,
+	updateData,
+	endWithError,
+	endCanceling,
+} from './commons/common'
+import useModuleEpic from './commons/moduleEpics'
+
+import ModelState from '../models/bases/ModelState'
+import {AnyAction} from 'redux'
+
+// ------------------------------------
+// Const
+// ------------------------------------
+
+const moduleName = 'teams'
+const path = '/api/teams'
+
+export const {moduleActions, moduleEpics: teamsEpic} = useModuleEpic(
+	moduleName,
+	path,
+)
+const {getAsync} = moduleActions
+
+// ------------------------------------
+// Reducer
+// ------------------------------------
+
+export type TeamsState = ModelState<Team[]>
+
+const initialState: ModelState<Team[]> = {
+	data: null,
+	status: 'idle',
+	error: null,
+}
+
+export const teamsReducer = (state = initialState, action: AnyAction) =>
+	produce(state, draft => {
+		switch (action.type) {
+			case getType(getAsync.request):
+				startFetching(draft)
+				break
+			case getType(getAsync.success):
+				updateData(draft, action.payload)
+				break
+			case getType(getAsync.failure):
+				endWithError(draft, action.payload)
+				break
+			case getType(getAsync.cancel):
+				endCanceling(draft)
+				break
+		}
+	})
+
+// ------------------------------------
+// Actions
+// ------------------------------------
+
+export const getTeams = () => getAsync.request({})
+export const cancelGetTeams = () => getAsync.cancel()

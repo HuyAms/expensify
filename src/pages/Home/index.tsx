@@ -1,14 +1,50 @@
-import React from 'react'
+import React, {useEffect} from 'react'
+import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
+import {TeamItem, TeamList} from './style'
+import {getTeams, cancelGetTeams} from '../../modules/Teams'
 
-const Home = () => {
+interface Props {
+	getTeams: () => any
+	cancelGetTeams: () => any
+}
+
+const Home: React.FunctionComponent<Props> = props => {
+	const {getTeams} = props
 	const [t] = useTranslation()
+
+	useEffect(() => {
+		getTeams()
+		return () => cancelGetTeams()
+	}, [])
 
 	return (
 		<div data-testid="home-page">
-			<h2>{t('appName')}</h2>
+			<TeamList>
+				<TeamItem>Create new team </TeamItem>
+				<TeamItem>Create new team</TeamItem>
+				<TeamItem>Create new team</TeamItem>
+				<TeamItem>Create new team</TeamItem>
+				<TeamItem>Create new team</TeamItem>
+				<TeamItem>Create new team</TeamItem>
+				<TeamItem>Create new team</TeamItem>
+			</TeamList>
 		</div>
 	)
 }
 
-export default Home
+const mapStateToProps = ({teams}) => {
+	return {
+		teams,
+	}
+}
+
+const mapDispatchToProps = {
+	getTeams,
+	cancelGetTeams,
+}
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(Home)
