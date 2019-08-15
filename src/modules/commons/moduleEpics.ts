@@ -7,7 +7,7 @@ import {getRequest, postRequest} from '../../services/api'
 import {RootState} from '../reducers'
 import {ErrorResponse} from './common'
 
-const useModuleEpic = <T>(moduleName: string, path: string) => {
+const useModuleEpic = <T>(moduleName: string) => {
 	// ------------------------------------
 	// Actions
 	// ------------------------------------
@@ -17,14 +17,14 @@ const useModuleEpic = <T>(moduleName: string, path: string) => {
 		`@@${moduleName}/GET_SUCCESS`,
 		`@@${moduleName}/GET_FAILURE`,
 		`@@${moduleName}/GET_CANCEL`,
-	)<{params?: string; query?: object}, T, Error, void>()
+	)<{path: string; query?: object}, T, Error, void>()
 
 	const postAsync = createAsyncAction(
 		`@@${moduleName}/POST_REQUEST`,
 		`@@${moduleName}/POST_SUCCESS`,
 		`@@${moduleName}/POST_FAILURE`,
 		`@@${moduleName}/POST_CANCEL`,
-	)<{body: object; params?: string; query?: object}, T, ErrorResponse, void>()
+	)<{path: string; body: object; query?: object}, T, ErrorResponse, void>()
 
 	const moduleActions = {
 		getAsync,
@@ -39,8 +39,8 @@ const useModuleEpic = <T>(moduleName: string, path: string) => {
 		return action$.pipe(
 			filter(isActionOf(getAsync.request)),
 			switchMap(action => {
-				const {params, query} = action.payload
-				return from(getRequest(path, params, query)).pipe(
+				const {path, query} = action.payload
+				return from(getRequest(path, query)).pipe(
 					map(res => getAsync.success(res)),
 					catchError(error => of(getAsync.failure(error.response.data))),
 					takeUntil(action$.pipe(filter(isActionOf(getAsync.cancel)))),
@@ -53,8 +53,8 @@ const useModuleEpic = <T>(moduleName: string, path: string) => {
 		return action$.pipe(
 			filter(isActionOf(postAsync.request)),
 			switchMap(action => {
-				const {body, params, query} = action.payload
-				return from(postRequest(path, body, params, query)).pipe(
+				const {path, body, query} = action.payload
+				return from(postRequest(path, body, query)).pipe(
 					map(res => postAsync.success(res)),
 					catchError(error => of(postAsync.failure(error.response.data))),
 					takeUntil(action$.pipe(filter(isActionOf(postAsync.cancel)))),

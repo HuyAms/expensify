@@ -12,19 +12,6 @@ import ModelState from '../models/bases/ModelState'
 import {AnyAction} from 'redux'
 
 // ------------------------------------
-// Const
-// ------------------------------------
-
-const moduleName = 'teams'
-const path = '/api/teams'
-
-export const {moduleActions, moduleEpics: teamsEpic} = useModuleEpic(
-	moduleName,
-	path,
-)
-const {getAsync} = moduleActions
-
-// ------------------------------------
 // Reducer
 // ------------------------------------
 
@@ -58,5 +45,10 @@ export const teamsReducer = (state = initialState, action: AnyAction) =>
 // Actions
 // ------------------------------------
 
-export const getTeams = () => getAsync.request({})
+const moduleName = 'teams'
+
+export const {moduleActions, moduleEpics: teamsEpic} = useModuleEpic(moduleName)
+const {getAsync} = moduleActions
+
+export const getTeams = () => getAsync.request({path: 'api/user'})
 export const cancelGetTeams = () => getAsync.cancel()

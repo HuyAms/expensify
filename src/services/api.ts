@@ -26,12 +26,8 @@ export const api = ({
 	})
 
 const getData = (res: AxiosResponse) => res.data
-const joinUrl = (path: string, params?: string, query?: object): string => {
+const joinUrl = (path: string, query?: object): string => {
 	let joinedUrl = path
-
-	if (params) {
-		joinedUrl = joinedUrl + '/' + params
-	}
 
 	if (query) {
 		joinedUrl = joinedUrl + `?${stringify(query)}`
@@ -40,32 +36,22 @@ const joinUrl = (path: string, params?: string, query?: object): string => {
 	return joinedUrl
 }
 
-export const getRequest = (path: string, params?: string, query?: object) =>
+export const getRequest = (path: string, query?: object) =>
 	api()
-		.get(joinUrl(path, params, query))
+		.get(joinUrl(path, query))
 		.then(getData)
 
-export const postRequest = (
-	path: string,
-	body: object,
-	params?: string,
-	query?: object,
-) =>
+export const postRequest = (path: string, body: object, query?: object) =>
 	api()
-		.post(joinUrl(path, params, query), body)
+		.post(joinUrl(path, query), body)
 		.then(getData)
 
-export const putRequest = (
-	path: string,
-	body: object,
-	params?: string,
-	query?: object,
-) =>
+export const putRequest = (path: string, body: object, query?: object) =>
 	api()
-		.put(joinUrl(path, params, query), body)
+		.put(joinUrl(path, query), body)
 		.then(getData)
 
-export const deleteRequest = (path: string, params?: string, query?: object) =>
+export const deleteRequest = (path: string, query?: object) =>
 	api()
-		.delete(joinUrl(path, params, query))
+		.delete(joinUrl(path, query))
 		.then(getData)

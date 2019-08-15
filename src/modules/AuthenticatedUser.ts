@@ -13,19 +13,6 @@ import ModelState from '../models/bases/ModelState'
 import {AnyAction} from 'redux'
 
 // ------------------------------------
-// Const
-// ------------------------------------
-
-const moduleName = 'authenticatedUser'
-const path = '/api/users'
-
-export const {
-	moduleActions,
-	moduleEpics: authenticatedUserEpics,
-} = useModuleEpic(moduleName, path)
-const {getAsync} = moduleActions
-
-// ------------------------------------
 // Reducer
 // ------------------------------------
 
@@ -59,4 +46,12 @@ export const authenticatedReducer = (state = initialState, action: AnyAction) =>
 // Actions
 // ------------------------------------
 
-export const getMe = () => getAsync.request({params: 'me'})
+const moduleName = 'authenticatedUser'
+
+export const {
+	moduleActions,
+	moduleEpics: authenticatedUserEpics,
+} = useModuleEpic(moduleName)
+const {getAsync} = moduleActions
+
+export const getMe = () => getAsync.request({path: '/api/users/me'})

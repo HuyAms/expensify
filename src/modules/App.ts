@@ -8,24 +8,6 @@ import {filter, switchMap, tap, ignoreElements} from 'rxjs/operators'
 import {of} from 'rxjs'
 
 // ------------------------------------
-// Const
-// ------------------------------------
-const moduleName = 'app'
-
-// ------------------------------------
-// Actions
-// ------------------------------------
-
-export const initialize = createAction(`@@${moduleName}/INITIALIZE`)
-export const tearDown = createAction(`@@${moduleName}/TEAR_DOWN`)
-export const changeLanguage = createAction(
-	`@@${moduleName}/CHANGE_LANGUAGE`,
-	action => {
-		return (language: string) => action({language})
-	},
-)
-
-// ------------------------------------
 // Reducer
 // ------------------------------------
 
@@ -43,6 +25,21 @@ export const appReducer = (state = initialState, action) =>
 				break
 		}
 	})
+
+// ------------------------------------
+// Actions
+// ------------------------------------
+
+const moduleName = 'app'
+
+export const initialize = createAction(`@@${moduleName}/INITIALIZE`)
+export const tearDown = createAction(`@@${moduleName}/TEAR_DOWN`)
+export const changeLanguage = createAction(
+	`@@${moduleName}/CHANGE_LANGUAGE`,
+	action => {
+		return (language: string) => action({language})
+	},
+)
 
 // ------------------------------------
 // Epics
