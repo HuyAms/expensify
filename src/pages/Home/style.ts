@@ -1,25 +1,36 @@
 import styled from 'styled-components'
-import chroma from 'chroma-js'
+import {darken, rgba} from 'polished'
 
-export const TeamItem = styled.div`
+export const TeamList = styled.div`
+	display: grid;
+	grid-gap: 1.5rem;
+	grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+`
+
+const Item = styled.div`
 	height: 10rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	transition: all 0.2s;
 	cursor: pointer;
+`
+
+interface TeamItemProps {
+	color: string
+}
+
+export const TeamItem = styled(Item)<TeamItemProps>`
+	background-color: ${props => props.color};
+
+	&:hover {
+		background-color: ${props => darken(0.2, props.color)};
+	}
+`
+export const ButtonCreateTeam = styled(Item)`
 	background-color: ${props => props.theme.colors.lightGray};
 
 	&:hover {
-		background-color: ${props =>
-			chroma(props.theme.colors.lightGray)
-				.darken()
-				.name()};
+		background-color: ${props => darken(0.2, props.theme.colors.lightGray)};
 	}
-`
-
-export const TeamList = styled.div`
-	display: grid;
-	grid-gap: 1.5rem;
-	grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
 `
