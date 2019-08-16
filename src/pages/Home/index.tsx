@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react'
+import {push} from 'connected-react-router'
 import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {TeamItem, TeamList, ButtonCreateTeam, TeamName, Wrapper} from './style'
@@ -9,10 +10,12 @@ import CreateTeamForm from './component/CreateTeamForm'
 import randomColor from 'randomcolor'
 import {usePrevious} from '../../utils/hooks'
 import Spinner from '../../components/Spinner'
+import {slugify} from '../../utils/utils'
 
 interface Props {
 	getMyTeams: () => any
 	cancelGetTeams: () => any
+	push: (path: string) => any
 	createTeam: (name: string, description: string) => any
 	teams: ModelState<Team[]>
 }
@@ -21,7 +24,7 @@ const Home: React.FunctionComponent<Props> = props => {
 	const [formVisible, setFormVisible] = React.useState()
 	const formRef = React.useRef(null)
 
-	const {getMyTeams, teams, createTeam, cancelGetTeams} = props
+	const {getMyTeams, teams, createTeam, cancelGetTeams, push} = props
 	const [t] = useTranslation(['common', 'home'])
 
 	useEffect(() => {
@@ -54,15 +57,19 @@ const Home: React.FunctionComponent<Props> = props => {
 					<ButtonCreateTeam onClick={toggleFormVisible}>
 						{t('createNewTeam')}
 					</ButtonCreateTeam>
-					{data.map(item => {
+					{data.map(team => {
 						const color = randomColor({
 							format: 'rgba',
 							alpha: 0.6,
 						})
 
+						const onTeamClick = () => {
+							push(`/board/${team._id}/${slugify(team.name)}`)
+						}
+
 						return (
-							<TeamItem color={color} key={item._id}>
-								<TeamName>{item.name}</TeamName>
+							<TeamItem onClick={onTeamClick} color={color} key={team._id}>
+								<TeamName>{team.name}</TeamName>
 							</TeamItem>
 						)
 					})}
@@ -113,6 +120,7 @@ const mapDispatchToProps = {
 	getMyTeams,
 	cancelGetTeams,
 	createTeam,
+	push,
 }
 
 export default connect(
