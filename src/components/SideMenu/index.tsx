@@ -56,5 +56,3 @@ const mapStateToProps = ({router}) => {
 	}
 }
 export default connect(mapStateToProps)(SiderMenu)
-
-// <StyledLink className='nav-text' to={path}>{t(name)}</StyledLink>
