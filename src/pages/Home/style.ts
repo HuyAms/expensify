@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 import {darken, rgba} from 'polished'
 
+export const Wrapper = styled.div`
+	margin: 0 5%;
+`
+
 export const TeamList = styled.div`
 	display: grid;
 	grid-gap: 1.5rem;

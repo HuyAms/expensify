@@ -44,7 +44,7 @@ const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
 		<Wrapper>
 			{renderAlert()}
 			<AppContainer>
-				{renderSideMenu}
+				{renderSideMenu()}
 				<Layout>
 					<MainHeader
 						loading={authenticatedUser.status === 'fetching'}

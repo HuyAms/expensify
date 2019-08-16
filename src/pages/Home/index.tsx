@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
-import {TeamItem, TeamList, ButtonCreateTeam, TeamName} from './style'
+import {TeamItem, TeamList, ButtonCreateTeam, TeamName, Wrapper} from './style'
 import {getMyTeams, cancelGetTeams, createTeam} from '../../modules/Teams'
 import ModelState from '../../models/bases/ModelState'
 import ErrorText from '../../components/ErrorText'
@@ -90,7 +90,7 @@ const Home: React.FunctionComponent<Props> = props => {
 	}
 
 	return (
-		<div data-testid="home-page">
+		<Wrapper data-testid="home-page">
 			{renderTeams()}
 			<CreateTeamForm
 				loading={teams.status === 'saving'}
@@ -99,7 +99,7 @@ const Home: React.FunctionComponent<Props> = props => {
 				handleSubmit={onSubmit}
 				handeCancel={toggleFormVisible}
 			/>
-		</div>
+		</Wrapper>
 	)
 }
 
