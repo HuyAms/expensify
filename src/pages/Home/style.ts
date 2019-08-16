@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {darken} from 'polished'
+import {darken, rgba} from 'polished'
 
 export const TeamList = styled.div`
 	display: grid;
@@ -15,6 +15,7 @@ const Item = styled.div`
 	transition: all 0.2s;
 	cursor: pointer;
 	border-radius: 4px;
+	background: linear-gradient(${rgba('black', 0.2)}, ${rgba('black', 0.2)});
 `
 
 interface TeamItemProps {
@@ -34,4 +35,9 @@ export const ButtonCreateTeam = styled(Item)`
 	&:hover {
 		background-color: ${props => darken(0.2, props.theme.colors.lightGray)};
 	}
+`
+export const TeamName = styled.p`
+	margin: 0;
+	color: white;
+	font-size: ${props => props.theme.fontSizes.lg};
 `

@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
-import {TeamItem, TeamList, ButtonCreateTeam} from './style'
+import {TeamItem, TeamList, ButtonCreateTeam, TeamName} from './style'
 import {getMyTeams, cancelGetTeams, createTeam} from '../../modules/Teams'
 import ModelState from '../../models/bases/ModelState'
 import ErrorText from '../../components/ErrorText'
@@ -62,7 +62,7 @@ const Home: React.FunctionComponent<Props> = props => {
 
 						return (
 							<TeamItem color={color} key={item._id}>
-								{item.name}
+								<TeamName>{item.name}</TeamName>
 							</TeamItem>
 						)
 					})}
