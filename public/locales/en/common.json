@@ -4,7 +4,9 @@
 	"en": "English",
 	"nav": {
 		"home": "Home",
-		"about": "About"
+		"report": "Report",
+		"about": "About",
+		"logout": "Log out"
 	},
 	"error": {
 		"unauthorized": "Unauthorized",

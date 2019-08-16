@@ -8,12 +8,12 @@
 import {combineReducers} from 'redux'
 import {History} from 'history'
 import {connectRouter, RouterState} from 'connected-react-router'
-import {UserState, userReducer} from './User'
+import {AuthenticatedUserState, authenticatedReducer} from './AuthenticatedUser'
 import {AppState, appReducer} from './App'
 import {AuthState, authReducer} from './Auth'
 
 export interface RootState {
-	user: UserState
+	authenticatedUser: AuthenticatedUserState
 	app: AppState
 	auth: AuthState
 	router: RouterState
@@ -21,7 +21,7 @@ export interface RootState {
 
 const rootReducer = (history: History) =>
 	combineReducers<RootState>({
-		user: userReducer,
+		authenticatedUser: authenticatedReducer,
 		app: appReducer,
 		auth: authReducer,
 		router: connectRouter(history),

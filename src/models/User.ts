@@ -11,7 +11,7 @@ export enum UserRole {
 
 export default interface User {
 	_id: string
-	firstName: number
+	firstName: string
 	lastName: string
 	email: string
 	role: UserRole
