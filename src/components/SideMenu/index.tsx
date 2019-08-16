@@ -30,7 +30,7 @@ interface Props {
 	pathname: string
 }
 
-const SiderMenu: React.FunctionComponent<Props> = ({pathname}) => {
+const SideMenu: React.FunctionComponent<Props> = ({pathname}) => {
 	const [t] = useTranslation()
 
 	return (
@@ -55,4 +55,4 @@ const mapStateToProps = ({router}) => {
 		pathname: router.location.pathname,
 	}
 }
-export default connect(mapStateToProps)(SiderMenu)
+export default connect(mapStateToProps)(SideMenu)
