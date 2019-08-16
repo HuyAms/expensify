@@ -1,10 +1,10 @@
 import styled from 'styled-components'
-import {darken, rgba} from 'polished'
+import {darken} from 'polished'
 
 export const TeamList = styled.div`
 	display: grid;
 	grid-gap: 1.5rem;
-	grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
 `
 
 const Item = styled.div`
@@ -14,6 +14,7 @@ const Item = styled.div`
 	align-items: center;
 	transition: all 0.2s;
 	cursor: pointer;
+	border-radius: 4px;
 `
 
 interface TeamItemProps {

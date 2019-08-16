@@ -2,7 +2,7 @@ import produce from 'immer'
 import {getType} from 'typesafe-actions'
 import {
 	startFetching,
-	updateData,
+	fetchingSuccess,
 	endWithError,
 	endCanceling,
 } from './commons/common'
@@ -31,7 +31,7 @@ export const authenticatedReducer = (state = initialState, action: AnyAction) =>
 				startFetching(draft)
 				break
 			case getType(getAsync.success):
-				updateData(draft, action.payload)
+				fetchingSuccess(draft, action.payload)
 				break
 			case getType(getAsync.failure):
 				endWithError(draft, action.payload)
