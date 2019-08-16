@@ -14,14 +14,18 @@ import {of} from 'rxjs'
 export type AppState = App
 
 const initialState: AppState = {
-	language: undefined,
+	language: null,
+	selectedTeam: null,
 }
 
 export const appReducer = (state = initialState, action) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(changeLanguage):
-				draft.language = action.payload
+				draft.language = action.payload.language
+				break
+			case getType(selectTeam):
+				draft.selectedTeam = action.payload.selectedTeam
 				break
 		}
 	})
@@ -38,6 +42,12 @@ export const changeLanguage = createAction(
 	`@@${moduleName}/CHANGE_LANGUAGE`,
 	action => {
 		return (language: string) => action({language})
+	},
+)
+export const selectTeam = createAction(
+	`@@${moduleName}/SELECT_TEAM`,
+	action => {
+		return (selectedTeam: Team) => action({selectedTeam})
 	},
 )
 
