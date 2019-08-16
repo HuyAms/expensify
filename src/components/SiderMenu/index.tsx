@@ -15,11 +15,6 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
 	{
-		path: AuthenticatedRoutePath.home,
-		name: 'nav.home',
-		iconType: 'home',
-	},
-	{
 		path: AuthenticatedRoutePath.report,
 		name: 'nav.report',
 		iconType: 'bar-chart',
