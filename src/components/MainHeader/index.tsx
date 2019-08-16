@@ -1,7 +1,8 @@
 import React from 'react'
-import {Menu, Icon, Layout, Spin} from 'antd'
+import {Menu, Icon, Layout} from 'antd'
 import {Link} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
+import Spinner from '../Spinner'
 
 const {Header} = Layout
 
@@ -22,7 +23,7 @@ const MainHeader: React.FunctionComponent<Props> = ({username, loading}) => {
 					}}
 					title={
 						loading ? (
-							<Spin size="small" />
+							<Spinner />
 						) : (
 							<span>
 								<Icon type="user" />
