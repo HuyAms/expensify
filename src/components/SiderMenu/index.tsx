@@ -15,6 +15,11 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
 	{
+		path: AuthenticatedRoutePath.board,
+		name: 'nav.board',
+		iconType: 'wallet',
+	},
+	{
 		path: AuthenticatedRoutePath.report,
 		name: 'nav.report',
 		iconType: 'bar-chart',

@@ -3,6 +3,7 @@
 	"en": "English",
 	"nav": {
 		"home": "Home",
+		"board": "Board",
 		"report": "Report",
 		"about": "About",
 		"logout": "Log out"
