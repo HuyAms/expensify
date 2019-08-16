@@ -22,6 +22,11 @@ export const startSaving = <T>(state: ModelState<T>) => {
 	state.error = null
 }
 
+export const savingSuccess = <T>(state: ModelState<T>) => {
+	state.status = 'success'
+	state.error = null
+}
+
 export const endWithError = <T>(
 	state: ModelState<T>,
 	errorResponse: ErrorResponse,
@@ -34,7 +39,7 @@ export const endCanceling = <T>(state: ModelState<T>) => {
 	state.status = 'idle'
 }
 
-export const updateData = <T>(
+export const fetchingSuccess = <T>(
 	state: ModelState<T>,
 	serverResponse: ServerResponse<T>,
 ) => {
