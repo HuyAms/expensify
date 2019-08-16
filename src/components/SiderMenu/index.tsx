@@ -1,10 +1,12 @@
 import React from 'react'
+import {push} from 'connected-react-router'
 import {connect} from 'react-redux'
 import {Layout, Menu, Icon} from 'antd'
 import {Logo} from './style'
 import {useTranslation} from 'react-i18next'
 import {AuthenticatedRoutePath} from '../../models/Route'
 import {Link} from 'react-router-dom'
+import {cancelGetTeams, createTeam, getMyTeams} from '../../modules/Teams'
 const {Sider} = Layout
 
 interface MenuItem {
@@ -28,14 +30,19 @@ const menuItems: MenuItem[] = [
 
 interface Props {
 	pathname: string
+	push: (path: string) => any
 }
 
-const SiderMenu: React.FunctionComponent<Props> = ({pathname}) => {
+const SiderMenu: React.FunctionComponent<Props> = ({pathname, push}) => {
 	const [t] = useTranslation()
+
+	const onLogoClick = () => {
+		push(AuthenticatedRoutePath.home)
+	}
 
 	return (
 		<Sider breakpoint="md" collapsedWidth="0">
-			<Logo>{t('appName')}</Logo>
+			<Logo onClick={onLogoClick}>{t('appName')}</Logo>
 			<Menu theme="dark" mode="inline" selectedKeys={[pathname]}>
 				{menuItems.map(({path, iconType, name}) => (
 					<Menu.Item key={path}>
@@ -50,11 +57,18 @@ const SiderMenu: React.FunctionComponent<Props> = ({pathname}) => {
 	)
 }
 
+const mapDispatchToProps = {
+	push,
+}
+
 const mapStateToProps = ({router}) => {
 	return {
 		pathname: router.location.pathname,
 	}
 }
-export default connect(mapStateToProps)(SiderMenu)
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(SiderMenu)
 
 // <StyledLink className='nav-text' to={path}>{t(name)}</StyledLink>
