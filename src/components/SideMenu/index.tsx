@@ -32,7 +32,7 @@ interface Props {
 	push: (path: string) => any
 }
 
-const SiderMenu: React.FunctionComponent<Props> = ({pathname, push}) => {
+const SideMenu: React.FunctionComponent<Props> = ({pathname}) => {
 	const [t] = useTranslation()
 
 	const onLogoClick = () => {
@@ -65,9 +65,8 @@ const mapStateToProps = ({router}) => {
 		pathname: router.location.pathname,
 	}
 }
+
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(SiderMenu)
-
-// <StyledLink className='nav-text' to={path}>{t(name)}</StyledLink>
+)(SideMenu)

@@ -1,6 +1,6 @@
 import React from 'react'
 import {Layout} from 'antd'
-import SiderMenu from '../../components/SiderMenu'
+import SiderMenu from '../../components/SideMenu'
 import {connect} from 'react-redux'
 import {Alert} from 'antd'
 import {getMe} from '../../modules/AuthenticatedUser'

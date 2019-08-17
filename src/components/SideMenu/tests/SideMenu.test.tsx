@@ -2,7 +2,7 @@ import React from 'react'
 import {render} from '../../../utils/testUtils'
 import SiderMenu from '../index'
 
-describe('<SiderMenu />', () => {
+describe('<SideMenu />', () => {
 	it('should render correct navs', () => {
 		// Act
 		const {getByText} = render(<SiderMenu />)
