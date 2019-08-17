@@ -27,7 +27,7 @@ import {
 	ErrorResponse,
 	resetData,
 	startSaving,
-	updateData,
+	fetchingSuccess,
 } from './commons/common'
 import {postRequest} from '../services/api'
 import {
@@ -85,7 +85,7 @@ export const authReducer = (state = initialState, action: AnyAction) =>
 				startSaving(draft)
 				break
 			case getType(authAsync.success):
-				updateData(draft, action.payload)
+				fetchingSuccess(draft, action.payload)
 				break
 			case getType(authAsync.failure):
 				endWithError(draft, action.payload)
@@ -132,24 +132,4 @@ const logOutEpic: Epic<Action, Action, RootState> = action$ => {
 	)
 }
 
-const handleUnauthenticatedUserEpic: Epic<
-	AnyAction,
-	Action,
-	RootState
-> = action$ => {
-	return action$.pipe(
-		filter(
-			action =>
-				!isActionOf(authAsync.failure) &&
-				action.payload &&
-				action.payload.status === 401,
-		),
-		mapTo(logOut()),
-	)
-}
-
-export const authEpics = [
-	authenticateUserEpic,
-	logOutEpic,
-	handleUnauthenticatedUserEpic,
-]
+export const authEpics = [authenticateUserEpic, logOutEpic]

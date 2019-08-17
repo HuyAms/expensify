@@ -11,11 +11,13 @@ import {connectRouter, RouterState} from 'connected-react-router'
 import {AuthenticatedUserState, authenticatedReducer} from './AuthenticatedUser'
 import {AppState, appReducer} from './App'
 import {AuthState, authReducer} from './Auth'
+import {TeamsState, teamsReducer} from './Teams'
 
 export interface RootState {
 	authenticatedUser: AuthenticatedUserState
 	app: AppState
 	auth: AuthState
+	teams: TeamsState
 	router: RouterState
 }
 
@@ -24,6 +26,7 @@ const rootReducer = (history: History) =>
 		authenticatedUser: authenticatedReducer,
 		app: appReducer,
 		auth: authReducer,
+		teams: teamsReducer,
 		router: connectRouter(history),
 	})
 

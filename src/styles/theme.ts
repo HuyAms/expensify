@@ -3,14 +3,10 @@ import {css, DefaultTheme} from 'styled-components'
 export const colors = {
 	white: '#fff',
 	black: '#191919',
-	lightGray: '#858181',
-	bisque: '#ffe4c4',
-	aliceblue: '#f0f8ff',
+	lightGray: '#f2f1f1',
 }
 
 export const appColors = {
-	primary: colors.bisque,
-	secondary: colors.aliceblue,
 	text: colors.black,
 }
 

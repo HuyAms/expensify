@@ -1,5 +1,4 @@
 {
-	"welcome": "Welcome to TypeScript Boilerplate",
 	"appName": "Expensify",
 	"en": "English",
 	"nav": {
@@ -25,6 +24,11 @@
 		"emailNotCorrect": "Email is not correct",
 		"emailNotUnique": "This email has already been used",
 		"notActiveUser": "Please check your email to activate this account",
-		"notHasPermission": "You do not have permission to perform this action"
+		"notHasPermission": "You do not have permission to perform this action",
+		"missingTeamName": "Please enter your team name"
+	},
+	"button": {
+		"create": "Create",
+		"cancel": "Cancel"
 	}
 }
