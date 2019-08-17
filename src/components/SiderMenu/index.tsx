@@ -6,7 +6,6 @@ import {Logo} from './style'
 import {useTranslation} from 'react-i18next'
 import {AuthenticatedRoutePath} from '../../models/Route'
 import {Link} from 'react-router-dom'
-import {cancelGetTeams, createTeam, getMyTeams} from '../../modules/Teams'
 const {Sider} = Layout
 
 interface MenuItem {

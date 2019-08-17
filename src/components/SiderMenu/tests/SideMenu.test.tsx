@@ -8,7 +8,7 @@ describe('<SiderMenu />', () => {
 		const {getByText} = render(<SiderMenu />)
 
 		// Assert
-		expect(getByText('nav.home')).toBeInTheDocument()
+		expect(getByText('nav.board')).toBeInTheDocument()
 		expect(getByText('nav.report')).toBeInTheDocument()
 	})
 })
