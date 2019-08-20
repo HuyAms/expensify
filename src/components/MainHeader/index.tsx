@@ -3,6 +3,7 @@ import {Menu, Icon, Layout} from 'antd'
 import {Link} from 'react-router-dom'
 import {useTranslation} from 'react-i18next'
 import Spinner from '../Spinner'
+import {Username} from './style'
 
 const {Header} = Layout
 
@@ -25,10 +26,10 @@ const MainHeader: React.FunctionComponent<Props> = ({username, loading}) => {
 						loading ? (
 							<Spinner />
 						) : (
-							<span>
+							<Username>
 								<Icon type="user" />
 								{username}
-							</span>
+							</Username>
 						)
 					}
 				>

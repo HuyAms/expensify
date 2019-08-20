@@ -1,6 +1,6 @@
 import React from 'react'
 import {Layout} from 'antd'
-import SiderMenu from '../../components/SideMenu'
+import SideMenu from '../../components/SideMenu'
 import {connect} from 'react-redux'
 import {Alert} from 'antd'
 import {getMe} from '../../modules/AuthenticatedUser'
@@ -9,14 +9,16 @@ import User, {UserStatus} from '../../models/User'
 import {useTranslation} from 'react-i18next'
 import MainHeader from '../../components/MainHeader'
 import {Wrapper, AppContainer, AppContent} from './style'
+import {AuthenticatedRoutePath} from '../../models/Route'
 
 interface Props {
 	authenticatedUser: ModelState<User>
 	getMe: () => any
+	pathname: string
 }
 
 const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
-	const {getMe, authenticatedUser} = props
+	const {getMe, authenticatedUser, pathname} = props
 	const [t] = useTranslation()
 
 	React.useEffect(() => {
@@ -32,11 +34,19 @@ const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
 		}
 	}
 
+	const renderSideMenu = () => {
+		if (pathname === AuthenticatedRoutePath.home) {
+			return null
+		}
+
+		return <SideMenu />
+	}
+
 	return (
 		<Wrapper>
 			{renderAlert()}
 			<AppContainer>
-				<SiderMenu />
+				{renderSideMenu()}
 				<Layout>
 					<MainHeader
 						loading={authenticatedUser.status === 'fetching'}
@@ -51,9 +61,10 @@ const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
 	)
 }
 
-const mapStateToProps = ({authenticatedUser}) => {
+const mapStateToProps = ({authenticatedUser, router}) => {
 	return {
 		authenticatedUser,
+		pathname: router.location.pathname,
 	}
 }
 

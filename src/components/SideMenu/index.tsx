@@ -1,10 +1,10 @@
 import React from 'react'
+import {push} from 'connected-react-router'
 import {connect} from 'react-redux'
 import {Layout, Menu, Icon} from 'antd'
-import {Logo} from './style'
+import {Logo, StyledLink} from './style'
 import {useTranslation} from 'react-i18next'
 import {AuthenticatedRoutePath} from '../../models/Route'
-import {Link} from 'react-router-dom'
 const {Sider} = Layout
 
 interface MenuItem {
@@ -15,9 +15,9 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
 	{
-		path: AuthenticatedRoutePath.home,
-		name: 'nav.home',
-		iconType: 'home',
+		path: AuthenticatedRoutePath.board,
+		name: 'nav.board',
+		iconType: 'wallet',
 	},
 	{
 		path: AuthenticatedRoutePath.report,
@@ -28,21 +28,26 @@ const menuItems: MenuItem[] = [
 
 interface Props {
 	pathname: string
+	push: (path: string) => any
 }
 
-const SideMenu: React.FunctionComponent<Props> = ({pathname}) => {
+const SideMenu: React.FunctionComponent<Props> = ({pathname, push}) => {
 	const [t] = useTranslation()
+
+	const onLogoClick = () => {
+		push(AuthenticatedRoutePath.home)
+	}
 
 	return (
 		<Sider breakpoint="md" collapsedWidth="0">
-			<Logo>{t('appName')}</Logo>
+			<Logo onClick={onLogoClick}>{t('appName')}</Logo>
 			<Menu theme="dark" mode="inline" selectedKeys={[pathname]}>
 				{menuItems.map(({path, iconType, name}) => (
 					<Menu.Item key={path}>
-						<Link to={path}>
+						<StyledLink to={path}>
 							<Icon type={iconType} />
 							<span>{t(name)}</span>
-						</Link>
+						</StyledLink>
 					</Menu.Item>
 				))}
 			</Menu>
@@ -50,9 +55,17 @@ const SideMenu: React.FunctionComponent<Props> = ({pathname}) => {
 	)
 }
 
+const mapDispatchToProps = {
+	push,
+}
+
 const mapStateToProps = ({router}) => {
 	return {
 		pathname: router.location.pathname,
 	}
 }
-export default connect(mapStateToProps)(SideMenu)
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(SideMenu)
