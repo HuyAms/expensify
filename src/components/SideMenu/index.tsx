@@ -32,7 +32,7 @@ interface Props {
 	push: (path: string) => any
 }
 
-const SideMenu: React.FunctionComponent<Props> = ({pathname}) => {
+const SideMenu: React.FunctionComponent<Props> = ({pathname, push}) => {
 	const [t] = useTranslation()
 
 	const onLogoClick = () => {
