@@ -1,6 +1,6 @@
 import React from 'react'
 import {Layout} from 'antd'
-import SiderMenu from '../../components/SideMenu'
+import SideMenu from '../../components/SideMenu'
 import {connect} from 'react-redux'
 import {Alert} from 'antd'
 import {getMe} from '../../modules/AuthenticatedUser'
@@ -35,9 +35,11 @@ const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
 	}
 
 	const renderSideMenu = () => {
-		if (pathname !== AuthenticatedRoutePath.home) {
-			return <SiderMenu />
+		if (pathname === AuthenticatedRoutePath.home) {
+			return null
 		}
+
+		return <SideMenu />
 	}
 
 	return (
