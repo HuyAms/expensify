@@ -62,12 +62,12 @@ const Home: React.FunctionComponent<Props> = props => {
 							alpha: 0.6,
 						})
 
-						const onTeamClick = () => {
+						const handleTeamClick = () => {
 							selectTeam(team)
 						}
 
 						return (
-							<TeamItem onClick={onTeamClick} color={color} key={team._id}>
+							<TeamItem onClick={handleTeamClick} color={color} key={team._id}>
 								<TeamName>{team.name}</TeamName>
 							</TeamItem>
 						)
