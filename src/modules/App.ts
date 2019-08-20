@@ -14,9 +14,7 @@ import {AuthenticatedRoutePath} from '../models/Route'
 // Reducer
 // ------------------------------------
 
-export type AppState = App
-
-const initialState: AppState = {
+const initialState: App = {
 	language: null,
 	selectedTeam: getSelectedTeam(),
 }
@@ -102,7 +100,10 @@ const selectTeamEpic: Epic<Action, Action, RootState> = action$ => {
 			const selectedTeam = action.payload
 			setSelectedTeam(selectedTeam)
 		}),
-		map(() => push(AuthenticatedRoutePath.board)),
+		map(action => {
+			const selectedTeam = action.payload
+			return push(`${AuthenticatedRoutePath.board}/${selectedTeam.slug}`)
+		}),
 	)
 }
 

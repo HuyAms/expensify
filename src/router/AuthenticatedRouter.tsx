@@ -17,7 +17,10 @@ const Router = () => {
 		<AuthenticatedLayout>
 			<Switch>
 				<Route exact path={AuthenticatedRoutePath.home} component={Home} />
-				<Route exact path={AuthenticatedRoutePath.board} component={Board} />
+				<Route
+					path={`${AuthenticatedRoutePath.board}/:slug`}
+					component={Board}
+				/>
 				<Route path={AuthenticatedRoutePath.report} component={Report} />
 				<Route path={AuthenticatedRoutePath.logout} component={LogOut} />
 				<Redirect to={AuthenticatedRoutePath.home} />
