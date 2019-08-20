@@ -5,8 +5,6 @@ import {
 	fetchingSuccess,
 	endWithError,
 	endCanceling,
-	startSaving,
-	savingSuccess,
 } from './commons/common'
 import useModuleEpic from './commons/moduleEpics'
 
@@ -16,8 +14,6 @@ import {AnyAction} from 'redux'
 // ------------------------------------
 // Reducer
 // ------------------------------------
-
-export type TeamsState = ModelState<Team[]>
 
 const initialState: ModelState<Team[]> = {
 	data: null,
@@ -34,14 +30,7 @@ export const teamsReducer = (state = initialState, action: AnyAction) =>
 			case getType(getAsync.success):
 				fetchingSuccess(draft, action.payload)
 				break
-			case getType(postAsync.request):
-				startSaving(draft)
-				break
-			case getType(postAsync.success):
-				savingSuccess(draft)
-				break
 			case getType(getAsync.failure):
-			case getType(postAsync.failure):
 				endWithError(draft, action.payload)
 				break
 			case getType(getAsync.cancel):
@@ -57,10 +46,7 @@ export const teamsReducer = (state = initialState, action: AnyAction) =>
 const moduleName = 'teams'
 
 export const {moduleActions, moduleEpics: teamsEpic} = useModuleEpic(moduleName)
-const {getAsync, postAsync} = moduleActions
+const {getAsync} = moduleActions
 
 export const getMyTeams = () => getAsync.request({path: 'api/users/me/teams'})
 export const cancelGetTeams = () => getAsync.cancel()
-
-export const createTeam = (name: string, description: string) =>
-	postAsync.request({path: 'api/teams', body: {name, description}})
