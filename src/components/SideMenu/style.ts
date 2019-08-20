@@ -6,8 +6,8 @@ export const Logo = styled.h1`
 	text-align: center;
 	padding-top: 1rem;
 	position: relative;
-	opacity: 0.6;
-	transition: opacity 0.8s;
+	opacity: 0.8;
+	transition: opacity 0.2s;
 	cursor: pointer;
 
 	&:hover {
