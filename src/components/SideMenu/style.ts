@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import {Link} from 'react-router-dom'
 
 export const Logo = styled.h1`
 	color: ${props => props.theme.colors.white};
@@ -12,4 +13,10 @@ export const Logo = styled.h1`
 	&:hover {
 		opacity: 1;
 	}
+`
+
+export const StyledLink = styled(Link)`
+	display: flex !important;
+	justify-content: flex-start;
+	align-items: center;
 `

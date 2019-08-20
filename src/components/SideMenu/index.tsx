@@ -2,10 +2,9 @@ import React from 'react'
 import {push} from 'connected-react-router'
 import {connect} from 'react-redux'
 import {Layout, Menu, Icon} from 'antd'
-import {Logo} from './style'
+import {Logo, StyledLink} from './style'
 import {useTranslation} from 'react-i18next'
 import {AuthenticatedRoutePath} from '../../models/Route'
-import {Link} from 'react-router-dom'
 const {Sider} = Layout
 
 interface MenuItem {
@@ -45,10 +44,10 @@ const SideMenu: React.FunctionComponent<Props> = ({pathname, push}) => {
 			<Menu theme="dark" mode="inline" selectedKeys={[pathname]}>
 				{menuItems.map(({path, iconType, name}) => (
 					<Menu.Item key={path}>
-						<Link to={path}>
+						<StyledLink to={path}>
 							<Icon type={iconType} />
 							<span>{t(name)}</span>
-						</Link>
+						</StyledLink>
 					</Menu.Item>
 				))}
 			</Menu>
