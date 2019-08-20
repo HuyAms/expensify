@@ -65,14 +65,12 @@ export const cancelAuthenticateUser = () => authAsync.cancel()
 // Reducer
 // ------------------------------------
 
-export type AuthState = ModelState<Auth>
-
 const initialAuth: Auth = {
 	token: getToken(),
 	userId: getUserId(),
 }
 
-const initialState: AuthState = {
+const initialState: ModelState<Auth> = {
 	data: initialAuth,
 	status: 'idle',
 	error: null,
