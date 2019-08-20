@@ -16,12 +16,12 @@ interface Props extends RouteComponentProps<MatchParams> {
 	cancelGetTeam: () => any
 }
 
-export interface WithTeamIdProps {
+export interface WithTeamProps {
 	teamId: string
 	slug: string
 }
 
-const withTeamId = WrappedComponent => {
+const withTeam = WrappedComponent => {
 	const EnhancedComponent: React.FunctionComponent<Props> = props => {
 		const {getTeam, cancelGetTeam, team} = props
 
@@ -64,4 +64,4 @@ const mapDispatchToProps = {
 	cancelGetTeam,
 }
 
-export default withTeamId
+export default withTeam
