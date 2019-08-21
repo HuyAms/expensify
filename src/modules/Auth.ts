@@ -1,4 +1,5 @@
 import produce from 'immer'
+import {push} from 'connected-react-router'
 import {
 	createAsyncAction,
 	getType,
@@ -12,9 +13,7 @@ import {
 	filter,
 	switchMap,
 	tap,
-	map,
 	catchError,
-	takeUntil,
 	ignoreElements,
 	mapTo,
 } from 'rxjs/operators'
@@ -37,6 +36,7 @@ import {
 	setToken,
 	setUserId,
 } from '../services/localStorage'
+import {AuthenticatedRoutePath, UnAuthenticatedRoutePath} from '../models/Route'
 
 // ------------------------------------
 // Const
@@ -59,20 +59,17 @@ export const logOut = createAction(`@@${moduleName}/LOG_OUT`)
 
 export const authenticateUser = (user: object, isSignIn: boolean) =>
 	authAsync.request({body: user, isSignIn})
-export const cancelAuthenticateUser = () => authAsync.cancel()
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-
-export type AuthState = ModelState<Auth>
 
 const initialAuth: Auth = {
 	token: getToken(),
 	userId: getUserId(),
 }
 
-const initialState: AuthState = {
+const initialState: ModelState<Auth> = {
 	data: initialAuth,
 	status: 'idle',
 	error: null,
@@ -89,9 +86,6 @@ export const authReducer = (state = initialState, action: AnyAction) =>
 				break
 			case getType(authAsync.failure):
 				endWithError(draft, action.payload)
-				break
-			case getType(authAsync.cancel):
-				endCanceling(draft)
 				break
 			case getType(logOut):
 				resetData(draft)
@@ -114,11 +108,12 @@ const authenticateUserEpic: Epic<Action, Action, RootState> = action$ => {
 					setToken(res.data.token)
 					setUserId(res.data.userId)
 				}),
-				map(res => authAsync.success(res)),
+				switchMap(res =>
+					of(authAsync.success(res), push(AuthenticatedRoutePath.home)),
+				),
 				catchError(error => {
 					return of(authAsync.failure(error.response.data))
 				}),
-				takeUntil(action$.pipe(filter(isActionOf(authAsync.cancel)))),
 			)
 		}),
 	)
@@ -128,7 +123,7 @@ const logOutEpic: Epic<Action, Action, RootState> = action$ => {
 	return action$.pipe(
 		filter(isActionOf(logOut)),
 		tap(() => clearLocalStorage()),
-		ignoreElements(),
+		mapTo(push(UnAuthenticatedRoutePath.signin)),
 	)
 }
 

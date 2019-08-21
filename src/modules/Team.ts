@@ -5,6 +5,8 @@ import {
 	fetchingSuccess,
 	endWithError,
 	endCanceling,
+	startSaving,
+	savingSuccess,
 } from './commons/common'
 import useModuleEpic from './commons/moduleEpics'
 
@@ -15,13 +17,13 @@ import {AnyAction} from 'redux'
 // Reducer
 // ------------------------------------
 
-const initialState: ModelState<Team[]> = {
+const initialState: ModelState<Team> = {
 	data: null,
 	status: 'idle',
 	error: null,
 }
 
-export const teamsReducer = (state = initialState, action: AnyAction) =>
+export const teamReducer = (state = initialState, action: AnyAction) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(getAsync.request):
@@ -30,7 +32,14 @@ export const teamsReducer = (state = initialState, action: AnyAction) =>
 			case getType(getAsync.success):
 				fetchingSuccess(draft, action.payload)
 				break
+			case getType(postAsync.request):
+				startSaving(draft)
+				break
+			case getType(postAsync.success):
+				savingSuccess(draft)
+				break
 			case getType(getAsync.failure):
+			case getType(postAsync.failure):
 				endWithError(draft, action.payload)
 				break
 			case getType(getAsync.cancel):
@@ -43,12 +52,14 @@ export const teamsReducer = (state = initialState, action: AnyAction) =>
 // Actions
 // ------------------------------------
 
-const moduleName = 'teams'
+const moduleName = 'team'
 
-export const {moduleActions, moduleEpics: teamsEpics} = useModuleEpic(
-	moduleName,
-)
-const {getAsync} = moduleActions
+export const {moduleActions, moduleEpics: teamEpics} = useModuleEpic(moduleName)
+const {getAsync, postAsync} = moduleActions
 
-export const getMyTeams = () => getAsync.request({path: 'api/users/me/teams'})
-export const cancelGetTeams = () => getAsync.cancel()
+export const getTeam = (slug: string) =>
+	getAsync.request({path: `api/users/me/teams/${slug}`})
+export const cancelGetTeam = () => getAsync.cancel()
+
+export const createTeam = (name: string, description: string) =>
+	postAsync.request({path: 'api/users/me/teams', body: {name, description}})

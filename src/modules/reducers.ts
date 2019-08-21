@@ -9,15 +9,20 @@ import {combineReducers} from 'redux'
 import {History} from 'history'
 import {connectRouter, RouterState} from 'connected-react-router'
 import {AuthenticatedUserState, authenticatedReducer} from './AuthenticatedUser'
-import {AppState, appReducer} from './App'
-import {AuthState, authReducer} from './Auth'
-import {TeamsState, teamsReducer} from './Teams'
+import {appReducer} from './App'
+import {authReducer} from './Auth'
+import {teamsReducer} from './Teams'
+import {teamReducer} from './Team'
+import ModelState from '../models/bases/ModelState'
+import Auth from '../models/Auth'
+import App from '../models/App'
 
 export interface RootState {
 	authenticatedUser: AuthenticatedUserState
-	app: AppState
-	auth: AuthState
-	teams: TeamsState
+	app: App
+	auth: ModelState<Auth>
+	teams: ModelState<Team[]>
+	team: ModelState<Team>
 	router: RouterState
 }
 
@@ -27,6 +32,7 @@ const rootReducer = (history: History) =>
 		app: appReducer,
 		auth: authReducer,
 		teams: teamsReducer,
+		team: teamReducer,
 		router: connectRouter(history),
 	})
 

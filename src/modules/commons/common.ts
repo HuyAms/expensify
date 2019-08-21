@@ -63,6 +63,7 @@ export enum ErrorCode {
 	emailNotUnique = 104,
 	notActiveUser = 106,
 	notHasPermission = 107,
+	notATeamMember = 301,
 }
 
 const parseError = (error: ErrorResponse): string => {
@@ -80,6 +81,8 @@ const parseError = (error: ErrorResponse): string => {
 				return 'error.notActiveUser'
 			case ErrorCode.notHasPermission:
 				return 'error.notHasPermission'
+			case ErrorCode.notATeamMember:
+				return 'error.notATeamMember'
 			default:
 				return 'error.unexpectedError'
 		}

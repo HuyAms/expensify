@@ -1,7 +1,8 @@
 import * as React from 'react'
-import {Redirect, Route, Switch} from 'react-router-dom'
+import {Route, Switch} from 'react-router-dom'
 import UnAuthenticatedLayout from '../layout/UnAuthenticatedLayout'
 import {UnAuthenticatedRoutePath} from '../models/Route'
+import NotFound from '../pages/NotFound'
 
 const SignIn = React.lazy(() =>
 	import(/* webpackChunkName: "SignIn" */ '../pages/Auth/SignIn'),
@@ -14,9 +15,15 @@ const Router = () => {
 	return (
 		<UnAuthenticatedLayout>
 			<Switch>
-				<Route path={UnAuthenticatedRoutePath.signin} component={SignIn} />
-				<Route path={UnAuthenticatedRoutePath.signup} component={SignUp} />
-				<Redirect to={UnAuthenticatedRoutePath.signin} />
+				<Route
+					path={`/${UnAuthenticatedRoutePath.signin}`}
+					component={SignIn}
+				/>
+				<Route
+					path={`/${UnAuthenticatedRoutePath.signup}`}
+					component={SignUp}
+				/>
+				<Route component={NotFound} />
 			</Switch>
 		</UnAuthenticatedLayout>
 	)
