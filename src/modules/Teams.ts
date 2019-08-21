@@ -45,7 +45,9 @@ export const teamsReducer = (state = initialState, action: AnyAction) =>
 
 const moduleName = 'teams'
 
-export const {moduleActions, moduleEpics: teamsEpic} = useModuleEpic(moduleName)
+export const {moduleActions, moduleEpics: teamsEpics} = useModuleEpic(
+	moduleName,
+)
 const {getAsync} = moduleActions
 
 export const getMyTeams = () => getAsync.request({path: 'api/users/me/teams'})

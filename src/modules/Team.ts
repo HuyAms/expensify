@@ -54,7 +54,7 @@ export const teamReducer = (state = initialState, action: AnyAction) =>
 
 const moduleName = 'team'
 
-export const {moduleActions, moduleEpics: teamEpic} = useModuleEpic(moduleName)
+export const {moduleActions, moduleEpics: teamEpics} = useModuleEpic(moduleName)
 const {getAsync, postAsync} = moduleActions
 
 export const getTeam = (slug: string) =>
