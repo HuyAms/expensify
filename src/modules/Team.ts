@@ -62,4 +62,4 @@ export const getTeam = (slug: string) =>
 export const cancelGetTeam = () => getAsync.cancel()
 
 export const createTeam = (name: string, description: string) =>
-	postAsync.request({path: 'api/teams', body: {name, description}})
+	postAsync.request({path: 'api/users/me/teams', body: {name, description}})
