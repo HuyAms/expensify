@@ -6,9 +6,6 @@ import {Action} from 'redux'
 import {RootState} from './reducers'
 import {filter, switchMap, tap, ignoreElements, map} from 'rxjs/operators'
 import {of} from 'rxjs'
-import {getSelectedTeam, setSelectedTeam} from '../services/localStorage'
-import {push} from 'connected-react-router'
-import {AuthenticatedRoutePath} from '../models/Route'
 
 // ------------------------------------
 // Reducer
@@ -16,7 +13,6 @@ import {AuthenticatedRoutePath} from '../models/Route'
 
 const initialState: App = {
 	language: null,
-	selectedTeam: getSelectedTeam(),
 }
 
 export const appReducer = (state = initialState, action) =>
@@ -24,9 +20,6 @@ export const appReducer = (state = initialState, action) =>
 		switch (action.type) {
 			case getType(changeLanguage):
 				draft.language = action.payload
-				break
-			case getType(selectTeam):
-				draft.selectedTeam = action.payload
 				break
 		}
 	})
@@ -43,12 +36,6 @@ export const changeLanguage = createAction(
 	`@@${moduleName}/CHANGE_LANGUAGE`,
 	action => {
 		return (language: string) => action(language)
-	},
-)
-export const selectTeam = createAction(
-	`@@${moduleName}/SELECT_TEAM`,
-	action => {
-		return (selectedTeam: Team) => action(selectedTeam)
 	},
 )
 
@@ -93,23 +80,4 @@ const changeLanguageEpic: Epic<Action, Action, RootState> = (
 	)
 }
 
-const selectTeamEpic: Epic<Action, Action, RootState> = action$ => {
-	return action$.pipe(
-		filter(isActionOf(selectTeam)),
-		tap(action => {
-			const selectedTeam = action.payload
-			setSelectedTeam(selectedTeam)
-		}),
-		map(action => {
-			const selectedTeam = action.payload
-			return push(`${AuthenticatedRoutePath.board}/${selectedTeam.slug}`)
-		}),
-	)
-}
-
-export const appEpics = [
-	initializeEpic,
-	tearDownEpic,
-	changeLanguageEpic,
-	selectTeamEpic,
-]
+export const appEpics = [initializeEpic, tearDownEpic, changeLanguageEpic]
