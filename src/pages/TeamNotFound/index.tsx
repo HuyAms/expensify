@@ -1,7 +1,21 @@
 import React from 'react'
+import {useTranslation} from 'react-i18next'
+import {Wrapper, ErrorImg, ErrorText} from './style'
+import Panda from '../../images/panda.png'
 
-const NotFound = () => {
-	return <h1>Not found</h1>
+interface Props {
+	error: string
 }
 
-export default NotFound
+const TeamNotFound: React.FunctionComponent<Props> = ({error}) => {
+	const [t] = useTranslation(['common'])
+
+	return (
+		<Wrapper>
+			<ErrorText>{t(error)}</ErrorText>
+			<ErrorImg src={Panda} alt="Panda" />
+		</Wrapper>
+	)
+}
+
+export default TeamNotFound
