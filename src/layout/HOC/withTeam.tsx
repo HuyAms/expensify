@@ -34,15 +34,18 @@ const withTeam = WrappedComponent => {
 		}, [])
 
 		const renderComponent = () => {
-			if (!slug || team.status === 'error') {
-				return <NotFound />
+			switch (team.status) {
+				case 'error':
+					return <NotFound />
+				case 'fetching':
+					return <LoadingPage />
+				case 'success':
+					return (
+						<WrappedComponent {...props} teamId={team.data._id} slug={slug} />
+					)
+				default:
+					return <LoadingPage />
 			}
-
-			if (team.status === 'fetching') {
-				return <LoadingPage />
-			}
-
-			return <WrappedComponent {...props} teamId={team.data._id} slug={slug} />
 		}
 
 		return <>{renderComponent()}</>
