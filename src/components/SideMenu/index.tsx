@@ -5,6 +5,7 @@ import {Layout, Menu, Icon} from 'antd'
 import {Logo, StyledLink} from './style'
 import {useTranslation} from 'react-i18next'
 import {AuthenticatedRoutePath} from '../../models/Route'
+import {RouteComponentProps, withRouter} from 'react-router'
 const {Sider} = Layout
 
 interface MenuItem {
@@ -13,26 +14,32 @@ interface MenuItem {
 	iconType: string
 }
 
-const menuItems: MenuItem[] = [
-	{
-		path: AuthenticatedRoutePath.board,
-		name: 'nav.board',
-		iconType: 'wallet',
-	},
-	{
-		path: AuthenticatedRoutePath.report,
-		name: 'nav.report',
-		iconType: 'bar-chart',
-	},
-]
+interface MatchParams {
+	slug: string
+}
 
-interface Props {
+interface Props extends RouteComponentProps<MatchParams> {
 	pathname: string
 	push: (path: string) => any
 }
 
-const SideMenu: React.FunctionComponent<Props> = ({pathname, push}) => {
+const SideMenu: React.FunctionComponent<Props> = props => {
+	const {pathname, push, match} = props
+	const {slug} = match.params
 	const [t] = useTranslation()
+
+	const menuItems: MenuItem[] = [
+		{
+			path: `/team/${slug}/${AuthenticatedRoutePath.board}`,
+			name: 'nav.board',
+			iconType: 'wallet',
+		},
+		{
+			path: `/team/${slug}/${AuthenticatedRoutePath.report}`,
+			name: 'nav.report',
+			iconType: 'bar-chart',
+		},
+	]
 
 	const onLogoClick = () => {
 		push(AuthenticatedRoutePath.home)
@@ -65,7 +72,9 @@ const mapStateToProps = ({router}) => {
 	}
 }
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(SideMenu)
+export default withRouter(
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	)(SideMenu),
+)
