@@ -12,8 +12,8 @@ const Router = () => {
 		<AuthenticatedLayout>
 			<Switch>
 				<Route path="/team/:slug" component={TeamLayout} />
+				<Route path={`/${AuthenticatedRoutePath.logout}`} component={LogOut} />
 				<Route path="/" component={NonTeamLayout} />
-				<Route path={AuthenticatedRoutePath.logout} component={LogOut} />
 				<Route component={NotFound} />
 			</Switch>
 		</AuthenticatedLayout>

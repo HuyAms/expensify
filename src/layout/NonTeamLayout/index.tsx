@@ -19,7 +19,7 @@ const NonTeamLayout: React.FunctionComponent<Props> = props => {
 
 	const renderNonTeamRoutes = () => (
 		<Switch>
-			<Route path={`/${AuthenticatedRoutePath.home}`} component={Home} />
+			<Route exact path={`${AuthenticatedRoutePath.home}`} component={Home} />
 			<Route component={NotFound} />
 		</Switch>
 	)
