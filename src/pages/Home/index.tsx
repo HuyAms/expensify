@@ -27,7 +27,7 @@ const Home: React.FunctionComponent<Props> = props => {
 	const formRef = React.useRef(null)
 
 	const {getMyTeams, teams, createTeam, cancelGetTeams, push} = props
-	const [t] = useTranslation(['common', 'home'])
+	const [t] = useTranslation(['home', 'common'])
 
 	useEffect(() => {
 		getMyTeams()
