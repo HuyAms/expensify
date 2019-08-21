@@ -37,7 +37,6 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
 	h2 {
-		text-transform: uppercase;
 		font-size: ${props => props.theme.fontSizes.lg};
 	}
 `
