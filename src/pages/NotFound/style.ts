@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import {Link} from 'react-router-dom'
 
 export const Wrapper = styled.div`
 	display: flex;
@@ -10,6 +11,10 @@ export const Wrapper = styled.div`
 
 export const ErrorImg = styled.img`
 	max-width: 30rem;
+`
+
+export const GoHomeText = styled(Link)`
+	margin-bottom: 3rem;
 `
 
 export const ErrorText = styled.h2`
