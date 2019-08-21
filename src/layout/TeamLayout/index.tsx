@@ -46,14 +46,14 @@ const TeamLayout: React.FunctionComponent<Props> = props => {
 				path={`/team/:slug/${AuthenticatedRoutePath.report}`}
 				component={Report}
 			/>
-			<Route path={`/team/hello`} component={Report} />
+			<Route component={NotFound} />
 		</Switch>
 	)
 
 	const renderComponent = () => {
 		switch (team.status) {
 			case 'error':
-				return <NotFound />
+				return <NotFound error={team.error} />
 			case 'fetching':
 				return <LoadingPage />
 			case 'success':

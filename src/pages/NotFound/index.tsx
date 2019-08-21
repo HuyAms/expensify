@@ -4,18 +4,18 @@ import {Wrapper, ErrorImg, ErrorText} from './style'
 import Panda from '../../images/panda.png'
 
 interface Props {
-	error: string
+	error?: string
 }
 
-const TeamNotFound: React.FunctionComponent<Props> = ({error}) => {
+const NotFound: React.FunctionComponent<Props> = ({error}) => {
 	const [t] = useTranslation(['common'])
 
 	return (
 		<Wrapper>
-			<ErrorText>{t(error)}</ErrorText>
+			<ErrorText>{error ? t(error) : t('error.pageNotFound')}</ErrorText>
 			<ErrorImg src={Panda} alt="Panda" />
 		</Wrapper>
 	)
 }
 
-export default TeamNotFound
+export default NotFound

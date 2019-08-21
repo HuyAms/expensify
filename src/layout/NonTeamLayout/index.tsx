@@ -8,6 +8,7 @@ import {AppContent} from '../style'
 import {Route, Switch} from 'react-router'
 import {AuthenticatedRoutePath} from '../../models/Route'
 import Home from '../../pages/Home'
+import NotFound from '../../pages/NotFound'
 
 interface Props {
 	authenticatedUser: ModelState<User>
@@ -19,6 +20,7 @@ const NonTeamLayout: React.FunctionComponent<Props> = props => {
 	const renderNonTeamRoutes = () => (
 		<Switch>
 			<Route path={`/${AuthenticatedRoutePath.home}`} component={Home} />
+			<Route component={NotFound} />
 		</Switch>
 	)
 

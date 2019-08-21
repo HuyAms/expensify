@@ -1,10 +1,11 @@
 import * as React from 'react'
-import {Redirect, Route, Switch} from 'react-router-dom'
+import {Route, Switch} from 'react-router-dom'
 import AuthenticatedLayout from '../layout/AuthenticatedLayout'
 import TeamLayout from '../layout/TeamLayout'
 import NonTeamLayout from '../layout/NonTeamLayout'
 import {AuthenticatedRoutePath} from '../models/Route'
 import LogOut from '../pages/Auth/LogOut'
+import NotFound from '../pages/NotFound'
 
 const Router = () => {
 	return (
@@ -13,7 +14,7 @@ const Router = () => {
 				<Route path="/team/:slug" component={TeamLayout} />
 				<Route path="/" component={NonTeamLayout} />
 				<Route path={AuthenticatedRoutePath.logout} component={LogOut} />
-				<Redirect to={AuthenticatedRoutePath.home} />
+				<Route component={NotFound} />
 			</Switch>
 		</AuthenticatedLayout>
 	)
