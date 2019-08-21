@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import {Form, Icon, Input} from 'antd'
 import {SignUpForm, SignUpContainer, SignUpButton} from './style'
 import {useTranslation} from 'react-i18next'
-import {authenticateUser, cancelAuthenticateUser} from '../../../modules/Auth'
+import {authenticateUser} from '../../../modules/Auth'
 import {connect} from 'react-redux'
 import ModelState from '../../../models/bases/ModelState'
 import Auth from '../../../models/Auth'
@@ -12,19 +12,14 @@ import ErrorText from '../../../components/ErrorText'
 interface Props {
 	auth: ModelState<Auth>
 	authenticateUser: (user: object, isSignIn: boolean) => void
-	cancelAuthenticateUser: () => void
 	form: any
 }
 
 const SignUp: React.FunctionComponent<Props> = props => {
-	const {form, auth, authenticateUser, cancelAuthenticateUser} = props
+	const {form, auth, authenticateUser} = props
 	const {getFieldDecorator, getFieldsError} = form
 	const [confirmDirty, setConfirmDirty] = React.useState(false)
-	const [t] = useTranslation(['common', 'auth'])
-
-	React.useEffect(() => {
-		return () => cancelAuthenticateUser()
-	}, [])
+	const [t] = useTranslation(['auth', 'common'])
 
 	const renderFirstName = () => {
 		return getFieldDecorator('firstName', {
@@ -154,7 +149,6 @@ const mapStateToProps = ({auth}) => {
 
 const mapDispatchToProps = {
 	authenticateUser,
-	cancelAuthenticateUser,
 }
 
 export default connect(
