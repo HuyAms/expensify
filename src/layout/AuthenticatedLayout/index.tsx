@@ -1,24 +1,19 @@
 import React from 'react'
-import {Layout} from 'antd'
-import SideMenu from '../../components/SideMenu'
 import {connect} from 'react-redux'
 import {Alert} from 'antd'
 import {getMe} from '../../modules/AuthenticatedUser'
 import ModelState from '../../models/bases/ModelState'
 import User, {UserStatus} from '../../models/User'
 import {useTranslation} from 'react-i18next'
-import MainHeader from '../../components/MainHeader'
-import {Wrapper, AppContainer, AppContent} from './style'
-import {AuthenticatedRoutePath} from '../../models/Route'
+import {Wrapper, AppContainer} from '../style'
 
 interface Props {
 	authenticatedUser: ModelState<User>
 	getMe: () => any
-	pathname: string
 }
 
 const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
-	const {getMe, authenticatedUser, pathname} = props
+	const {getMe, authenticatedUser} = props
 	const [t] = useTranslation()
 
 	React.useEffect(() => {
@@ -34,37 +29,17 @@ const AuthenticatedLayout: React.FunctionComponent<Props> = props => {
 		}
 	}
 
-	const renderSideMenu = () => {
-		if (pathname === AuthenticatedRoutePath.home) {
-			return null
-		}
-
-		return <SideMenu />
-	}
-
 	return (
 		<Wrapper>
 			{renderAlert()}
-			<AppContainer>
-				{renderSideMenu()}
-				<Layout>
-					<MainHeader
-						loading={authenticatedUser.status === 'fetching'}
-						username={
-							authenticatedUser.data && authenticatedUser.data.firstName
-						}
-					/>
-					<AppContent>{props.children}</AppContent>
-				</Layout>
-			</AppContainer>
+			<AppContainer>{props.children}</AppContainer>
 		</Wrapper>
 	)
 }
 
-const mapStateToProps = ({authenticatedUser, router}) => {
+const mapStateToProps = ({authenticatedUser}) => {
 	return {
 		authenticatedUser,
-		pathname: router.location.pathname,
 	}
 }
 
