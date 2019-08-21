@@ -1,6 +1,6 @@
 import React from 'react'
 import {Layout} from 'antd'
-import {Route, RouteComponentProps, Switch, withRouter} from 'react-router'
+import {Route, RouteComponentProps, Switch, withRouter} from 'react-router-dom'
 import SideMenu from '../../components/SideMenu'
 import {connect} from 'react-redux'
 import ModelState from '../../models/bases/ModelState'

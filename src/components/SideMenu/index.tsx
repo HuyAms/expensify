@@ -5,7 +5,7 @@ import {Layout, Menu, Icon} from 'antd'
 import {Logo, StyledLink} from './style'
 import {useTranslation} from 'react-i18next'
 import {AuthenticatedRoutePath} from '../../models/Route'
-import {RouteComponentProps, withRouter} from 'react-router'
+import {RouteComponentProps, withRouter} from 'react-router-dom'
 const {Sider} = Layout
 
 interface MenuItem {
