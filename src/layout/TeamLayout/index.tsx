@@ -12,6 +12,7 @@ import {cancelGetTeam, getTeam} from '../../modules/Team'
 import {AuthenticatedRoutePath} from '../../models/Route'
 import Board from '../../pages/Board'
 import Report from '../../pages/Report'
+import Settings from '../../pages/Settings'
 import {AppContent} from '../style'
 
 interface MatchParams {
@@ -45,6 +46,10 @@ const TeamLayout: React.FunctionComponent<Props> = props => {
 			<Route
 				path={`/team/:slug/${AuthenticatedRoutePath.report}`}
 				component={Report}
+			/>
+			<Route
+				path={`/team/:slug/${AuthenticatedRoutePath.settings}`}
+				component={Settings}
 			/>
 			<Route component={NotFound} />
 		</Switch>
