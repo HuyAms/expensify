@@ -39,6 +39,11 @@ const SideMenu: React.FunctionComponent<Props> = props => {
 			name: 'nav.report',
 			iconType: 'bar-chart',
 		},
+		{
+			path: `/team/${slug}/${AuthenticatedRoutePath.settings}`,
+			name: 'nav.settings',
+			iconType: 'setting',
+		},
 	]
 
 	const onLogoClick = () => {
