@@ -1,6 +1,7 @@
 import React from 'react'
 import {Layout} from 'antd'
 import {Route, RouteComponentProps, Switch, withRouter} from 'react-router-dom'
+import {TeamContext} from '../../contexts'
 import SideMenu from '../../components/SideMenu'
 import {connect} from 'react-redux'
 import ModelState from '../../models/bases/ModelState'
@@ -70,14 +71,18 @@ const TeamLayout: React.FunctionComponent<Props> = props => {
 
 	return (
 		<>
-			<SideMenu />
-			<Layout>
-				<MainHeader
-					loading={authenticatedUser.status === 'fetching'}
-					username={authenticatedUser.data && authenticatedUser.data.firstName}
-				/>
-				<AppContent>{renderComponent()}</AppContent>
-			</Layout>
+			<TeamContext.Provider value={team.data}>
+				<SideMenu />
+				<Layout>
+					<MainHeader
+						loading={authenticatedUser.status === 'fetching'}
+						username={
+							authenticatedUser.data && authenticatedUser.data.firstName
+						}
+					/>
+					<AppContent>{renderComponent()}</AppContent>
+				</Layout>
+			</TeamContext.Provider>
 		</>
 	)
 }
