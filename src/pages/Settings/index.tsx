@@ -12,7 +12,7 @@ import {CategoryType} from '../../models/Category'
 import {getCategories, cancelGetCategories} from '../../modules/Categories'
 
 interface Props {
-	getCategories: (teamId: string, type: CategoryType) => any
+	getCategories: (teamId: string, type?: CategoryType) => any
 	cancelGetCategories: () => any
 }
 
@@ -24,7 +24,7 @@ const Settings: React.FunctionComponent<Props> = ({
 	const team = React.useContext(TeamContext)
 
 	useEffect(() => {
-		getCategories(team._id, CategoryType.Expense)
+		getCategories(team._id)
 		return () => cancelGetCategories()
 	}, [])
 

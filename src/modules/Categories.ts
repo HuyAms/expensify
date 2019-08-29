@@ -1,6 +1,6 @@
 import produce from 'immer'
 import {getType} from 'typesafe-actions'
-import {Category} from '../models/Category'
+import {Category, CategoryType} from '../models/Category'
 import {
 	startFetching,
 	fetchingSuccess,
@@ -19,7 +19,7 @@ const {getAsync} = moduleActions
 // ------------------------------------
 // Actions
 // ------------------------------------
-export const getCategories = (teamId, type) =>
+export const getCategories = (teamId: string, type?: CategoryType) =>
 	getAsync.request({path: `api/teams/${teamId}/categories`, query: {type}})
 export const cancelGetCategories = () => getAsync.cancel()
 
