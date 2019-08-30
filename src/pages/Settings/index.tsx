@@ -2,11 +2,15 @@ import React, {useEffect} from 'react'
 import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 
+// Components
+import CategorySettings from './components/CategorySettings'
+
 // Context
 import {TeamContext} from '../../contexts'
 
 // Interface
-import {CategoryType} from '../../models/Category'
+import {CategoryType, Category} from '../../models/Category'
+import ModelState from '../../models/bases/ModelState'
 
 // Actions
 import {getCategories, cancelGetCategories} from '../../modules/Categories'
@@ -14,11 +18,13 @@ import {getCategories, cancelGetCategories} from '../../modules/Categories'
 interface Props {
 	getCategories: (teamId: string, type?: CategoryType) => any
 	cancelGetCategories: () => any
+	categories: ModelState<Category[]>
 }
 
 const Settings: React.FunctionComponent<Props> = ({
 	getCategories,
 	cancelGetCategories,
+	categories,
 }) => {
 	const [t] = useTranslation('settings')
 	const team = React.useContext(TeamContext)
@@ -31,8 +37,11 @@ const Settings: React.FunctionComponent<Props> = ({
 	return (
 		<div>
 			<h2>{t('title')}</h2>
-			<h3>{t('categories.title')}</h3>
-			<label>{t('categories.expenseLabel')}</label>
+			<CategorySettings
+				data={categories.data}
+				status={categories.status}
+				error={categories.error}
+			/>
 		</div>
 	)
 }
@@ -42,7 +51,9 @@ const mapDispatchToProps = {
 	cancelGetCategories,
 }
 
-const mapStateToProps = ({categories}) => categories
+const mapStateToProps = state => ({
+	categories: state.categories,
+})
 
 export default connect(
 	mapStateToProps,
