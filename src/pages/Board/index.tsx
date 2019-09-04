@@ -1,9 +1,13 @@
 import React from 'react'
+import {Collapse} from 'antd'
+import CreateItemForm from './component/CreateItemForm'
 import {cancelGetItems, getItems} from '../../modules/Items'
 import {connect} from 'react-redux'
 import Item from '../../models/Item'
 import ModelState from '../../models/bases/ModelState'
 import {TeamContext} from '../../contexts'
+
+const {Panel} = Collapse
 
 interface Props {
 	getItems: (teamId: string) => any
@@ -21,7 +25,15 @@ const Board: React.FunctionComponent<Props> = props => {
 		return () => cancelGetItems()
 	}, [])
 
-	return <p>Board</p>
+	return (
+		<div>
+			<Collapse defaultActiveKey={['1']}>
+				<Panel header="This is panel header 1" key="1">
+					<CreateItemForm />
+				</Panel>
+			</Collapse>
+		</div>
+	)
 }
 
 const mapStateToProps = ({items}) => {
