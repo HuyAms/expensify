@@ -63,7 +63,13 @@ export enum ErrorCode {
 	emailNotUnique = 104,
 	notActiveUser = 106,
 	notHasPermission = 107,
+
+	// Category: 2xx
+	categoryNameNotUnique = 201,
+
+	// Team: 3xx
 	notATeamMember = 301,
+	duplicatedTeamName = 302,
 }
 
 const parseError = (error: ErrorResponse): string => {
@@ -83,6 +89,10 @@ const parseError = (error: ErrorResponse): string => {
 				return 'error.notHasPermission'
 			case ErrorCode.notATeamMember:
 				return 'error.notATeamMember'
+			case ErrorCode.categoryNameNotUnique:
+				return 'error.categoryNameNotUnique'
+			case ErrorCode.duplicatedTeamName:
+				return 'error.duplicatedTeamName'
 			default:
 				return 'error.unexpectedError'
 		}

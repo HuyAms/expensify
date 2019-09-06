@@ -24,7 +24,10 @@ export const {moduleActions, moduleEpics: itemEpics} = useModuleEpic(moduleName)
 const {getAsync, postAsync} = moduleActions
 
 export const createItem = (teamId: string, item: Item) => {
-	postAsync.request({path: `api/teams/${teamId}/expenseItems`, body: item})
+	return postAsync.request({
+		path: `api/teams/${teamId}/expenseItems`,
+		body: item,
+	})
 }
 
 // ------------------------------------

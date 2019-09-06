@@ -29,10 +29,20 @@
 		"emailNotUnique": "This email has already been used",
 		"notActiveUser": "Please check your email to activate this account",
 		"notHasPermission": "You do not have permission to perform this action",
-		"missingTeamName": "Please enter your team name"
+		"categoryNameNotUnique": "This category has been created",
+		"duplicatedTeamName": "This team has been created",
+		"missingTeamName": "Please enter your team name",
+		"missingQuantity": "Quantity is required",
+		"missingPrice": "Price is required",
+		"missingDate": "Date is required",
+		"missingItemName": "Item name is required"
 	},
 	"button": {
 		"create": "Create",
 		"cancel": "Cancel"
+	},
+	"categoryType": {
+		"expense": "Expense",
+		"income": "Income"
 	}
 }
