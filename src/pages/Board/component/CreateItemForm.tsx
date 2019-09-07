@@ -19,7 +19,13 @@ interface Props extends FormComponentProps {
 const CreateItemForm: React.FunctionComponent<Props> = props => {
 	const {form, isItemSaving, onSubmit, categories, isCateogryLoading} = props
 	const {getFieldDecorator, getFieldsError} = form
+
 	const [t] = useTranslation(['board', 'common'])
+
+	// Reset form category input when categories change
+	React.useEffect(() => {
+		form.setFieldsValue({category: categories.length > 0 && categories[0]._id})
+	}, [categories])
 
 	const renderNameInput = () => {
 		return getFieldDecorator('name', {
@@ -58,9 +64,10 @@ const CreateItemForm: React.FunctionComponent<Props> = props => {
 	}
 
 	const renderCategoryInput = () => {
+		const defaultValue = categories.length > 0 && categories[0]._id
 		return getFieldDecorator('category', {
 			rules: [{required: true, message: 'Please select your category'}],
-			initialValue: categories.length > 0 && categories[0]._id,
+			initialValue: defaultValue,
 		})(
 			<Select
 				style={{minWidth: '20rem'}}
