@@ -49,8 +49,8 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	]
 
 	const sortCategoriesByType = () => {
-		let expenseCategories: ExpenseRow[] = []
-		let incomeCategories: ExpenseRow[] = []
+		const expenseCategories: ExpenseRow[] = []
+		const incomeCategories: ExpenseRow[] = []
 
 		data.forEach(category => {
 			switch (category.type) {

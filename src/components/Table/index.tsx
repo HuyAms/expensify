@@ -1,5 +1,6 @@
 import React from 'react'
 import {Table as AntdTable} from 'antd'
+import {PaginationConfig} from 'antd/lib/pagination'
 
 // Components
 import Row from './components/Row'
@@ -14,9 +15,14 @@ interface Column {
 interface Props<T> {
 	columns: Column[]
 	data: T[]
+	pagination?: PaginationConfig | false
 }
 
-const Table: React.FunctionComponent<Props<any>> = ({columns, data}) => {
+const Table: React.FunctionComponent<Props<any>> = ({
+	columns,
+	data,
+	pagination,
+}) => {
 	const components = {
 		body: {
 			row: Row,
@@ -24,8 +30,10 @@ const Table: React.FunctionComponent<Props<any>> = ({columns, data}) => {
 		},
 	}
 
+	const getRowClassName = () => 'editable-row'
+
 	const handleSave = row => {
-		let newData = [...data]
+		const newData = [...data]
 		const index = newData.findIndex(item => row.key === item.key)
 		const item = newData[index]
 
@@ -59,13 +67,18 @@ const Table: React.FunctionComponent<Props<any>> = ({columns, data}) => {
 		<div>
 			<AntdTable
 				components={components}
-				rowClassName={() => 'editable-row'}
+				rowClassName={getRowClassName}
 				bordered
 				dataSource={data}
 				columns={normalizeColumns()}
+				pagination={pagination}
 			/>
 		</div>
 	)
 }
 
 export default Table
+
+Table.defaultProps = {
+	pagination: false,
+}
