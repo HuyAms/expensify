@@ -13,6 +13,9 @@ import NotFound from '../../../pages/NotFound'
 import LoadingPage from '../../../components/LoadingPage'
 import Table from '../../../components/Table'
 
+// Styled components
+import {Item, CategoryLabel} from '../style'
+
 // Interfaces
 import {Category, CategoryType} from '../../../models/Category'
 import {RequestStatus} from '../../../models/bases/ModelState'
@@ -78,10 +81,14 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		const [expenseCategories, incomeCategories] = sortCategoriesByType()
 		return (
 			<>
-				<h4>{t('categories.expenseLabel')}</h4>
-				<Table columns={getTableColumns()} data={expenseCategories} />
-				<h4>{t('categories.incomeLabel')}</h4>
-				<Table columns={getTableColumns()} data={incomeCategories} />
+				<Item>
+					<CategoryLabel>{t('categories.expenseLabel')}</CategoryLabel>
+					<Table columns={getTableColumns()} data={expenseCategories} />
+				</Item>
+				<Item>
+					<CategoryLabel>{t('categories.incomeLabel')}</CategoryLabel>
+					<Table columns={getTableColumns()} data={incomeCategories} />
+				</Item>
 			</>
 		)
 	}
@@ -101,7 +108,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 
 	return (
 		<>
-			<h3>{t('categories.title')}</h3>
+			<h2>{t('categories.title')}</h2>
 			{renderContent()}
 		</>
 	)
