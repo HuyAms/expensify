@@ -51,8 +51,8 @@ const mapDispatchToProps = {
 	cancelGetCategories,
 }
 
-const mapStateToProps = state => ({
-	categories: state.categories,
+const mapStateToProps = ({categories}) => ({
+	categories,
 })
 
 export default connect(
