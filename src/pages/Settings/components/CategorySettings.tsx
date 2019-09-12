@@ -9,7 +9,6 @@ import React from 'react'
 import {useTranslation} from 'react-i18next'
 
 // Components
-import LoadingPage from '../../../components/LoadingPage'
 import Table from '../../../components/Table'
 
 // Styled components
@@ -19,6 +18,7 @@ import {Item, CategoryLabel} from '../style'
 import {Category, CategoryType} from '../../../models/Category'
 import {RequestStatus} from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
+import Spinner from '../../../components/Spinner'
 
 interface Props {
 	data: Category[]
@@ -99,7 +99,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 			case 'error':
 				return <ErrorText>{error}</ErrorText>
 			case 'fetching':
-				return <LoadingPage />
+				return <Spinner />
 			case 'success':
 				return renderCategoryTables()
 			default:
