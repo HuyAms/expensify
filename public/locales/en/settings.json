@@ -1,0 +1,14 @@
+{
+	"title": "Settings",
+	"categories": {
+		"title": "Categories",
+		"expenseLabel": "Expense categories",
+		"incomeLabel": "Income categories",
+		"table": {
+			"heading": {
+				"name": "Name",
+				"description": "Description"
+			}
+		}
+	}
+}
