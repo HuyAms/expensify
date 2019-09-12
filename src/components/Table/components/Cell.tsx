@@ -49,7 +49,13 @@ const Cell: React.FunctionComponent<Props> = ({
 						},
 					],
 					initialValue: record[dataIndex],
-				})(<Input onPressEnter={handleInputSave} onBlur={handleInputSave} />)}
+				})(
+					<Input
+						onPressEnter={handleInputSave}
+						onBlur={handleInputSave}
+						autoFocus={true}
+					/>,
+				)}
 			</Form.Item>
 		)
 	}
