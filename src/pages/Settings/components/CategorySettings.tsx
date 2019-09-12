@@ -9,7 +9,6 @@ import React from 'react'
 import {useTranslation} from 'react-i18next'
 
 // Components
-import NotFound from '../../../pages/NotFound'
 import LoadingPage from '../../../components/LoadingPage'
 import Table from '../../../components/Table'
 
@@ -19,6 +18,7 @@ import {Item, CategoryLabel} from '../style'
 // Interfaces
 import {Category, CategoryType} from '../../../models/Category'
 import {RequestStatus} from '../../../models/bases/ModelState'
+import ErrorText from '../../../components/ErrorText'
 
 interface Props {
 	data: Category[]
@@ -97,7 +97,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	const renderContent = () => {
 		switch (status) {
 			case 'error':
-				return <NotFound error={error} />
+				return <ErrorText>{error}</ErrorText>
 			case 'fetching':
 				return <LoadingPage />
 			case 'success':
