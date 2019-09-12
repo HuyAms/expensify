@@ -77,7 +77,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		return [expenseCategories, incomeCategories]
 	}
 
-	const renderCategoryItem = (data, label) => (
+	const renderCategoryTable = (data, label) => (
 		<Item>
 			<CategoryLabel>{label}</CategoryLabel>
 			<Table columns={getTableColumns()} data={data} />
@@ -88,8 +88,8 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		const [expenseCategories, incomeCategories] = sortCategoriesByType()
 		return (
 			<>
-				{renderCategoryItem(expenseCategories, t('categories.expenseLabel'))}
-				{renderCategoryItem(incomeCategories, t('categories.incomeLabel'))}
+				{renderCategoryTable(expenseCategories, t('categories.expenseLabel'))}
+				{renderCategoryTable(incomeCategories, t('categories.incomeLabel'))}
 			</>
 		)
 	}
