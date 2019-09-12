@@ -13,6 +13,9 @@ import NotFound from '../../../pages/NotFound'
 import LoadingPage from '../../../components/LoadingPage'
 import Table from '../../../components/Table'
 
+// Styled components
+import {Item, CategoryLabel} from '../style'
+
 // Interfaces
 import {Category, CategoryType} from '../../../models/Category'
 import {RequestStatus} from '../../../models/bases/ModelState'
@@ -49,8 +52,8 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	]
 
 	const sortCategoriesByType = () => {
-		let expenseCategories: ExpenseRow[] = []
-		let incomeCategories: ExpenseRow[] = []
+		const expenseCategories: ExpenseRow[] = []
+		const incomeCategories: ExpenseRow[] = []
 
 		data.forEach(category => {
 			switch (category.type) {
@@ -74,14 +77,19 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		return [expenseCategories, incomeCategories]
 	}
 
+	const renderCategoryItem = (data, label) => (
+		<Item>
+			<CategoryLabel>{label}</CategoryLabel>
+			<Table columns={getTableColumns()} data={data} />
+		</Item>
+	)
+
 	const renderCategoryTables = () => {
 		const [expenseCategories, incomeCategories] = sortCategoriesByType()
 		return (
 			<>
-				<h4>{t('categories.expenseLabel')}</h4>
-				<Table columns={getTableColumns()} data={expenseCategories} />
-				<h4>{t('categories.incomeLabel')}</h4>
-				<Table columns={getTableColumns()} data={incomeCategories} />
+				{renderCategoryItem(expenseCategories, t('categories.expenseLabel'))}
+				{renderCategoryItem(incomeCategories, t('categories.incomeLabel'))}
 			</>
 		)
 	}
@@ -101,7 +109,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 
 	return (
 		<>
-			<h3>{t('categories.title')}</h3>
+			<h2>{t('categories.title')}</h2>
 			{renderContent()}
 		</>
 	)
