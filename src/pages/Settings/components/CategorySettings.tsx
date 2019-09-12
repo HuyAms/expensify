@@ -12,7 +12,7 @@ import {useTranslation} from 'react-i18next'
 import Table from '../../../components/Table'
 
 // Styled components
-import {Item, CategoryLabel} from '../style'
+import {CategoryTableWrapper, CategoryLabel} from '../style'
 
 // Interfaces
 import {Category, CategoryType} from '../../../models/Category'
@@ -78,10 +78,10 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	}
 
 	const renderCategoryTable = (data, label) => (
-		<Item>
+		<CategoryTableWrapper>
 			<CategoryLabel>{label}</CategoryLabel>
 			<Table columns={getTableColumns()} data={data} />
-		</Item>
+		</CategoryTableWrapper>
 	)
 
 	const renderCategoryTables = () => {
