@@ -37,11 +37,7 @@ const Settings: React.FunctionComponent<Props> = ({
 	return (
 		<div>
 			<h1>{t('title')}</h1>
-			<CategorySettings
-				data={categories.data}
-				status={categories.status}
-				error={categories.error}
-			/>
+			<CategorySettings categories={categories} />
 		</div>
 	)
 }
@@ -51,8 +47,8 @@ const mapDispatchToProps = {
 	cancelGetCategories,
 }
 
-const mapStateToProps = state => ({
-	categories: state.categories,
+const mapStateToProps = ({categories}) => ({
+	categories,
 })
 
 export default connect(

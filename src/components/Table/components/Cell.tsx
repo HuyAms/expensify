@@ -26,7 +26,7 @@ const Cell: React.FunctionComponent<Props> = ({
 	const [editing, setEditing] = useState(false)
 	const form = useContext(EditableContext)
 
-	const toggleEdit = () => setEditing(!editing)
+	const toggleEdit = () => setEditing(editing => !editing)
 
 	const handleInputSave = e => {
 		form.validateFields((error, values) => {
@@ -49,7 +49,13 @@ const Cell: React.FunctionComponent<Props> = ({
 						},
 					],
 					initialValue: record[dataIndex],
-				})(<Input onPressEnter={handleInputSave} onBlur={handleInputSave} />)}
+				})(
+					<Input
+						onPressEnter={handleInputSave}
+						onBlur={handleInputSave}
+						autoFocus={true}
+					/>,
+				)}
 			</Form.Item>
 		)
 	}

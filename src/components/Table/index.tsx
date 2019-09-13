@@ -16,12 +16,14 @@ interface Props<T> {
 	columns: Column[]
 	data: T[]
 	pagination?: PaginationConfig | false
+	loading?: boolean
 }
 
 const Table: React.FunctionComponent<Props<any>> = ({
 	columns,
 	data,
 	pagination,
+	loading,
 }) => {
 	const components = {
 		body: {
@@ -72,6 +74,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 				dataSource={data}
 				columns={normalizeColumns()}
 				pagination={pagination}
+				loading={loading}
 			/>
 		</div>
 	)

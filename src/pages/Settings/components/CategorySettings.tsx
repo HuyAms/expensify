@@ -9,43 +9,37 @@ import React from 'react'
 import {useTranslation} from 'react-i18next'
 
 // Components
-import NotFound from '../../../pages/NotFound'
-import LoadingPage from '../../../components/LoadingPage'
 import Table from '../../../components/Table'
 
 // Styled components
-import {Item, CategoryLabel} from '../style'
+import {CategoryTableWrapper, CategoryLabel} from '../style'
 
 // Interfaces
 import {Category, CategoryType} from '../../../models/Category'
-import {RequestStatus} from '../../../models/bases/ModelState'
+import ModelState from '../../../models/bases/ModelState'
+import ErrorText from '../../../components/ErrorText'
 
 interface Props {
-	data: Category[]
-	status: RequestStatus
-	error: string
+	categories: ModelState<Category[]>
 }
 
 interface ExpenseRow extends Category {
 	key: string
 }
 
-const CategorySettings: React.FunctionComponent<Props> = ({
-	data,
-	status,
-	error,
-}) => {
+const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
 	const [t] = useTranslation('settings')
+	const {data, status, error} = categories
 
 	const getTableColumns = () => [
 		{
-			title: t('categories.table.heading.name'),
+			title: t('categories.name'),
 			dataIndex: 'name',
 			width: '30%',
 			editable: true,
 		},
 		{
-			title: t('categories.table.heading.description'),
+			title: t('categories.description'),
 			dataIndex: 'description',
 			editable: true,
 		},
@@ -77,19 +71,23 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		return [expenseCategories, incomeCategories]
 	}
 
-	const renderCategoryItem = (data, label) => (
-		<Item>
+	const renderCategoryTable = (data, label) => (
+		<CategoryTableWrapper>
 			<CategoryLabel>{label}</CategoryLabel>
-			<Table columns={getTableColumns()} data={data} />
-		</Item>
+			<Table
+				columns={getTableColumns()}
+				data={data}
+				loading={status === 'fetching'}
+			/>
+		</CategoryTableWrapper>
 	)
 
 	const renderCategoryTables = () => {
 		const [expenseCategories, incomeCategories] = sortCategoriesByType()
 		return (
 			<>
-				{renderCategoryItem(expenseCategories, t('categories.expenseLabel'))}
-				{renderCategoryItem(incomeCategories, t('categories.incomeLabel'))}
+				{renderCategoryTable(expenseCategories, t('categories.expenseLabel'))}
+				{renderCategoryTable(incomeCategories, t('categories.incomeLabel'))}
 			</>
 		)
 	}
@@ -97,9 +95,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	const renderContent = () => {
 		switch (status) {
 			case 'error':
-				return <NotFound error={error} />
-			case 'fetching':
-				return <LoadingPage />
+				return <ErrorText>{error}</ErrorText>
 			case 'success':
 				return renderCategoryTables()
 			default:
