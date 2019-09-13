@@ -1,24 +1,27 @@
 /**
  * Categories settings component
  *  - Show categories tables for each type
+ *  - Allow users to add a new category
  *  - Allow users to edit name and description of each category
  *
  */
 
-import React from 'react'
+import React, {useState, useRef} from 'react'
 import {useTranslation} from 'react-i18next'
 
 // Components
 import Table from '../../../components/Table'
+import {Button} from 'antd'
 
 // Styled components
-import {CategoryTableWrapper, CategoryLabel} from '../style'
+import {CategoryTableWrapper, CategoryLabel, CategoryTitle} from '../style'
 
 // Interfaces
 import {Category, CategoryType} from '../../../models/Category'
 import {RequestStatus} from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
 import Spinner from '../../../components/Spinner'
+import CreateCategoryForm from './CreateCategoryForm'
 
 interface Props {
 	data: Category[]
@@ -36,6 +39,10 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	error,
 }) => {
 	const [t] = useTranslation('settings')
+	const [shownModalName, setShownModalName] = useState(null)
+	const createFormRef = useRef(null)
+
+	const showCreateForm = e => setShownModalName(e.target.name)
 
 	const getTableColumns = () => [
 		{
@@ -77,9 +84,18 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		return [expenseCategories, incomeCategories]
 	}
 
-	const renderCategoryTable = (data, label) => (
+	const renderCategoryTable = (
+		data: Category[],
+		type: CategoryType,
+		label: string,
+	) => (
 		<CategoryTableWrapper>
-			<CategoryLabel>{label}</CategoryLabel>
+			<CategoryTitle>
+				<CategoryLabel>{label}</CategoryLabel>
+				<Button name={type} onClick={showCreateForm}>
+					{t('categories.table.button.add')}
+				</Button>
+			</CategoryTitle>
 			<Table columns={getTableColumns()} data={data} />
 		</CategoryTableWrapper>
 	)
@@ -88,8 +104,16 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		const [expenseCategories, incomeCategories] = sortCategoriesByType()
 		return (
 			<>
-				{renderCategoryTable(expenseCategories, t('categories.expenseLabel'))}
-				{renderCategoryTable(incomeCategories, t('categories.incomeLabel'))}
+				{renderCategoryTable(
+					expenseCategories,
+					CategoryType.Expense,
+					t('categories.expenseLabel'),
+				)}
+				{renderCategoryTable(
+					incomeCategories,
+					CategoryType.Income,
+					t('categories.incomeLabel'),
+				)}
 			</>
 		)
 	}
@@ -107,10 +131,47 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		}
 	}
 
+	const handleCreateCategory = type => {
+		const form = createFormRef.current.form
+		form.validateFields((err, values) => {
+			if (err) {
+				return
+			}
+
+			// TODO: handle values submission here
+		})
+	}
+
+	const getCreateFormTitle = () => {
+		switch (shownModalName) {
+			case CategoryType.Expense:
+				return t('categories.createNew.expense.title')
+			case CategoryType.Income:
+				return t('categories.createNew.income.title')
+			default:
+				return ''
+		}
+	}
+	const renderCreateForm = () => {
+		const title = getCreateFormTitle()
+		return (
+			<CreateCategoryForm
+				visible={shownModalName ? true : false}
+				title={title}
+				wrappedComponentRef={createFormRef}
+				type={shownModalName}
+				loading={false}
+				handleSubmit={handleCreateCategory}
+				handleCancel={() => setShownModalName(null)}
+			/>
+		)
+	}
+
 	return (
 		<>
 			<h2>{t('categories.title')}</h2>
 			{renderContent()}
+			{renderCreateForm()}
 		</>
 	)
 }
