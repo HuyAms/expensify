@@ -11,6 +11,7 @@ import {authEpics} from '../modules/Auth'
 import {appEpics} from '../modules/App'
 import {teamsEpics} from '../modules/Teams'
 import {teamEpics} from '../modules/Team'
+import {categoriesEpics} from '../modules/Categories'
 
 export const createRootEpic = () => {
 	return combineEpics(
@@ -19,5 +20,6 @@ export const createRootEpic = () => {
 		...appEpics,
 		...teamsEpics,
 		...teamEpics,
+		...categoriesEpics,
 	)
 }

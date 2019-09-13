@@ -2,6 +2,7 @@ export enum AuthenticatedRoutePath {
 	home = '/',
 	board = 'board',
 	report = 'report',
+	settings = 'settings',
 	logout = 'logout',
 }
 

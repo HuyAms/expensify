@@ -9,15 +9,15 @@ export const GlobalStyle = createGlobalStyle`
 
 :root {
 	font-size: 62.5%;
-		
+
 	${media.tabLand} {
 		font-size: 56.25%;
 	}
-		
+
 	${media.tabPort} {
 		font-size: 50%;
 	}
-		
+
 	${media.bigDesktop} {
 		font-size: 75%;
 	}
@@ -38,5 +38,9 @@ export const GlobalStyle = createGlobalStyle`
 
 	h2 {
 		font-size: ${props => props.theme.fontSizes.lg};
+	}
+
+	h3 {
+		font-size: ${props => props.theme.fontSizes.md};
 	}
 `
