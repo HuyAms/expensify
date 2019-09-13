@@ -16,25 +16,20 @@ import {CategoryTableWrapper, CategoryLabel} from '../style'
 
 // Interfaces
 import {Category, CategoryType} from '../../../models/Category'
-import {RequestStatus} from '../../../models/bases/ModelState'
+import ModelState from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
 
 interface Props {
-	data: Category[]
-	status: RequestStatus
-	error: string
+	categories: ModelState<Category[]>
 }
 
 interface ExpenseRow extends Category {
 	key: string
 }
 
-const CategorySettings: React.FunctionComponent<Props> = ({
-	data,
-	status,
-	error,
-}) => {
+const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
 	const [t] = useTranslation('settings')
+	const {data, status, error} = categories
 
 	const getTableColumns = () => [
 		{
