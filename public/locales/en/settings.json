@@ -4,11 +4,7 @@
 		"title": "Categories",
 		"expenseLabel": "Expense categories",
 		"incomeLabel": "Income categories",
-		"table": {
-			"heading": {
-				"name": "Name",
-				"description": "Description"
-			}
-		}
+		"name": "Name",
+		"description": "Description"
 	}
 }

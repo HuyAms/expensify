@@ -39,13 +39,13 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 
 	const getTableColumns = () => [
 		{
-			title: t('categories.table.heading.name'),
+			title: t('categories.name'),
 			dataIndex: 'name',
 			width: '30%',
 			editable: true,
 		},
 		{
-			title: t('categories.table.heading.description'),
+			title: t('categories.description'),
 			dataIndex: 'description',
 			editable: true,
 		},
