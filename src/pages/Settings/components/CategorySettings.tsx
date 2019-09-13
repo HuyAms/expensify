@@ -18,7 +18,6 @@ import {CategoryTableWrapper, CategoryLabel} from '../style'
 import {Category, CategoryType} from '../../../models/Category'
 import {RequestStatus} from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
-import Spinner from '../../../components/Spinner'
 
 interface Props {
 	data: Category[]
@@ -80,7 +79,11 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	const renderCategoryTable = (data, label) => (
 		<CategoryTableWrapper>
 			<CategoryLabel>{label}</CategoryLabel>
-			<Table columns={getTableColumns()} data={data} />
+			<Table
+				columns={getTableColumns()}
+				data={data}
+				loading={status === 'fetching'}
+			/>
 		</CategoryTableWrapper>
 	)
 
@@ -98,8 +101,6 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		switch (status) {
 			case 'error':
 				return <ErrorText>{error}</ErrorText>
-			case 'fetching':
-				return <Spinner />
 			case 'success':
 				return renderCategoryTables()
 			default:
