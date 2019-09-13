@@ -29,10 +29,16 @@
 		"emailNotUnique": "This email has already been used",
 		"notActiveUser": "Please check your email to activate this account",
 		"notHasPermission": "You do not have permission to perform this action",
-		"missingTeamName": "Please enter your team name"
+		"missingTeamName": "Please enter your team name",
+		"missingCategoryName": "Please enter category name"
 	},
 	"button": {
 		"create": "Create",
-		"cancel": "Cancel"
+		"cancel": "Cancel",
+		"addNew": "Add new"
+	},
+	"label": {
+		"name": "Name",
+		"description": "Description"
 	}
 }
