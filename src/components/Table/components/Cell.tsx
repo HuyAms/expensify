@@ -61,20 +61,16 @@ const Cell: React.FunctionComponent<Props> = ({
 	}
 
 	const renderChilren = () => {
-		return (
-			<div
-				className="editable-cell-value-wrap"
-				style={{paddingRight: 24}}
-				onClick={toggleEdit}
-			>
-				{children}
-			</div>
-		)
+		return <div onClick={toggleEdit}>{children}</div>
 	}
 
 	const renderCell = () => (editing ? renderEditingCell() : renderChilren())
 
-	return <td {...restProps}>{editable ? renderCell() : children}</td>
+	return (
+		<td style={{textAlign: 'center'}} {...restProps}>
+			{editable ? renderCell() : children}
+		</td>
+	)
 }
 
 export default Cell
