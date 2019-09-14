@@ -35,13 +35,9 @@ const Settings: React.FunctionComponent<Props> = ({
 	}, [])
 
 	return (
-		<div>
-			<CategorySettings
-				data={categories.data}
-				status={categories.status}
-				error={categories.error}
-			/>
-		</div>
+		<>
+			<CategorySettings categories={categories} />
+		</>
 	)
 }
 

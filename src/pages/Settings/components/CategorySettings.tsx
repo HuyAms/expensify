@@ -18,29 +18,23 @@ import {CategoryTableWrapper, CategoryLabel, CategoryTitle} from '../style'
 
 // Interfaces
 import {Category, CategoryType} from '../../../models/Category'
-import {RequestStatus} from '../../../models/bases/ModelState'
+import ModelState from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
-import Spinner from '../../../components/Spinner'
 import CreateCategoryForm from './CreateCategoryForm'
 
 interface Props {
-	data: Category[]
-	status: RequestStatus
-	error: string
+	categories: ModelState<Category[]>
 }
 
 interface ExpenseRow extends Category {
 	key: string
 }
 
-const CategorySettings: React.FunctionComponent<Props> = ({
-	data,
-	status,
-	error,
-}) => {
-	const [t] = useTranslation('settings')
+const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
+	const [t] = useTranslation(['settings', 'common'])
 	const [shownModalName, setShownModalName] = useState(null)
 	const createFormRef = useRef(null)
+	const {data, status, error} = categories
 
 	const getTableColumns = (type: CategoryType) => [
 		{
@@ -53,7 +47,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 			editable: true,
 		},
 		{
-			title: t('categories.table.heading.description'),
+			title: t('categories.description'),
 			dataIndex: 'description',
 			editable: true,
 		},
@@ -85,11 +79,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		return [expenseCategories, incomeCategories]
 	}
 
-	const renderCategoryTable = (
-		data: Category[],
-		type: CategoryType,
-		label: string,
-	) => (
+	const renderCategoryTable = (data: Category[], type: CategoryType) => (
 		<CategoryTableWrapper>
 			<Table columns={getTableColumns(type)} data={data} />
 		</CategoryTableWrapper>
@@ -99,16 +89,8 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		const [expenseCategories, incomeCategories] = sortCategoriesByType()
 		return (
 			<>
-				{renderCategoryTable(
-					expenseCategories,
-					CategoryType.Expense,
-					t('categories.expenseLabel'),
-				)}
-				{renderCategoryTable(
-					incomeCategories,
-					CategoryType.Income,
-					t('categories.incomeLabel'),
-				)}
+				{renderCategoryTable(expenseCategories, CategoryType.Expense)}
+				{renderCategoryTable(incomeCategories, CategoryType.Income)}
 			</>
 		)
 	}
@@ -117,8 +99,6 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		switch (status) {
 			case 'error':
 				return <ErrorText>{error}</ErrorText>
-			case 'fetching':
-				return <Spinner />
 			case 'success':
 				return renderCategoryTables()
 			default:
@@ -165,7 +145,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	const renderTitle = () => (
 		<div className="category-title">
 			<h2>{t('categories.title')}</h2>
-			<Button type="primary">{t('categories.table.button.add')}</Button>
+			<Button type="primary">{t('button.addNew')}</Button>
 		</div>
 	)
 

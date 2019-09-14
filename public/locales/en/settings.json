@@ -3,22 +3,7 @@
 		"title": "Categories",
 		"expenseLabel": "Expense categories",
 		"incomeLabel": "Income categories",
-		"table": {
-			"heading": {
-				"name": "Name",
-				"description": "Description"
-			},
-			"button": {
-				"add": "Add new"
-			}
-		},
-		"createNew": {
-			"expense": {
-				"title": "Create new expense category"
-			},
-			"income": {
-				"title": "Create new income category"
-			}
-		}
+		"name": "Name",
+		"description": "Description"
 	}
 }
