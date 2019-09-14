@@ -12,6 +12,7 @@ import {useModuleNotification} from '../../utils/hooks'
 import {enumToValues} from '../../utils/utils'
 import {useTranslation} from 'react-i18next'
 import {createItem} from '../../modules/Item'
+import ItemTable from './component/ItemTable'
 
 const {Option} = Select
 
@@ -35,6 +36,7 @@ const Board: React.FunctionComponent<Props> = props => {
 		item,
 		categories,
 		createItem,
+		items,
 	} = props
 
 	const [selectedCategoryType, setSelectedCategoryType] = React.useState(
@@ -101,6 +103,7 @@ const Board: React.FunctionComponent<Props> = props => {
 					categories={getAvailableCategories()}
 				/>
 			</Card>
+			<ItemTable items={items} />
 		</div>
 	)
 }
