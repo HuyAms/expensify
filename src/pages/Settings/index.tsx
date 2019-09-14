@@ -36,7 +36,6 @@ const Settings: React.FunctionComponent<Props> = ({
 
 	return (
 		<div>
-			<h1>{t('title')}</h1>
 			<CategorySettings
 				data={categories.data}
 				status={categories.status}
