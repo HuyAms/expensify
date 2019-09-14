@@ -11,7 +11,7 @@ import {useTranslation} from 'react-i18next'
 
 // Components
 import Table from '../../../components/Table'
-import {Button} from 'antd'
+import {Card, Button} from 'antd'
 
 // Styled components
 import {CategoryTableWrapper, CategoryLabel, CategoryTitle} from '../style'
@@ -162,12 +162,18 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		)
 	}
 
-	return (
-		<>
+	const renderTitle = () => (
+		<div className="category-title">
 			<h2>{t('categories.title')}</h2>
+			<Button type="primary">{t('categories.table.button.add')}</Button>
+		</div>
+	)
+
+	return (
+		<Card title={renderTitle()}>
 			{renderContent()}
 			{renderCreateForm()}
-		</>
+		</Card>
 	)
 }
 
