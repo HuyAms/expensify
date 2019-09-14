@@ -42,11 +42,12 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	const [shownModalName, setShownModalName] = useState(null)
 	const createFormRef = useRef(null)
 
-	const showCreateForm = e => setShownModalName(e.target.name)
-
-	const getTableColumns = () => [
+	const getTableColumns = (type: CategoryType) => [
 		{
-			title: t('categories.table.heading.name'),
+			title:
+				type === CategoryType.Expense
+					? t('categories.expenseLabel')
+					: t('categories.incomeLabel'),
 			dataIndex: 'name',
 			width: '30%',
 			editable: true,
@@ -90,13 +91,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		label: string,
 	) => (
 		<CategoryTableWrapper>
-			<CategoryTitle>
-				<CategoryLabel>{label}</CategoryLabel>
-				<Button name={type} onClick={showCreateForm}>
-					{t('categories.table.button.add')}
-				</Button>
-			</CategoryTitle>
-			<Table columns={getTableColumns()} data={data} />
+			<Table columns={getTableColumns(type)} data={data} />
 		</CategoryTableWrapper>
 	)
 
