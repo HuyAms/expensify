@@ -4,11 +4,7 @@ export const CategoryTableWrapper = styled.div`
 	margin-bottom: 1.6rem;
 `
 
-export const CategoryTitle = styled.div`
+export const CategoryCardTitle = styled.div`
 	display: flex;
 	justify-content: space-between;
-`
-
-export const CategoryLabel = styled.h4`
-	margin-bottom: 0.8rem;
 `

@@ -14,7 +14,7 @@ import Table from '../../../components/Table'
 import {Card, Button} from 'antd'
 
 // Styled components
-import {CategoryTableWrapper, CategoryLabel, CategoryTitle} from '../style'
+import {CategoryTableWrapper, CategoryCardTitle} from '../style'
 
 // Interfaces
 import {Category, CategoryType} from '../../../models/Category'
@@ -143,10 +143,10 @@ const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
 	}
 
 	const renderTitle = () => (
-		<div className="category-title">
+		<CategoryCardTitle>
 			<h2>{t('categories.title')}</h2>
 			<Button type="primary">{t('button.addNew')}</Button>
-		</div>
+		</CategoryCardTitle>
 	)
 
 	return (
