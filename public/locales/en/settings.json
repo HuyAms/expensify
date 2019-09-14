@@ -4,6 +4,7 @@
 		"expenseLabel": "Expense categories",
 		"incomeLabel": "Income categories",
 		"name": "Name",
-		"description": "Description"
+		"description": "Description",
+		"createNewTitle": "Create a new category"
 	}
 }

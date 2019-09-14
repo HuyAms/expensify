@@ -32,7 +32,7 @@ interface ExpenseRow extends Category {
 
 const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
 	const [t] = useTranslation(['settings', 'common'])
-	const [shownModalName, setShownModalName] = useState(null)
+	const [isCreateFormVisible, setCreateFormVisible] = useState(false)
 	const createFormRef = useRef(null)
 	const {data, status, error} = categories
 
@@ -106,46 +106,35 @@ const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
 		}
 	}
 
-	const handleCreateCategory = type => {
+	const handleCreateCategory = () => {
 		const form = createFormRef.current.form
 		form.validateFields((err, values) => {
 			if (err) {
 				return
 			}
-
 			// TODO: handle values submission here
 		})
 	}
 
-	const getCreateFormTitle = () => {
-		switch (shownModalName) {
-			case CategoryType.Expense:
-				return t('categories.createNew.expense.title')
-			case CategoryType.Income:
-				return t('categories.createNew.income.title')
-			default:
-				return ''
-		}
-	}
-	const renderCreateForm = () => {
-		const title = getCreateFormTitle()
-		return (
-			<CreateCategoryForm
-				visible={shownModalName ? true : false}
-				title={title}
-				wrappedComponentRef={createFormRef}
-				type={shownModalName}
-				loading={false}
-				handleSubmit={handleCreateCategory}
-				handleCancel={() => setShownModalName(null)}
-			/>
-		)
-	}
+	const renderCreateForm = () => (
+		<CreateCategoryForm
+			visible={isCreateFormVisible}
+			title={t('categories.createNewTitle')}
+			wrappedComponentRef={createFormRef}
+			loading={false}
+			handleSubmit={handleCreateCategory}
+			handleCancel={() => setCreateFormVisible(false)}
+		/>
+	)
+
+	const showCreateForm = () => setCreateFormVisible(true)
 
 	const renderTitle = () => (
 		<CategoryCardTitle>
 			<h2>{t('categories.title')}</h2>
-			<Button type="primary">{t('button.addNew')}</Button>
+			<Button type="primary" onClick={showCreateForm}>
+				{t('button.addNew')}
+			</Button>
 		</CategoryCardTitle>
 	)
 

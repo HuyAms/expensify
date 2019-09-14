@@ -4,39 +4,72 @@
  *  - reusable for both expense and income category
  *
  */
-import React from 'react'
+import React, {useState} from 'react'
 import {useTranslation} from 'react-i18next'
 
 // Components
-import {Form, Input, Modal} from 'antd'
+import {Form, Input, Modal, Checkbox} from 'antd'
 import {FormComponentProps} from 'antd/es/form'
+
+// Utils
+import {enumToValues} from '../../../utils/utils'
+import {CategoryType} from '../../../models/Category'
 
 interface Props extends FormComponentProps {
 	form: any
 	visible: boolean
 	loading: boolean
 	title: string
-	type: string
-	handleSubmit: (type: string) => void
+	handleSubmit: () => void
 	handleCancel: () => void
 }
 
 const CreateCategoryForm: React.FunctionComponent<Props> = React.forwardRef(
 	(props, ref) => {
-		const [t] = useTranslation(['common'])
-		const {
-			visible,
-			loading,
-			title,
-			type,
-			handleSubmit,
-			handleCancel,
-			form,
-		} = props
+		const [t] = useTranslation(['common', 'settings'])
+		const [isExpense, setExpense] = useState(true)
+		const [isIncome, setIncome] = useState(false)
+
+		const {visible, loading, title, handleSubmit, handleCancel, form} = props
 		const {getFieldDecorator} = form
+
 		React.useImperativeHandle(ref, () => ({
 			form,
 		}))
+
+		const toggleCheckbox = e => {
+			const {name, checked} = e.target
+			if (name === CategoryType.Expense) {
+				setExpense(checked)
+				if (isIncome) {
+					setIncome(false)
+				}
+				return
+			}
+
+			setIncome(checked)
+			if (isExpense) {
+				setExpense(false)
+			}
+		}
+
+		const renderCategoryTypes = () =>
+			enumToValues(CategoryType).map(type =>
+				getFieldDecorator(type, {
+					rules: [{type: 'boolean', required: true}],
+				})(
+					<Checkbox
+						key={type}
+						name={type}
+						checked={type === CategoryType.Expense ? isExpense : isIncome}
+						onChange={toggleCheckbox}
+					>
+						{type === CategoryType.Expense
+							? t('categories.expenseLabel')
+							: t('categories.incomeLabel')}
+					</Checkbox>,
+				),
+			)
 
 		const renderNameInput = () => {
 			return getFieldDecorator('name', {
@@ -54,11 +87,12 @@ const CreateCategoryForm: React.FunctionComponent<Props> = React.forwardRef(
 				title={title}
 				okText={t('button.create')}
 				cancelText={t('button.cancel')}
-				onOk={() => handleSubmit(type)}
+				onOk={handleSubmit}
 				onCancel={handleCancel}
 				confirmLoading={loading}
 			>
 				<Form layout="vertical">
+					<Form.Item>{renderCategoryTypes()}</Form.Item>
 					<Form.Item label={t('label.name')}>{renderNameInput()}</Form.Item>
 					<Form.Item label={t('label.description')}>
 						{renderDescriptionInput()}
