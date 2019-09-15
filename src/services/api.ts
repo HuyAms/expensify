@@ -11,6 +11,8 @@ import {getToken} from './localStorage'
 
 const baseUrl: string = process.env.API_ENDPOINT || 'http://localhost:3000'
 
+const CancelToken = axios.CancelToken
+let cancel
 export const api = ({
 	token = getToken(),
 	baseURL = baseUrl,
@@ -23,7 +25,13 @@ export const api = ({
 			authorization: token ? `Bearer ${token}` : null,
 			...axiosOptions.headers,
 		},
+		// https://github.com/axios/axios#cancellation
+		cancelToken: new CancelToken(function executor(c) {
+			cancel = c
+		}),
 	})
+
+export {cancel}
 
 const getData = (res: AxiosResponse) => res.data
 const joinUrl = (path: string, query?: object): string => {
