@@ -1,9 +1,16 @@
 import {Action} from 'redux'
 import {Epic} from 'redux-observable'
-import {switchMap, map, filter, takeUntil, catchError} from 'rxjs/operators'
+import {
+	switchMap,
+	map,
+	filter,
+	takeUntil,
+	catchError,
+	tap,
+} from 'rxjs/operators'
 import {of, from} from 'rxjs'
 import {createAsyncAction, isActionOf} from 'typesafe-actions'
-import {getRequest, postRequest} from '../../services/api'
+import {cancel, getRequest, postRequest} from '../../services/api'
 import {RootState} from '../reducers'
 import {ErrorResponse} from './common'
 
@@ -57,7 +64,12 @@ const useModuleEpic = <T>(moduleName: string) => {
 				return from(postRequest(path, body, query)).pipe(
 					map(res => postAsync.success(res)),
 					catchError(error => of(postAsync.failure(error.response.data))),
-					takeUntil(action$.pipe(filter(isActionOf(postAsync.cancel)))),
+					takeUntil(
+						action$.pipe(
+							filter(isActionOf(postAsync.cancel)),
+							tap(() => cancel()),
+						),
+					),
 				)
 			}),
 		)
