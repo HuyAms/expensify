@@ -11,7 +11,7 @@ import {useTranslation} from 'react-i18next'
 import {connect} from 'react-redux'
 
 // Actions
-import {createCategory} from '../../../modules/Category'
+import {createCategory, cancelCategoryRequest} from '../../../modules/Category'
 import {getCategories} from '../../../modules/Categories'
 
 // Components
@@ -38,6 +38,7 @@ interface Props {
 	category: ModelState<Category>
 	createCategory: (teamId: string, category: CategoryInput) => any
 	getCategories: (teamId: string, type?: CategoryType) => any
+	cancelCategoryRequest: () => any
 }
 
 interface ExpenseRow extends Category {
@@ -49,6 +50,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	createCategory,
 	category,
 	getCategories,
+	cancelCategoryRequest,
 }) => {
 	const [t] = useTranslation(['settings', 'common'])
 	const [isCreateFormVisible, setCreateFormVisible] = useState(false)
@@ -165,6 +167,10 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 
 	const showCreateForm = () => setCreateFormVisible(true)
 	const hideCreateForm = () => {
+		if (category.status === 'saving') {
+			cancelCategoryRequest()
+			return
+		}
 		setCreateFormVisible(false)
 		createFormRef.current.form.resetFields()
 	}
@@ -193,6 +199,7 @@ const mapStateToProps = ({category}) => ({
 const mapDispatchToProps = {
 	createCategory,
 	getCategories,
+	cancelCategoryRequest,
 }
 
 export default connect(

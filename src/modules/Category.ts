@@ -1,6 +1,11 @@
 import produce from 'immer'
 import {getType} from 'typesafe-actions'
-import {endWithError, startSaving, savingSuccess} from './commons/common'
+import {
+	endWithError,
+	startSaving,
+	savingSuccess,
+	endCanceling,
+} from './commons/common'
 import useModuleEpic from './commons/moduleEpics'
 import ModelState from '../models/bases/ModelState'
 import {AnyAction} from 'redux'
@@ -16,6 +21,7 @@ const {postAsync} = moduleActions
 
 export const createCategory = (teamId: string, category: CategoryInput) =>
 	postAsync.request({path: `api/teams/${teamId}/categories`, body: category})
+export const cancelCategoryRequest = () => postAsync.cancel()
 
 // ------------------------------------
 // Reducer
@@ -38,6 +44,9 @@ export const categoryReducer = (state = initialState, action: AnyAction) =>
 				break
 			case getType(postAsync.failure):
 				endWithError(draft, action.payload)
+				break
+			case getType(postAsync.cancel):
+				endCanceling(draft)
 				break
 		}
 	})
