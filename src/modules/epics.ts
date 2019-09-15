@@ -12,6 +12,7 @@ import {appEpics} from '../modules/App'
 import {teamsEpics} from '../modules/Teams'
 import {teamEpics} from '../modules/Team'
 import {categoriesEpics} from '../modules/Categories'
+import {categoryEpics} from '../modules/Category'
 
 export const createRootEpic = () => {
 	return combineEpics(
@@ -21,5 +22,6 @@ export const createRootEpic = () => {
 		...teamsEpics,
 		...teamEpics,
 		...categoriesEpics,
+		...categoryEpics,
 	)
 }

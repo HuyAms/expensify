@@ -14,6 +14,7 @@ import {authReducer} from './Auth'
 import {teamsReducer} from './Teams'
 import {teamReducer} from './Team'
 import {categoriesReducer} from './Categories'
+import {categoryReducer} from './Category'
 import {Category} from '../models/Category'
 import ModelState from '../models/bases/ModelState'
 import Auth from '../models/Auth'
@@ -26,6 +27,7 @@ export interface RootState {
 	teams: ModelState<Team[]>
 	team: ModelState<Team>
 	categories: ModelState<Category[]>
+	category: ModelState<Category>
 	router: RouterState
 }
 
@@ -37,6 +39,7 @@ const rootReducer = (history: History) =>
 		teams: teamsReducer,
 		team: teamReducer,
 		categories: categoriesReducer,
+		category: categoryReducer,
 		router: connectRouter(history),
 	})
 

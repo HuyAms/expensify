@@ -6,8 +6,13 @@
  *
  */
 
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useContext, useEffect} from 'react'
 import {useTranslation} from 'react-i18next'
+import {connect} from 'react-redux'
+
+// Actions
+import {createCategory} from '../../../modules/Category'
+import {getCategories} from '../../../modules/Categories'
 
 // Components
 import Table from '../../../components/Table'
@@ -17,24 +22,48 @@ import {Card, Button} from 'antd'
 import {CategoryTableWrapper, CategoryCardTitle} from '../style'
 
 // Interfaces
-import {Category, CategoryType} from '../../../models/Category'
+import {Category, CategoryType, CategoryInput} from '../../../models/Category'
 import ModelState from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
 import CreateCategoryForm from './CreateCategoryForm'
 
+// Contexts
+import {TeamContext} from '../../../contexts'
+
+// Utils
+import {usePrevious} from '../../../utils/hooks'
+
 interface Props {
 	categories: ModelState<Category[]>
+	category: ModelState<Category>
+	createCategory: (teamId: string, category: CategoryInput) => any
+	getCategories: (teamId: string, type?: CategoryType) => any
 }
 
 interface ExpenseRow extends Category {
 	key: string
 }
 
-const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
+const CategorySettings: React.FunctionComponent<Props> = ({
+	categories,
+	createCategory,
+	category,
+	getCategories,
+}) => {
 	const [t] = useTranslation(['settings', 'common'])
 	const [isCreateFormVisible, setCreateFormVisible] = useState(false)
 	const createFormRef = useRef(null)
+	const team = useContext(TeamContext)
 	const {data, status, error} = categories
+
+	const previousCategoryStatus = usePrevious(category.status)
+	useEffect(() => {
+		if (previousCategoryStatus === 'saving' && category.status === 'success') {
+			getCategories(team._id)
+			hideCreateForm()
+			createFormRef.current.form.resetFields()
+		}
+	}, [category.status])
 
 	const getTableColumns = (type: CategoryType) => [
 		{
@@ -112,7 +141,14 @@ const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
 			if (err) {
 				return
 			}
-			// TODO: handle values submission here
+
+			const {expense, name, description} = values
+			const categoryData: CategoryInput = {
+				name,
+				description,
+				type: expense ? CategoryType.Expense : CategoryType.Income,
+			}
+			createCategory(team._id, categoryData)
 		})
 	}
 
@@ -121,13 +157,17 @@ const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
 			visible={isCreateFormVisible}
 			title={t('categories.createNewTitle')}
 			wrappedComponentRef={createFormRef}
-			loading={false}
+			loading={category.status === 'saving'}
 			handleSubmit={handleCreateCategory}
-			handleCancel={() => setCreateFormVisible(false)}
+			handleCancel={hideCreateForm}
 		/>
 	)
 
 	const showCreateForm = () => setCreateFormVisible(true)
+	const hideCreateForm = () => {
+		setCreateFormVisible(false)
+		createFormRef.current.form.resetFields()
+	}
 
 	const renderTitle = () => (
 		<CategoryCardTitle>
@@ -146,4 +186,16 @@ const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
 	)
 }
 
-export default CategorySettings
+const mapStateToProps = ({category}) => ({
+	category,
+})
+
+const mapDispatchToProps = {
+	createCategory,
+	getCategories,
+}
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(CategorySettings)

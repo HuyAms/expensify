@@ -4,7 +4,7 @@
  *  - reusable for both expense and income category
  *
  */
-import React, {useState} from 'react'
+import React from 'react'
 import {useTranslation} from 'react-i18next'
 
 // Components
@@ -27,49 +27,43 @@ interface Props extends FormComponentProps {
 const CreateCategoryForm: React.FunctionComponent<Props> = React.forwardRef(
 	(props, ref) => {
 		const [t] = useTranslation(['common', 'settings'])
-		const [isExpense, setExpense] = useState(true)
-		const [isIncome, setIncome] = useState(false)
-
 		const {visible, loading, title, handleSubmit, handleCancel, form} = props
-		const {getFieldDecorator} = form
+		const {getFieldDecorator, setFieldsValue} = form
 
 		React.useImperativeHandle(ref, () => ({
 			form,
 		}))
 
 		const toggleCheckbox = e => {
-			const {name, checked} = e.target
-			if (name === CategoryType.Expense) {
-				setExpense(checked)
-				if (isIncome) {
-					setIncome(false)
-				}
-				return
+			if (e.target.name === CategoryType.Expense) {
+				return setFieldsValue({
+					[CategoryType.Expense]: true,
+					[CategoryType.Income]: false,
+				})
 			}
 
-			setIncome(checked)
-			if (isExpense) {
-				setExpense(false)
-			}
+			setFieldsValue({
+				[CategoryType.Expense]: false,
+				[CategoryType.Income]: true,
+			})
 		}
 
 		const renderCategoryTypes = () =>
-			enumToValues(CategoryType).map(type =>
-				getFieldDecorator(type, {
-					rules: [{type: 'boolean', required: true}],
-				})(
-					<Checkbox
-						key={type}
-						name={type}
-						checked={type === CategoryType.Expense ? isExpense : isIncome}
-						onChange={toggleCheckbox}
-					>
-						{type === CategoryType.Expense
-							? t('categories.expenseLabel')
-							: t('categories.incomeLabel')}
-					</Checkbox>,
-				),
-			)
+			enumToValues(CategoryType).map(type => (
+				<Form.Item key={type}>
+					{getFieldDecorator(type, {
+						rules: [{type: 'boolean'}],
+						initialValue: type === CategoryType.Expense ? true : false,
+						valuePropName: 'checked',
+					})(
+						<Checkbox name={type} onChange={toggleCheckbox}>
+							{type === CategoryType.Expense
+								? t('categories.expenseLabel')
+								: t('categories.incomeLabel')}
+						</Checkbox>,
+					)}
+				</Form.Item>
+			))
 
 		const renderNameInput = () => {
 			return getFieldDecorator('name', {
@@ -91,8 +85,8 @@ const CreateCategoryForm: React.FunctionComponent<Props> = React.forwardRef(
 				onCancel={handleCancel}
 				confirmLoading={loading}
 			>
-				<Form layout="vertical">
-					<Form.Item>{renderCategoryTypes()}</Form.Item>
+				<Form layout="vertical" onSubmit={handleSubmit}>
+					{renderCategoryTypes()}
 					<Form.Item label={t('label.name')}>{renderNameInput()}</Form.Item>
 					<Form.Item label={t('label.description')}>
 						{renderDescriptionInput()}
