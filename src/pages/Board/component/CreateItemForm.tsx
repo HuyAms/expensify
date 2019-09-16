@@ -94,8 +94,9 @@ const CreateItemForm: React.FunctionComponent<Props> = props => {
 		})
 	}
 
-	const hasErrors = fieldsError => {
-		return Object.keys(fieldsError).some(field => fieldsError[field])
+	const hasErrors = () => {
+		const fieldsError = getFieldsError()
+		return Object.keys(fieldsError).some(field => !!fieldsError[field])
 	}
 
 	return (
@@ -110,7 +111,7 @@ const CreateItemForm: React.FunctionComponent<Props> = props => {
 				<Button
 					type="primary"
 					htmlType="submit"
-					disabled={isItemSaving || hasErrors(getFieldsError())}
+					disabled={isItemSaving || hasErrors()}
 					loading={isItemSaving}
 				>
 					{t('button.create')}
