@@ -144,13 +144,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 				return
 			}
 
-			const {expense, name, description} = values
-			const categoryData: CategoryInput = {
-				name,
-				description,
-				type: expense ? CategoryType.Expense : CategoryType.Income,
-			}
-			createCategory(team._id, categoryData)
+			createCategory(team._id, values)
 		})
 	}
 
@@ -162,6 +156,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 			loading={category.status === 'saving'}
 			handleSubmit={handleCreateCategory}
 			handleCancel={hideCreateForm}
+			error={category.error}
 		/>
 	)
 
