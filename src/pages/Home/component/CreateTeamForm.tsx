@@ -13,7 +13,7 @@ interface Props extends FormComponentProps {
 
 const CreateTeamForm: React.FunctionComponent<Props> = React.forwardRef(
 	(props, ref) => {
-		const [t] = useTranslation(['common', 'home'])
+		const [t] = useTranslation(['home', 'common'])
 
 		const {form, visible, handleSubmit, handeCancel, loading} = props
 		const {getFieldDecorator} = form
