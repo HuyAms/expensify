@@ -166,6 +166,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	)
 
 	const showCreateForm = () => setCreateFormVisible(true)
+
 	const hideCreateForm = () => {
 		if (category.status === 'saving') {
 			cancelCategoryRequest()
