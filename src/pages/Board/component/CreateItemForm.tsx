@@ -10,14 +10,14 @@ const {TextArea} = Input
 const {Option} = Select
 
 interface Props extends FormComponentProps {
-	isCateogryLoading: boolean
+	isCategoryLoading: boolean
 	isItemSaving: boolean
 	categories: Category[]
 	onSubmit: (item: Item) => any
 }
 
 const CreateItemForm: React.FunctionComponent<Props> = props => {
-	const {form, isItemSaving, onSubmit, categories, isCateogryLoading} = props
+	const {form, isItemSaving, onSubmit, categories, isCategoryLoading} = props
 	const {getFieldDecorator, getFieldsError} = form
 
 	const [t] = useTranslation(['board', 'common'])
@@ -71,7 +71,7 @@ const CreateItemForm: React.FunctionComponent<Props> = props => {
 		})(
 			<Select
 				style={{minWidth: '20rem'}}
-				loading={isCateogryLoading}
+				loading={isCategoryLoading}
 				placeholder="Select category"
 			>
 				{renderCategoryOptions()}
