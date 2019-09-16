@@ -5,41 +5,37 @@ import {
 	fetchingSuccess,
 	endWithError,
 	endCanceling,
-	startSaving,
-	savingSuccess,
 } from './commons/common'
 import useModuleEpic from './commons/moduleEpics'
 
 import ModelState from '../models/bases/ModelState'
 import {AnyAction} from 'redux'
+import Item from '../models/Item'
+
+const moduleName = 'items'
+export const {moduleActions, moduleEpics: itemsEpics} = useModuleEpic(
+	moduleName,
+)
+const {getAsync} = moduleActions
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-
-const moduleName = 'team'
-
-export const {moduleActions, moduleEpics: teamEpics} = useModuleEpic(moduleName)
-const {getAsync, postAsync} = moduleActions
-
-export const getTeam = (slug: string) =>
-	getAsync.request({path: `api/users/me/teams/${slug}`})
-export const cancelGetTeam = () => getAsync.cancel()
-
-export const createTeam = (name: string, description: string) =>
-	postAsync.request({path: 'api/users/me/teams', body: {name, description}})
+export const getItems = (teamId: string) =>
+	getAsync.request({path: `api/teams/${teamId}/expenseItems`})
+export const cancelGetItems = () => getAsync.cancel()
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 
-const initialState: ModelState<Team> = {
+const initialState: ModelState<Item[]> = {
 	data: null,
 	status: 'idle',
 	error: null,
 }
 
-export const teamReducer = (state = initialState, action: AnyAction) =>
+export const itemsReducer = (state = initialState, action: AnyAction) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(getAsync.request):
@@ -48,14 +44,7 @@ export const teamReducer = (state = initialState, action: AnyAction) =>
 			case getType(getAsync.success):
 				fetchingSuccess(draft, action.payload)
 				break
-			case getType(postAsync.request):
-				startSaving(draft)
-				break
-			case getType(postAsync.success):
-				savingSuccess(draft)
-				break
 			case getType(getAsync.failure):
-			case getType(postAsync.failure):
 				endWithError(draft, action.payload)
 				break
 			case getType(getAsync.cancel):

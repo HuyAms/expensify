@@ -26,7 +26,7 @@ interface Props extends FormComponentProps {
 
 const CreateCategoryForm: React.FunctionComponent<Props> = React.forwardRef(
 	(props, ref) => {
-		const [t] = useTranslation(['common', 'settings'])
+		const [t] = useTranslation(['settings', 'common'])
 		const {visible, loading, title, handleSubmit, handleCancel, form} = props
 		const {getFieldDecorator, setFieldsValue} = form
 
@@ -87,8 +87,10 @@ const CreateCategoryForm: React.FunctionComponent<Props> = React.forwardRef(
 			>
 				<Form layout="vertical" onSubmit={handleSubmit}>
 					{renderCategoryTypes()}
-					<Form.Item label={t('label.name')}>{renderNameInput()}</Form.Item>
-					<Form.Item label={t('label.description')}>
+					<Form.Item label={t('categories.name')}>
+						{renderNameInput()}
+					</Form.Item>
+					<Form.Item label={t('categories.description')}>
 						{renderDescriptionInput()}
 					</Form.Item>
 				</Form>
