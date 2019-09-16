@@ -35,7 +35,8 @@
 		"missingQuantity": "Quantity is required",
 		"missingPrice": "Price is required",
 		"missingDate": "Date is required",
-		"missingItemName": "Item name is required"
+		"missingItemName": "Item name is required",
+		"missingCategoryName": "Please enter category name"
 	},
 	"button": {
 		"create": "Create",
