@@ -38,8 +38,17 @@ const ItemTable: React.FunctionComponent<Props> = ({items}) => {
 			editable: true,
 		},
 		{
+			title: t('total'),
+			dataIndex: 'total',
+		},
+		{
 			title: t('category'),
 			dataIndex: 'category.name',
+			editable: true,
+		},
+		{
+			title: t('note'),
+			dataIndex: 'note',
 			editable: true,
 		},
 	]

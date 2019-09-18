@@ -4,5 +4,6 @@
 	"quantity": "Quantity",
 	"category": "Category",
 	"price": "Price",
+	"total": "Total",
 	"date": "Date"
 }

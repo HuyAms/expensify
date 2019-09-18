@@ -7,4 +7,5 @@ export default interface Item {
 	category: string
 	team: string
 	creator: string
+	total: number
 }
