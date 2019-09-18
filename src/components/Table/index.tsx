@@ -15,6 +15,7 @@ interface Column {
 interface Props<T> {
 	columns: Column[]
 	data: T[]
+	size?: 'small' | 'default' | 'middle'
 	pagination?: PaginationConfig | false
 	loading?: boolean
 }
@@ -24,6 +25,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 	data,
 	pagination,
 	loading,
+	size,
 }) => {
 	const components = {
 		body: {
@@ -74,6 +76,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 				dataSource={data}
 				columns={normalizeColumns()}
 				pagination={pagination}
+				size={size}
 				loading={loading}
 			/>
 		</div>
@@ -84,4 +87,5 @@ export default Table
 
 Table.defaultProps = {
 	pagination: false,
+	size: 'small',
 }
