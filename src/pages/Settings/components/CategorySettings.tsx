@@ -1,39 +1,78 @@
 /**
  * Categories settings component
  *  - Show categories tables for each type
+ *  - Allow users to add a new category
  *  - Allow users to edit name and description of each category
  *
  */
 
-import React from 'react'
+import React, {useState, useRef, useContext, useEffect} from 'react'
 import {useTranslation} from 'react-i18next'
+import {connect} from 'react-redux'
+
+// Actions
+import {createCategory, cancelCategoryRequest} from '../../../modules/Category'
+import {getCategories} from '../../../modules/Categories'
 
 // Components
 import Table from '../../../components/Table'
+import {Card, Button} from 'antd'
 
 // Styled components
-import {CategoryTableWrapper, CategoryLabel} from '../style'
+import {CategoryTableWrapper, CategoryCardTitle} from '../style'
 
 // Interfaces
-import {Category, CategoryType} from '../../../models/Category'
+import {Category, CategoryType, CategoryInput} from '../../../models/Category'
 import ModelState from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
+import CreateCategoryForm from './CreateCategoryForm'
+
+// Contexts
+import {TeamContext} from '../../../contexts'
+
+// Utils
+import {usePrevious} from '../../../utils/hooks'
 
 interface Props {
 	categories: ModelState<Category[]>
+	category: ModelState<Category>
+	createCategory: (teamId: string, category: CategoryInput) => any
+	getCategories: (teamId: string, type?: CategoryType) => any
+	cancelCategoryRequest: () => any
 }
 
 interface ExpenseRow extends Category {
 	key: string
 }
 
-const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
-	const [t] = useTranslation('settings')
+const CategorySettings: React.FunctionComponent<Props> = ({
+	categories,
+	createCategory,
+	category,
+	getCategories,
+	cancelCategoryRequest,
+}) => {
+	const [t] = useTranslation(['settings', 'common'])
+	const [isCreateFormVisible, setCreateFormVisible] = useState(false)
+	const createFormRef = useRef(null)
+	const team = useContext(TeamContext)
 	const {data, status, error} = categories
 
-	const getTableColumns = () => [
+	const previousCategoryStatus = usePrevious(category.status)
+	useEffect(() => {
+		if (previousCategoryStatus === 'saving' && category.status === 'success') {
+			getCategories(team._id)
+			hideCreateForm()
+			createFormRef.current.form.resetFields()
+		}
+	}, [category.status])
+
+	const getTableColumns = (type: CategoryType) => [
 		{
-			title: t('categories.name'),
+			title:
+				type === CategoryType.Expense
+					? t('categories.expenseLabel')
+					: t('categories.incomeLabel'),
 			dataIndex: 'name',
 			width: '30%',
 			editable: true,
@@ -71,14 +110,9 @@ const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
 		return [expenseCategories, incomeCategories]
 	}
 
-	const renderCategoryTable = (data, label) => (
+	const renderCategoryTable = (data: Category[], type: CategoryType) => (
 		<CategoryTableWrapper>
-			<CategoryLabel>{label}</CategoryLabel>
-			<Table
-				columns={getTableColumns()}
-				data={data}
-				loading={status === 'fetching'}
-			/>
+			<Table columns={getTableColumns(type)} data={data} />
 		</CategoryTableWrapper>
 	)
 
@@ -86,8 +120,8 @@ const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
 		const [expenseCategories, incomeCategories] = sortCategoriesByType()
 		return (
 			<>
-				{renderCategoryTable(expenseCategories, t('categories.expenseLabel'))}
-				{renderCategoryTable(incomeCategories, t('categories.incomeLabel'))}
+				{renderCategoryTable(expenseCategories, CategoryType.Expense)}
+				{renderCategoryTable(incomeCategories, CategoryType.Income)}
 			</>
 		)
 	}
@@ -103,12 +137,68 @@ const CategorySettings: React.FunctionComponent<Props> = ({categories}) => {
 		}
 	}
 
-	return (
-		<>
+	const handleCreateCategory = () => {
+		const form = createFormRef.current.form
+		form.validateFields((err, values) => {
+			if (err) {
+				return
+			}
+
+			createCategory(team._id, values)
+		})
+	}
+
+	const renderCreateForm = () => (
+		<CreateCategoryForm
+			visible={isCreateFormVisible}
+			title={t('categories.createNewTitle')}
+			wrappedComponentRef={createFormRef}
+			loading={category.status === 'saving'}
+			handleSubmit={handleCreateCategory}
+			handleCancel={hideCreateForm}
+			error={category.error}
+		/>
+	)
+
+	const showCreateForm = () => setCreateFormVisible(true)
+
+	const hideCreateForm = () => {
+		if (category.status === 'saving') {
+			cancelCategoryRequest()
+			return
+		}
+		setCreateFormVisible(false)
+		createFormRef.current.form.resetFields()
+	}
+
+	const renderTitle = () => (
+		<CategoryCardTitle>
 			<h2>{t('categories.title')}</h2>
+			<Button type="primary" onClick={showCreateForm}>
+				{t('button.addNew')}
+			</Button>
+		</CategoryCardTitle>
+	)
+
+	return (
+		<Card title={renderTitle()}>
 			{renderContent()}
-		</>
+			{renderCreateForm()}
+		</Card>
 	)
 }
 
-export default CategorySettings
+const mapStateToProps = ({category}) => ({
+	category,
+})
+
+const mapDispatchToProps = {
+	createCategory,
+	getCategories,
+	cancelCategoryRequest,
+}
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(CategorySettings)

@@ -1,11 +1,13 @@
 import React from 'react'
 import {Table as AntdTable} from 'antd'
 import {PaginationConfig} from 'antd/lib/pagination'
+import {ColumnProps} from 'antd/es/table'
 
 // Components
 import Row from './components/Row'
 import Cell from './components/Cell'
 
+type ColumnAlign = 'left' | 'right' | 'center'
 interface Column {
 	title: string
 	dataIndex: string
@@ -17,6 +19,7 @@ interface Props<T> {
 	data: T[]
 	pagination?: PaginationConfig | false
 	loading?: boolean
+	bordered?: boolean
 }
 
 const Table: React.FunctionComponent<Props<any>> = ({
@@ -24,6 +27,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 	data,
 	pagination,
 	loading,
+	bordered,
 }) => {
 	const components = {
 		body: {
@@ -51,7 +55,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 	const normalizeColumns = () =>
 		columns.map(col => {
 			if (!col.editable) {
-				return col
+				return {...col, align: 'center' as ColumnAlign}
 			}
 
 			return {
@@ -63,6 +67,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 					title: col.title,
 					handleSave,
 				}),
+				align: 'center' as ColumnAlign,
 			}
 		})
 	return (
@@ -70,7 +75,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 			<AntdTable
 				components={components}
 				rowClassName={getRowClassName}
-				bordered
+				bordered={bordered}
 				dataSource={data}
 				columns={normalizeColumns()}
 				pagination={pagination}
@@ -84,4 +89,5 @@ export default Table
 
 Table.defaultProps = {
 	pagination: false,
+	bordered: false,
 }
