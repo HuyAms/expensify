@@ -11,12 +11,16 @@ import {useTranslation} from 'react-i18next'
 import {connect} from 'react-redux'
 
 // Actions
-import {createCategory, cancelCategoryRequest} from '../../../modules/Category'
+import {
+	createCategory,
+	cancelCategoryRequest,
+	deleteCategory,
+} from '../../../modules/Category'
 import {getCategories} from '../../../modules/Categories'
 
 // Components
 import Table from '../../../components/Table'
-import {Card, Button} from 'antd'
+import {Card, Button, Popconfirm, Icon} from 'antd'
 
 // Styled components
 import {CategoryTableWrapper, CategoryCardTitle} from '../style'
@@ -39,6 +43,7 @@ interface Props {
 	createCategory: (teamId: string, category: CategoryInput) => any
 	getCategories: (teamId: string, type?: CategoryType) => any
 	cancelCategoryRequest: () => any
+	deleteCategory: (teamId: string, categoryId: string) => any
 }
 
 interface ExpenseRow extends Category {
@@ -51,6 +56,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	category,
 	getCategories,
 	cancelCategoryRequest,
+	deleteCategory,
 }) => {
 	const [t] = useTranslation(['settings', 'common'])
 	const [isCreateFormVisible, setCreateFormVisible] = useState(false)
@@ -67,6 +73,10 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		}
 	}, [category.status])
 
+	const handleDeleteCategory = id => {
+		deleteCategory(team._id, id)
+	}
+
 	const getTableColumns = (type: CategoryType) => [
 		{
 			title:
@@ -81,6 +91,18 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 			title: t('categories.description'),
 			dataIndex: 'description',
 			editable: true,
+		},
+		{
+			title: '',
+			dataIndex: 'operation',
+			render: (text, record: Category) => (
+				<Popconfirm
+					title={t('categories.deleteConfirmation')}
+					onConfirm={() => handleDeleteCategory(record._id)}
+				>
+					<Icon type="delete" theme="twoTone" twoToneColor="red" />
+				</Popconfirm>
+			),
 		},
 	]
 
@@ -196,6 +218,7 @@ const mapDispatchToProps = {
 	createCategory,
 	getCategories,
 	cancelCategoryRequest,
+	deleteCategory,
 }
 
 export default connect(
