@@ -5,6 +5,7 @@
 		"incomeLabel": "Income categories",
 		"name": "Name",
 		"description": "Description",
-		"createNewTitle": "Create a new category"
+		"createNewTitle": "Create a new category",
+		"deleteConfirmation": "Are you sure to delete this category?"
 	}
 }
