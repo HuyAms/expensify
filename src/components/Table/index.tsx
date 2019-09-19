@@ -7,6 +7,8 @@ import {ColumnProps} from 'antd/es/table'
 import Row from './components/Row'
 import Cell from './components/Cell'
 
+// Interfaces
+import {CategoryInput, Category} from '../../models/Category'
 type ColumnAlign = 'left' | 'right' | 'center'
 interface Column {
 	title: string
@@ -20,6 +22,7 @@ interface Props<T> {
 	pagination?: PaginationConfig | false
 	loading?: boolean
 	bordered?: boolean
+	handleUpdateData?: (T) => any
 }
 
 const Table: React.FunctionComponent<Props<any>> = ({
@@ -28,6 +31,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 	pagination,
 	loading,
 	bordered,
+	handleUpdateData,
 }) => {
 	const components = {
 		body: {
@@ -39,17 +43,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 	const getRowClassName = () => 'editable-row'
 
 	const handleSave = row => {
-		const newData = [...data]
-		const index = newData.findIndex(item => row.key === item.key)
-		const item = newData[index]
-
-		newData.splice(index, 1, {
-			...item,
-			...row,
-		})
-
-		// TODO: add functionality of editing a category
-		return
+		handleUpdateData(row)
 	}
 
 	const normalizeColumns = () =>

@@ -14,6 +14,7 @@ import {connect} from 'react-redux'
 import {
 	createCategory,
 	cancelCategoryRequest,
+	updateCategory,
 	deleteCategory,
 } from '../../../modules/Category'
 import {getCategories} from '../../../modules/Categories'
@@ -44,6 +45,11 @@ interface Props {
 	getCategories: (teamId: string, type?: CategoryType) => any
 	cancelCategoryRequest: () => any
 	deleteCategory: (teamId: string, categoryId: string) => any
+	updateCategory: (
+		teamId: string,
+		categoryId: string,
+		category: CategoryInput,
+	) => any
 }
 
 interface ExpenseRow extends Category {
@@ -57,6 +63,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 	getCategories,
 	cancelCategoryRequest,
 	deleteCategory,
+	updateCategory,
 }) => {
 	const [t] = useTranslation(['settings', 'common'])
 	const [isCreateFormVisible, setCreateFormVisible] = useState(false)
@@ -75,6 +82,14 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 
 	const handleDeleteCategory = id => {
 		deleteCategory(team._id, id)
+	}
+
+	const handleUpdateCategoryItem = (categoryItem: Category) => {
+		updateCategory(team._id, categoryItem._id, {
+			name: categoryItem.name,
+			description: categoryItem.description,
+			type: categoryItem.type,
+		})
 	}
 
 	const getTableColumns = (type: CategoryType) => [
@@ -134,7 +149,11 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 
 	const renderCategoryTable = (data: Category[], type: CategoryType) => (
 		<CategoryTableWrapper>
-			<Table columns={getTableColumns(type)} data={data} />
+			<Table
+				columns={getTableColumns(type)}
+				data={data}
+				handleUpdateData={handleUpdateCategoryItem}
+			/>
 		</CategoryTableWrapper>
 	)
 
@@ -218,6 +237,7 @@ const mapDispatchToProps = {
 	createCategory,
 	getCategories,
 	cancelCategoryRequest,
+	updateCategory,
 	deleteCategory,
 }
 
