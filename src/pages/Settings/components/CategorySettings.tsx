@@ -153,6 +153,7 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 				columns={getTableColumns(type)}
 				data={data}
 				handleUpdateData={handleUpdateCategoryItem}
+				loading={category.status === 'fetching'}
 			/>
 		</CategoryTableWrapper>
 	)
