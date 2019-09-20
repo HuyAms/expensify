@@ -102,7 +102,7 @@ const Board: React.FunctionComponent<Props> = props => {
 				extra={renderSelectCategoryType()}
 			>
 				<CreateItemForm
-					isCateogryLoading={categories.status === 'fetching'}
+					isCategoryLoading={categories.status === 'fetching'}
 					isItemSaving={item.status === 'saving'}
 					onSubmit={handleCreateItem}
 					categories={getAvailableCategories()}

@@ -6,6 +6,8 @@ import {PaginationConfig} from 'antd/lib/pagination'
 import Row from './components/Row'
 import Cell from './components/Cell'
 
+// Interfaces
+type ColumnAlign = 'left' | 'right' | 'center'
 interface Column {
 	title: string
 	dataIndex: string
@@ -18,6 +20,8 @@ interface Props<T> {
 	size?: 'small' | 'default' | 'middle'
 	pagination?: PaginationConfig | false
 	loading?: boolean
+	bordered?: boolean
+	handleUpdateData?: (T) => any
 }
 
 const Table: React.FunctionComponent<Props<any>> = ({
@@ -26,6 +30,8 @@ const Table: React.FunctionComponent<Props<any>> = ({
 	pagination,
 	loading,
 	size,
+	bordered,
+	handleUpdateData,
 }) => {
 	const components = {
 		body: {
@@ -37,23 +43,13 @@ const Table: React.FunctionComponent<Props<any>> = ({
 	const getRowClassName = () => 'editable-row'
 
 	const handleSave = row => {
-		const newData = [...data]
-		const index = newData.findIndex(item => row.key === item.key)
-		const item = newData[index]
-
-		newData.splice(index, 1, {
-			...item,
-			...row,
-		})
-
-		// TODO: add functionality of editing a category
-		return
+		handleUpdateData(row)
 	}
 
 	const normalizeColumns = () =>
 		columns.map(col => {
 			if (!col.editable) {
-				return col
+				return {...col, align: 'center' as ColumnAlign}
 			}
 
 			return {
@@ -65,6 +61,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 					title: col.title,
 					handleSave,
 				}),
+				align: 'center' as ColumnAlign,
 			}
 		})
 	return (
@@ -72,7 +69,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 			<AntdTable
 				components={components}
 				rowClassName={getRowClassName}
-				bordered
+				bordered={bordered}
 				dataSource={data}
 				columns={normalizeColumns()}
 				pagination={pagination}
@@ -88,4 +85,5 @@ export default Table
 Table.defaultProps = {
 	pagination: false,
 	size: 'small',
+	bordered: false,
 }

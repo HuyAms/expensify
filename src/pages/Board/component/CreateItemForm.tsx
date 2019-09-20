@@ -11,14 +11,14 @@ const {TextArea} = Input
 const {Option} = Select
 
 interface Props extends FormComponentProps {
-	isCateogryLoading: boolean
+	isCategoryLoading: boolean
 	isItemSaving: boolean
 	categories: Category[]
 	onSubmit: (item: Item) => any
 }
 
 const CreateItemForm: React.FunctionComponent<Props> = props => {
-	const {form, isItemSaving, onSubmit, categories, isCateogryLoading} = props
+	const {form, isItemSaving, onSubmit, categories, isCategoryLoading} = props
 	const {getFieldDecorator, getFieldsError} = form
 
 	const [t] = useTranslation(['board', 'common'])
@@ -72,7 +72,7 @@ const CreateItemForm: React.FunctionComponent<Props> = props => {
 		})(
 			<Select
 				style={{minWidth: '20rem'}}
-				loading={isCateogryLoading}
+				loading={isCategoryLoading}
 				placeholder="Select category"
 			>
 				{renderCategoryOptions()}
@@ -95,8 +95,9 @@ const CreateItemForm: React.FunctionComponent<Props> = props => {
 		})
 	}
 
-	const hasErrors = fieldsError => {
-		return Object.keys(fieldsError).some(field => fieldsError[field])
+	const hasErrors = () => {
+		const fieldsError = getFieldsError()
+		return Object.keys(fieldsError).some(field => !!fieldsError[field])
 	}
 
 	return (
@@ -111,7 +112,7 @@ const CreateItemForm: React.FunctionComponent<Props> = props => {
 				<Button
 					type="primary"
 					htmlType="submit"
-					disabled={isItemSaving || hasErrors(getFieldsError())}
+					disabled={isItemSaving || hasErrors()}
 					loading={isItemSaving}
 				>
 					{t('button.create')}

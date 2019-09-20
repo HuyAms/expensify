@@ -1,9 +1,22 @@
 import {Action} from 'redux'
 import {Epic} from 'redux-observable'
-import {switchMap, map, filter, takeUntil, catchError} from 'rxjs/operators'
+import {
+	switchMap,
+	map,
+	filter,
+	takeUntil,
+	catchError,
+	tap,
+} from 'rxjs/operators'
 import {of, from} from 'rxjs'
 import {createAsyncAction, isActionOf} from 'typesafe-actions'
-import {getRequest, postRequest} from '../../services/api'
+import {
+	cancel,
+	getRequest,
+	postRequest,
+	deleteRequest,
+	putRequest,
+} from '../../services/api'
 import {RootState} from '../reducers'
 import {ErrorResponse} from './common'
 
@@ -26,9 +39,25 @@ const useModuleEpic = <T>(moduleName: string) => {
 		`@@${moduleName}/POST_CANCEL`,
 	)<{path: string; body: object; query?: object}, T, ErrorResponse, void>()
 
+	const updateAsync = createAsyncAction(
+		`@@${moduleName}/PUT_REQUEST`,
+		`@@${moduleName}/PUT_SUCCESS`,
+		`@@${moduleName}/PUT_FAILURE`,
+		`@@${moduleName}/PUT_CANCEL`,
+	)<{path: string; body: object; query?: object}, T, ErrorResponse, void>()
+
+	const deleteAsync = createAsyncAction(
+		`@@${moduleName}/DELETE_REQUEST`,
+		`@@${moduleName}/DELETE_SUCCESS`,
+		`@@${moduleName}/DELETE_FAILURE`,
+		`@@${moduleName}/DELETE_CANCEL`,
+	)<{path: string}, T, ErrorResponse, void>()
+
 	const moduleActions = {
 		getAsync,
 		postAsync,
+		deleteAsync,
+		updateAsync,
 	}
 
 	// ------------------------------------
@@ -57,13 +86,61 @@ const useModuleEpic = <T>(moduleName: string) => {
 				return from(postRequest(path, body, query)).pipe(
 					map(res => postAsync.success(res)),
 					catchError(error => of(postAsync.failure(error.response.data))),
-					takeUntil(action$.pipe(filter(isActionOf(postAsync.cancel)))),
+					takeUntil(
+						action$.pipe(
+							filter(isActionOf(postAsync.cancel)),
+							tap(() => cancel()),
+						),
+					),
 				)
 			}),
 		)
 	}
 
-	const moduleEpics = [getModelEpic, postModelEpic]
+	const updateModelEpic: Epic<Action, Action, RootState> = action$ => {
+		return action$.pipe(
+			filter(isActionOf(updateAsync.request)),
+			switchMap(action => {
+				const {path, body, query} = action.payload
+				return from(putRequest(path, body, query)).pipe(
+					map(res => updateAsync.success(res)),
+					catchError(error => of(updateAsync.failure(error.response.data))),
+					takeUntil(
+						action$.pipe(
+							filter(isActionOf(updateAsync.cancel)),
+							tap(() => cancel()),
+						),
+					),
+				)
+			}),
+		)
+	}
+
+	const deleteModelEpic: Epic<Action, Action, RootState> = action$ => {
+		return action$.pipe(
+			filter(isActionOf(deleteAsync.request)),
+			switchMap(action => {
+				const {path} = action.payload
+				return from(deleteRequest(path)).pipe(
+					map(res => deleteAsync.success(res)),
+					catchError(error => of(deleteAsync.failure(error.response.data))),
+					takeUntil(
+						action$.pipe(
+							filter(isActionOf(deleteAsync.cancel)),
+							tap(() => cancel()),
+						),
+					),
+				)
+			}),
+		)
+	}
+
+	const moduleEpics = [
+		getModelEpic,
+		postModelEpic,
+		updateModelEpic,
+		deleteModelEpic,
+	]
 
 	return {moduleActions, moduleEpics}
 }
