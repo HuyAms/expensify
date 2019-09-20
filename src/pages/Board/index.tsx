@@ -96,7 +96,11 @@ const Board: React.FunctionComponent<Props> = props => {
 
 	return (
 		<div>
-			<CreateItemCard title="Create Item" extra={renderSelectCategoryType()}>
+			<CreateItemCard
+				title="Create Item"
+				size="small"
+				extra={renderSelectCategoryType()}
+			>
 				<CreateItemForm
 					isCateogryLoading={categories.status === 'fetching'}
 					isItemSaving={item.status === 'saving'}
