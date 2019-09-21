@@ -22,7 +22,7 @@ const {getAsync} = moduleActions
 // Actions
 // ------------------------------------
 export const getItems = (teamId: string) =>
-	getAsync.request({path: `api/teams/${teamId}/expenseItems`})
+	getAsync.request({path: `api/teams/${teamId}/items`})
 export const cancelGetItems = () => getAsync.cancel()
 
 // ------------------------------------

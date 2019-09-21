@@ -25,7 +25,7 @@ const {getAsync, postAsync} = moduleActions
 
 export const createItem = (teamId: string, item: Item) => {
 	return postAsync.request({
-		path: `api/teams/${teamId}/expenseItems`,
+		path: `api/teams/${teamId}/items`,
 		body: item,
 	})
 }

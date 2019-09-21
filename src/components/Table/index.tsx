@@ -1,14 +1,12 @@
 import React from 'react'
 import {Table as AntdTable} from 'antd'
 import {PaginationConfig} from 'antd/lib/pagination'
-import {ColumnProps} from 'antd/es/table'
 
 // Components
 import Row from './components/Row'
 import Cell from './components/Cell'
 
 // Interfaces
-import {CategoryInput, Category} from '../../models/Category'
 type ColumnAlign = 'left' | 'right' | 'center'
 interface Column {
 	title: string
@@ -19,6 +17,7 @@ interface Column {
 interface Props<T> {
 	columns: Column[]
 	data: T[]
+	size?: 'small' | 'default' | 'middle'
 	pagination?: PaginationConfig | false
 	loading?: boolean
 	bordered?: boolean
@@ -30,6 +29,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 	data,
 	pagination,
 	loading,
+	size,
 	bordered,
 	handleUpdateData,
 }) => {
@@ -73,6 +73,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 				dataSource={data}
 				columns={normalizeColumns()}
 				pagination={pagination}
+				size={size}
 				loading={loading}
 			/>
 		</div>
@@ -83,5 +84,6 @@ export default Table
 
 Table.defaultProps = {
 	pagination: false,
+	size: 'small',
 	bordered: false,
 }

@@ -80,10 +80,6 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		}
 	}, [category.status])
 
-	const handleDeleteCategory = id => {
-		deleteCategory(team._id, id)
-	}
-
 	const handleUpdateCategoryItem = (categoryItem: Category) => {
 		updateCategory(team._id, categoryItem._id, {
 			name: categoryItem.name,
@@ -110,14 +106,20 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 		{
 			title: '',
 			dataIndex: 'operation',
-			render: (text, record: Category) => (
-				<Popconfirm
-					title={t('categories.deleteConfirmation')}
-					onConfirm={() => handleDeleteCategory(record._id)}
-				>
-					<Icon type="delete" theme="twoTone" twoToneColor="red" />
-				</Popconfirm>
-			),
+			render: (text, record: Category) => {
+				const handleDeleteCategory = () => {
+					deleteCategory(team._id, record._id)
+				}
+
+				return (
+					<Popconfirm
+						title={t('categories.deleteConfirmation')}
+						onConfirm={handleDeleteCategory}
+					>
+						<Icon type="delete" theme="twoTone" twoToneColor="red" />
+					</Popconfirm>
+				)
+			},
 		},
 	]
 

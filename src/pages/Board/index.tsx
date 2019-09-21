@@ -1,5 +1,5 @@
 import React from 'react'
-import {Select, Card} from 'antd'
+import {Select} from 'antd'
 import CreateItemForm from './component/CreateItemForm'
 import {cancelGetItems, getItems} from '../../modules/Items'
 import {connect} from 'react-redux'
@@ -12,6 +12,8 @@ import {useModuleNotification} from '../../utils/hooks'
 import {enumToValues} from '../../utils/utils'
 import {useTranslation} from 'react-i18next'
 import {createItem} from '../../modules/Item'
+import ItemTable from './component/ItemTable'
+import {CreateItemCard} from './style'
 
 const {Option} = Select
 
@@ -35,6 +37,7 @@ const Board: React.FunctionComponent<Props> = props => {
 		item,
 		categories,
 		createItem,
+		items,
 	} = props
 
 	const [selectedCategoryType, setSelectedCategoryType] = React.useState(
@@ -93,14 +96,19 @@ const Board: React.FunctionComponent<Props> = props => {
 
 	return (
 		<div>
-			<Card title="Create Item" extra={renderSelectCategoryType()}>
+			<CreateItemCard
+				title="Create Item"
+				size="small"
+				extra={renderSelectCategoryType()}
+			>
 				<CreateItemForm
 					isCategoryLoading={categories.status === 'fetching'}
 					isItemSaving={item.status === 'saving'}
 					onSubmit={handleCreateItem}
 					categories={getAvailableCategories()}
 				/>
-			</Card>
+			</CreateItemCard>
+			<ItemTable items={items} />
 		</div>
 	)
 }

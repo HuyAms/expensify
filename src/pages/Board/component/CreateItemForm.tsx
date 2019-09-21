@@ -5,6 +5,7 @@ import Item from '../../../models/Item'
 import moment from 'moment'
 import {FormComponentProps} from 'antd/es/form'
 import {Category} from '../../../models/Category'
+import {DATE_FORMAT} from '../../../constant'
 
 const {TextArea} = Input
 const {Option} = Select
@@ -52,7 +53,7 @@ const CreateItemForm: React.FunctionComponent<Props> = props => {
 		return getFieldDecorator('date', {
 			rules: [{required: true, message: t('error.missingDate')}],
 			initialValue: moment(),
-		})(<DatePicker placeholder={t('date')} />)
+		})(<DatePicker placeholder={t('date')} format={DATE_FORMAT} />)
 	}
 
 	const renderCategoryOptions = () => {

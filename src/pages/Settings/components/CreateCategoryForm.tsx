@@ -38,7 +38,7 @@ const CreateCategoryForm: React.FunctionComponent<Props> = React.forwardRef(
 			handleCancel,
 			form,
 		} = props
-		const {getFieldDecorator, setFieldsValue} = form
+		const {getFieldDecorator} = form
 
 		React.useImperativeHandle(ref, () => ({
 			form,
@@ -49,7 +49,7 @@ const CreateCategoryForm: React.FunctionComponent<Props> = React.forwardRef(
 				rules: [{required: true}],
 				initialValue: CategoryType.Expense,
 			})(
-				<Radio.Group onChange={e => setFieldsValue({type: e.target.value})}>
+				<Radio.Group>
 					{enumToValues(CategoryType).map(type => (
 						<Radio key={type} value={type}>
 							{type === CategoryType.Expense
