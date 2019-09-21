@@ -34,6 +34,11 @@ const Cell: React.FunctionComponent<Props> = ({
 				return
 			}
 			toggleEdit()
+
+			if (record[dataIndex] === values[dataIndex]) {
+				return
+			}
+
 			handleSave({...record, ...values})
 		})
 	}
