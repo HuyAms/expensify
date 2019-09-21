@@ -1,5 +1,7 @@
 import React from 'react'
+import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
+import {Popconfirm, Icon} from 'antd'
 import Item from '../../../models/Item'
 import ModelState from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
@@ -8,13 +10,17 @@ import moment from 'moment'
 import {DATE_FORMAT} from '../../../constant'
 import {TextValue} from './style'
 import {CategoryType} from '../../../models/Category'
+import {deleteItem} from '../../../modules/Item'
+import {TeamContext} from '../../../contexts'
 
 interface Props {
 	items: ModelState<Item[]>
+	deleteItem: (teamId: string, itemId: string) => any
 }
 
-const ItemTable: React.FunctionComponent<Props> = ({items}) => {
+const ItemTable: React.FunctionComponent<Props> = ({items, deleteItem}) => {
 	const [t] = useTranslation(['board', 'common'])
+	const team = React.useContext(TeamContext)
 	const {data, status, error} = items
 
 	const getTableColumns = () => [
@@ -63,6 +69,18 @@ const ItemTable: React.FunctionComponent<Props> = ({items}) => {
 			editable: true,
 			width: '24%',
 		},
+		{
+			title: '',
+			dataIndex: 'operation',
+			render: (text, record: Item) => {
+				const onItemDelete = () => deleteItem(team._id, record._id)
+				return (
+					<Popconfirm title={t('deleteConfirmation')} onConfirm={onItemDelete}>
+						<Icon type="delete" theme="twoTone" twoToneColor="red" />
+					</Popconfirm>
+				)
+			},
+		},
 	]
 
 	const renderValueText = (text, record) => {
@@ -88,4 +106,11 @@ const ItemTable: React.FunctionComponent<Props> = ({items}) => {
 	return <>{renderContent()}</>
 }
 
-export default ItemTable
+const mapDispatchToProps = {
+	deleteItem,
+}
+
+export default connect(
+	null,
+	mapDispatchToProps,
+)(ItemTable)

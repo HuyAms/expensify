@@ -21,7 +21,7 @@ import Item from '../models/Item'
 const moduleName = 'item'
 
 export const {moduleActions, moduleEpics: itemEpics} = useModuleEpic(moduleName)
-const {getAsync, postAsync} = moduleActions
+const {getAsync, postAsync, deleteAsync} = moduleActions
 
 export const createItem = (teamId: string, item: Item) => {
 	return postAsync.request({
@@ -29,6 +29,9 @@ export const createItem = (teamId: string, item: Item) => {
 		body: item,
 	})
 }
+
+export const deleteItem = (teamId: string, itemId: string) =>
+	deleteAsync.request({path: `api/teams/${teamId}/items/${itemId}`})
 
 // ------------------------------------
 // Reducer
@@ -50,13 +53,16 @@ export const itemReducer = (state = initialState, action: AnyAction) =>
 				fetchingSuccess(draft, action.payload)
 				break
 			case getType(postAsync.request):
+			case getType(deleteAsync.request):
 				startSaving(draft)
 				break
 			case getType(postAsync.success):
+			case getType(deleteAsync.success):
 				savingSuccess(draft)
 				break
 			case getType(getAsync.failure):
 			case getType(postAsync.failure):
+			case getType(deleteAsync.failure):
 				endWithError(draft, action.payload)
 				break
 			case getType(getAsync.cancel):
