@@ -6,6 +6,8 @@ import ErrorText from '../../../components/ErrorText'
 import Table from '../../../components/Table'
 import moment from 'moment'
 import {DATE_FORMAT} from '../../../constant'
+import {TextValue} from './style'
+import {CategoryType} from '../../../models/Category'
 
 interface Props {
 	items: ModelState<Item[]>
@@ -21,37 +23,52 @@ const ItemTable: React.FunctionComponent<Props> = ({items}) => {
 			dataIndex: 'date',
 			editable: true,
 			render: date => moment(date).format(DATE_FORMAT),
+			width: '10%',
 		},
 		{
 			title: t('item'),
 			dataIndex: 'name',
 			editable: true,
+			width: '23%',
 		},
 		{
 			title: t('price'),
 			dataIndex: 'price',
 			editable: true,
+			width: '8%',
+			render: renderValueText,
 		},
 		{
 			title: t('quantity'),
 			dataIndex: 'quantity',
 			editable: true,
+			width: '8%',
+			render: renderValueText,
 		},
 		{
 			title: t('total'),
 			dataIndex: 'total',
+			width: '8%',
+			render: renderValueText,
 		},
 		{
 			title: t('category'),
 			dataIndex: 'category.name',
 			editable: true,
+			width: '19%',
 		},
 		{
 			title: t('note'),
 			dataIndex: 'note',
 			editable: true,
+			width: '24%',
 		},
 	]
+
+	const renderValueText = (text, record) => {
+		const isIncomeCategory = record.category.type === CategoryType.Income
+		return <TextValue incomeColor={isIncomeCategory}>{text}</TextValue>
+	}
 
 	const renderContent = () => {
 		if (status === 'error') {
@@ -60,6 +77,7 @@ const ItemTable: React.FunctionComponent<Props> = ({items}) => {
 
 		return (
 			<Table
+				alternativeColor={true}
 				columns={getTableColumns()}
 				data={data}
 				loading={status === 'fetching'}

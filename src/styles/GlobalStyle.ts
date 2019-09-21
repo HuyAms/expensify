@@ -1,5 +1,6 @@
 import {createGlobalStyle} from 'styled-components'
 import {media} from './utils'
+import {overrideAntd} from './vendor/antd'
 
 export const GlobalStyle = createGlobalStyle`
 
@@ -43,4 +44,6 @@ export const GlobalStyle = createGlobalStyle`
 	h3 {
 		font-size: ${props => props.theme.fontSizes.md};
 	}
+	
+	${overrideAntd}
 `

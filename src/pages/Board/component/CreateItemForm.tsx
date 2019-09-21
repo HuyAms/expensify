@@ -73,7 +73,7 @@ const CreateItemForm: React.FunctionComponent<Props> = props => {
 			<Select
 				style={{minWidth: '20rem'}}
 				loading={isCategoryLoading}
-				placeholder="Select category"
+				placeholder={t('category')}
 			>
 				{renderCategoryOptions()}
 			</Select>,
