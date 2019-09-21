@@ -1,4 +1,5 @@
 export default interface Item {
+	_id: string
 	date: Date
 	name: string
 	note?: string
