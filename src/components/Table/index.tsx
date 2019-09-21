@@ -1,4 +1,5 @@
 import React from 'react'
+import classnames from 'classnames'
 import {Table as AntdTable} from 'antd'
 import {PaginationConfig} from 'antd/lib/pagination'
 
@@ -22,6 +23,12 @@ interface Props<T> {
 	loading?: boolean
 	bordered?: boolean
 	handleUpdateData?: (T) => any
+	scroll?: {
+		x?: boolean | number | string
+		y?: boolean | number | string
+	}
+	rowClassName?: string
+	alternativeColor?: boolean
 }
 
 const Table: React.FunctionComponent<Props<any>> = ({
@@ -32,6 +39,8 @@ const Table: React.FunctionComponent<Props<any>> = ({
 	size,
 	bordered,
 	handleUpdateData,
+	scroll,
+	alternativeColor,
 }) => {
 	const components = {
 		body: {
@@ -40,7 +49,8 @@ const Table: React.FunctionComponent<Props<any>> = ({
 		},
 	}
 
-	const getRowClassName = () => 'editable-row'
+	const getRowClassName = () =>
+		classnames('editable-row', {'alternative-color-row': alternativeColor})
 
 	const handleSave = row => {
 		handleUpdateData(row)
@@ -75,6 +85,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 				pagination={pagination}
 				size={size}
 				loading={loading}
+				scroll={scroll}
 			/>
 		</div>
 	)
@@ -84,6 +95,8 @@ export default Table
 
 Table.defaultProps = {
 	pagination: false,
-	size: 'small',
+	size: 'middle',
 	bordered: false,
+	scroll: {y: 600},
+	alternativeColor: false,
 }

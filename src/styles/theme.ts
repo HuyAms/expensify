@@ -4,10 +4,12 @@ export const colors = {
 	white: '#fff',
 	black: '#191919',
 	lightGray: '#f2f1f1',
+	green: '#008000',
 }
 
 export const appColors = {
 	text: colors.black,
+	textIncome: colors.green,
 }
 
 export const fontStack = css`-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,

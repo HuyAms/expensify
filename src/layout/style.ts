@@ -12,9 +12,8 @@ export const AppContainer = styled(Layout)`
 `
 
 export const AppContent = styled(Content)`
-	height: 100%;
-	margin: 2.4rem 1.6rem 0;
+	margin: 2.4rem 1.6rem;
 	padding: 2.4rem;
 	background: ${props => props.theme.colors.white};
-	minheight: 36rem;
+	min-height: auto !important;
 `
