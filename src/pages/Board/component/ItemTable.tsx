@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {Popconfirm, Icon} from 'antd'
-import Item from '../../../models/Item'
+import Item, {ItemInput} from '../../../models/Item'
 import ModelState from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
 import Table from '../../../components/Table'
@@ -10,18 +10,36 @@ import moment from 'moment'
 import {DATE_FORMAT} from '../../../constant'
 import {TextValue} from './style'
 import {CategoryType} from '../../../models/Category'
-import {deleteItem} from '../../../modules/Item'
+import {deleteItem, updateItem} from '../../../modules/Item'
 import {TeamContext} from '../../../contexts'
 
 interface Props {
 	items: ModelState<Item[]>
 	deleteItem: (teamId: string, itemId: string) => any
+	updateItem: (teamId: string, itemId: string, item: ItemInput) => any
 }
 
-const ItemTable: React.FunctionComponent<Props> = ({items, deleteItem}) => {
+const ItemTable: React.FunctionComponent<Props> = ({
+	items,
+	deleteItem,
+	updateItem,
+}) => {
 	const [t] = useTranslation(['board', 'common'])
 	const team = React.useContext(TeamContext)
 	const {data, status, error} = items
+
+	const handleUpdateItem = ({
+		_id,
+		date,
+		name,
+		note,
+		quantity,
+		price,
+		category,
+	}) => {
+		const updatedItem = {date, name, note, quantity, price, category}
+		updateItem(team._id, _id, updatedItem)
+	}
 
 	const getTableColumns = () => [
 		{
@@ -99,6 +117,7 @@ const ItemTable: React.FunctionComponent<Props> = ({items, deleteItem}) => {
 				columns={getTableColumns()}
 				data={data}
 				loading={status === 'fetching'}
+				handleUpdateData={handleUpdateItem}
 			/>
 		)
 	}
@@ -108,6 +127,7 @@ const ItemTable: React.FunctionComponent<Props> = ({items, deleteItem}) => {
 
 const mapDispatchToProps = {
 	deleteItem,
+	updateItem,
 }
 
 export default connect(
