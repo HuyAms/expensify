@@ -9,6 +9,9 @@
 		"about": "About",
 		"logout": "Log out"
 	},
+	"success": {
+		"generic": "Success"
+	},
 	"error": {
 		"unauthorized": "Unauthorized",
 		"forbidden": "You do not have permission to perform this action",
