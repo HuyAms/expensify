@@ -1,24 +1,25 @@
 import React from 'react'
 import {Select} from 'antd'
 import CreateItemForm from './component/CreateItemForm'
-import {cancelGetItems, getItems} from '../../modules/Items'
+import {cancelGetItems, getItems, GetItemQuery} from '../../modules/Items'
 import {connect} from 'react-redux'
 import Item from '../../models/Item'
 import ModelState from '../../models/bases/ModelState'
 import {TeamContext} from '../../contexts'
 import {getCategories, cancelGetCategories} from '../../modules/Categories'
 import {Category, CategoryType} from '../../models/Category'
-import {useModuleNotification} from '../../utils/hooks'
+import {useModuleNotification, useQueryParams} from '../../utils/hooks'
 import {enumToValues} from '../../utils/utils'
 import {useTranslation} from 'react-i18next'
 import {createItem} from '../../modules/Item'
 import ItemTable from './component/ItemTable'
 import {CreateItemCard} from './style'
+import {Sort} from '../../models/Sort'
 
 const {Option} = Select
 
 interface Props {
-	getItems: (teamId: string) => any
+	getItems: (teamId: string, options?: GetItemQuery) => any
 	getCategories: (teamId: string, type?: CategoryType) => any
 	cancelGetItems: () => any
 	cancelGetCategories: () => any
@@ -26,6 +27,7 @@ interface Props {
 	item: ModelState<Item>
 	categories: ModelState<Category[]>
 	createItem: (teamId: string, item: Item) => any
+	push: (path: string) => any
 }
 
 const Board: React.FunctionComponent<Props> = props => {
@@ -45,6 +47,7 @@ const Board: React.FunctionComponent<Props> = props => {
 	)
 	const team = React.useContext(TeamContext)
 	const [t] = useTranslation(['board', 'common'])
+	const [query, updateQuery] = useQueryParams(null)
 
 	React.useEffect(() => {
 		getItems(team._id)
@@ -55,6 +58,17 @@ const Board: React.FunctionComponent<Props> = props => {
 			cancelGetCategories()
 		}
 	}, [])
+
+	// Update getItems when query changed
+	React.useEffect(() => {
+		if (!query) {
+			return
+		}
+
+		const {sort, field} = query
+
+		getItems(team._id, {sort, field})
+	}, [query])
 
 	// Show notification after creating item
 	useModuleNotification(item)
@@ -94,6 +108,12 @@ const Board: React.FunctionComponent<Props> = props => {
 		createItem(team._id, item)
 	}
 
+	const onTableChange = sorter => {
+		const {field, order} = sorter
+		const sort = order === 'ascend' ? Sort.asc : Sort.desc
+		updateQuery({sort, field})
+	}
+
 	return (
 		<div>
 			<CreateItemCard
@@ -108,7 +128,7 @@ const Board: React.FunctionComponent<Props> = props => {
 					categories={getAvailableCategories()}
 				/>
 			</CreateItemCard>
-			<ItemTable items={items} />
+			<ItemTable query={query} onTableChange={onTableChange} items={items} />
 		</div>
 	)
 }

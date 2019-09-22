@@ -6,6 +6,7 @@ import {PaginationConfig} from 'antd/lib/pagination'
 // Components
 import Row from './components/Row'
 import Cell from './components/Cell'
+import {SorterResult, TableCurrentDataSource} from 'antd/lib/table'
 
 // Interfaces
 type ColumnAlign = 'left' | 'right' | 'center'
@@ -29,6 +30,12 @@ interface Props<T> {
 	}
 	rowClassName?: string
 	alternativeColor?: boolean
+	onChange?: (
+		pagination: PaginationConfig,
+		filters: Record<keyof T, string[]>,
+		sorter: SorterResult<T>,
+		extra: TableCurrentDataSource<T>,
+	) => void
 }
 
 const Table: React.FunctionComponent<Props<any>> = ({
@@ -41,6 +48,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 	handleUpdateData,
 	scroll,
 	alternativeColor,
+	onChange,
 }) => {
 	const components = {
 		body: {
@@ -86,6 +94,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 				size={size}
 				loading={loading}
 				scroll={scroll}
+				onChange={onChange}
 			/>
 		</div>
 	)
