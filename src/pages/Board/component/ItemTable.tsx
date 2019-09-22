@@ -75,6 +75,8 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			dataIndex: 'total',
 			width: '8%',
 			render: renderValueText,
+			sorter: true,
+			sortOrder: getSortOrder('total'),
 		},
 		{
 			title: t('category'),
