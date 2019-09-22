@@ -57,12 +57,10 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		})
 	}
 
-	const renderDatePicker = record => (
-		<DatePicker
-			value={moment(record.date)}
-			onChange={date => handleUpdateDate(date, record)}
-		/>
-	)
+	const renderDatePicker = record => {
+		const onChange = date => handleUpdateDate(date, record)
+		return <DatePicker value={moment(record.date)} onChange={onChange} />
+	}
 
 	const renderValueText = (text, record) => {
 		const isIncomeCategory = record.category.type === CategoryType.Income
@@ -79,11 +77,12 @@ const ItemTable: React.FunctionComponent<Props> = ({
 
 	const renderCategorySelect = record => {
 		const defaultValue = record.category._id
+		const onChange = categoryId => handleUpdateCategory(categoryId, record)
 		return (
 			<Select
 				style={{minWidth: '20rem'}}
 				value={defaultValue}
-				onChange={categoryId => handleUpdateCategory(categoryId, record)}
+				onChange={onChange}
 			>
 				{renderCategoryOptions()}
 			</Select>
@@ -136,6 +135,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			title: t('note'),
 			dataIndex: 'note',
 			editable: true,
+			required: false,
 			width: '15%',
 		},
 		{
