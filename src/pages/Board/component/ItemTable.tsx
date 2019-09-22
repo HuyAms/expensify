@@ -32,17 +32,8 @@ const ItemTable: React.FunctionComponent<Props> = ({
 
 	const normalizedData = data && data.map(item => ({...item, key: item._id}))
 
-	const handleUpdateItem = ({
-		_id,
-		date,
-		name,
-		note,
-		quantity,
-		price,
-		category,
-	}) => {
-		const updatedItem = {date, name, note, quantity, price, category}
-		updateItem(team._id, _id, updatedItem)
+	const handleUpdateItem = item => {
+		updateItem(team._id, item._id, item)
 	}
 
 	const handleUpdateCategory = (categoryId, record) => {
