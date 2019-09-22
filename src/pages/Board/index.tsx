@@ -8,7 +8,7 @@ import ModelState from '../../models/bases/ModelState'
 import {TeamContext} from '../../contexts'
 import {getCategories, cancelGetCategories} from '../../modules/Categories'
 import {Category, CategoryType} from '../../models/Category'
-import {useModuleNotification, usePrevious} from '../../utils/hooks'
+import {useModuleNotification} from '../../utils/hooks'
 import {enumToValues} from '../../utils/utils'
 import {useTranslation} from 'react-i18next'
 import {createItem} from '../../modules/Item'
@@ -45,7 +45,6 @@ const Board: React.FunctionComponent<Props> = props => {
 	)
 	const team = React.useContext(TeamContext)
 	const [t] = useTranslation(['board', 'common'])
-	// const previousStatus = usePrevious(item.status)
 
 	React.useEffect(() => {
 		getItems(team._id)
