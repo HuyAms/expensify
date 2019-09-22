@@ -91,6 +91,7 @@ const CreateItemForm: React.FunctionComponent<Props> = props => {
 		form.validateFields((err, item) => {
 			if (!err) {
 				onSubmit(item)
+				form.resetFields()
 			}
 		})
 	}
