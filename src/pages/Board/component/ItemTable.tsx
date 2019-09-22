@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
-import {Popconfirm, Icon, Select} from 'antd'
+import {Popconfirm, Icon, Select, DatePicker} from 'antd'
 import Item, {ItemInput} from '../../../models/Item'
 import ModelState from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
@@ -50,9 +50,44 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		})
 	}
 
+	const handleUpdateDate = (date, record) => {
+		handleUpdateItem({
+			...record,
+			date: date.toDate(),
+		})
+	}
+
+	const renderDatePicker = record => (
+		<DatePicker
+			value={moment(record.date)}
+			onChange={date => handleUpdateDate(date, record)}
+		/>
+	)
+
 	const renderValueText = (text, record) => {
 		const isIncomeCategory = record.category.type === CategoryType.Income
 		return <TextValue incomeColor={isIncomeCategory}>{text}</TextValue>
+	}
+
+	const renderCategoryOptions = () => {
+		return categories.map(category => (
+			<Select.Option key={category._id} value={category._id}>
+				{category.name}
+			</Select.Option>
+		))
+	}
+
+	const renderCategorySelect = record => {
+		const defaultValue = record.category._id
+		return (
+			<Select
+				style={{minWidth: '20rem'}}
+				value={defaultValue}
+				onChange={categoryId => handleUpdateCategory(categoryId, record)}
+			>
+				{renderCategoryOptions()}
+			</Select>
+		)
 	}
 
 	const columns = [
@@ -61,7 +96,8 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			dataIndex: 'date',
 			editable: true,
 			render: date => moment(date).format(DATE_FORMAT),
-			width: '10%',
+			renderEditingCell: renderDatePicker,
+			width: '15%',
 		},
 		{
 			title: t('item'),
@@ -94,13 +130,13 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			dataIndex: 'category.name',
 			editable: true,
 			width: '19%',
-			renderEditingCell: record => renderCategorySelect(record),
+			renderEditingCell: renderCategorySelect,
 		},
 		{
 			title: t('note'),
 			dataIndex: 'note',
 			editable: true,
-			width: '24%',
+			width: '15%',
 		},
 		{
 			title: '',
@@ -115,27 +151,6 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			},
 		},
 	]
-
-	const renderCategoryOptions = () => {
-		return categories.map(category => (
-			<Select.Option key={category._id} value={category._id}>
-				{category.name}
-			</Select.Option>
-		))
-	}
-
-	const renderCategorySelect = record => {
-		const defaultValue = record.category._id
-		return (
-			<Select
-				style={{minWidth: '20rem'}}
-				value={defaultValue}
-				onChange={categoryId => handleUpdateCategory(categoryId, record)}
-			>
-				{renderCategoryOptions()}
-			</Select>
-		)
-	}
 
 	const renderContent = () => {
 		if (status === 'error') {
