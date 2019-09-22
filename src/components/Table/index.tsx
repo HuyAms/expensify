@@ -13,7 +13,7 @@ interface Column {
 	title: string
 	dataIndex: string
 	editable?: boolean
-	renderEditingCell?: () => any
+	renderEditingCell?: (arg: object) => any
 }
 
 interface Props<T> {
