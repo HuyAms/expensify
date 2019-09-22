@@ -6,6 +6,7 @@ import {EditableContext} from '../../../contexts'
 
 interface Props {
 	editable: boolean
+	required: boolean
 	restProps?: object
 	children?: any
 	dataIndex: number
@@ -18,6 +19,7 @@ interface Props {
 const Cell: React.FunctionComponent<Props> = ({
 	editable,
 	restProps,
+	required,
 	children,
 	dataIndex,
 	record,
@@ -52,7 +54,7 @@ const Cell: React.FunctionComponent<Props> = ({
 					{form.getFieldDecorator(dataIndex, {
 						rules: [
 							{
-								required: true,
+								required,
 								message: `${title} is required.`,
 							},
 						],
@@ -70,7 +72,11 @@ const Cell: React.FunctionComponent<Props> = ({
 	}
 
 	const renderChilren = () => {
-		return <div onClick={toggleEdit}>{children}</div>
+		return (
+			<div onClick={toggleEdit} style={{minHeight: 16}}>
+				{children}
+			</div>
+		)
 	}
 
 	const renderCell = () => (editing ? renderEditing() : renderChilren())
@@ -80,6 +86,10 @@ const Cell: React.FunctionComponent<Props> = ({
 			{editable ? renderCell() : children}
 		</td>
 	)
+}
+
+Cell.defaultProps = {
+	required: true,
 }
 
 export default Cell
