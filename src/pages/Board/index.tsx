@@ -50,16 +50,14 @@ const Board: React.FunctionComponent<Props> = props => {
 	const [query, updateQuery] = useQueryParams(null)
 
 	React.useEffect(() => {
-		getItems(team._id)
 		getCategories(team._id)
 
 		return () => {
-			cancelGetItems()
 			cancelGetCategories()
 		}
 	}, [])
 
-	// Update getItems when query changed
+	// getItems when query changed
 	React.useEffect(() => {
 		if (!query) {
 			return
@@ -68,6 +66,10 @@ const Board: React.FunctionComponent<Props> = props => {
 		const {sort, field} = query
 
 		getItems(team._id, {sort, field})
+
+		return () => {
+			cancelGetItems()
+		}
 	}, [query])
 
 	// Show notification after creating item
