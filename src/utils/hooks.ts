@@ -8,6 +8,7 @@ import {
 } from '../components/Notification'
 import ModelState from '../models/bases/ModelState'
 import {useTranslation} from 'react-i18next'
+import {getWindowDimensions} from './utils'
 
 export const usePrevious = value => {
 	const ref = React.useRef()
@@ -32,6 +33,23 @@ export const useModuleNotification = <T>(moduleState: ModelState<T>) => {
 			openErrorNotification(t(moduleState.error))
 		}
 	}, [moduleState.status])
+}
+
+export const useWindowDimensions = () => {
+	const [windowDimensions, setWindowDimensions] = React.useState(
+		getWindowDimensions(),
+	)
+
+	React.useEffect(() => {
+		function handleResize() {
+			setWindowDimensions(getWindowDimensions())
+		}
+
+		window.addEventListener('resize', handleResize)
+		return () => window.removeEventListener('resize', handleResize)
+	}, [])
+
+	return windowDimensions
 }
 
 export const useQueryParams = initialQuery => {

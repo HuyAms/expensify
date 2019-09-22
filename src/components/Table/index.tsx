@@ -7,6 +7,7 @@ import {PaginationConfig} from 'antd/lib/pagination'
 import Row from './components/Row'
 import Cell from './components/Cell'
 import {SorterResult, TableCurrentDataSource} from 'antd/lib/table'
+import {useWindowDimensions} from '../../utils/hooks'
 
 // Interfaces
 type ColumnAlign = 'left' | 'right' | 'center'
@@ -57,6 +58,15 @@ const Table: React.FunctionComponent<Props<any>> = ({
 		},
 	}
 
+	const getScroll = () => {
+		const {width} = useWindowDimensions()
+		const tabPortWidth = 900
+
+		const x = width < tabPortWidth ? 900 : null
+
+		return {x, ...scroll}
+	}
+
 	const getRowClassName = () =>
 		classnames('editable-row', {'alternative-color-row': alternativeColor})
 
@@ -93,7 +103,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 				pagination={pagination}
 				size={size}
 				loading={loading}
-				scroll={scroll}
+				scroll={getScroll()}
 				onChange={onChange}
 			/>
 		</div>

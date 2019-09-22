@@ -102,6 +102,15 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		onTableChange(sorter)
 	}
 
+	const parseItemData = () => {
+		return status === 'success'
+			? data.map(item => ({
+					key: item._id,
+					...item,
+			  }))
+			: []
+	}
+
 	const renderContent = () => {
 		if (status === 'error') {
 			return <ErrorText>{error}</ErrorText>
@@ -111,7 +120,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			<Table
 				alternativeColor={true}
 				columns={getTableColumns()}
-				data={data}
+				data={parseItemData()}
 				loading={status === 'fetching'}
 				onChange={onChange}
 			/>
