@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
-import {Popconfirm, Icon} from 'antd'
+import {Popconfirm, Icon, Select} from 'antd'
 import Item, {ItemInput} from '../../../models/Item'
 import ModelState from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
@@ -9,18 +9,20 @@ import Table from '../../../components/Table'
 import moment from 'moment'
 import {DATE_FORMAT} from '../../../constant'
 import {TextValue} from './style'
-import {CategoryType} from '../../../models/Category'
+import {CategoryType, Category} from '../../../models/Category'
 import {deleteItem, updateItem} from '../../../modules/Item'
 import {TeamContext} from '../../../contexts'
 
 interface Props {
 	items: ModelState<Item[]>
+	categories: Category[]
 	deleteItem: (teamId: string, itemId: string) => any
 	updateItem: (teamId: string, itemId: string, item: ItemInput) => any
 }
 
 const ItemTable: React.FunctionComponent<Props> = ({
 	items,
+	categories,
 	deleteItem,
 	updateItem,
 }) => {
@@ -41,7 +43,19 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		updateItem(team._id, _id, updatedItem)
 	}
 
-	const getTableColumns = () => [
+	const handleUpdateCategory = (categoryId, record) => {
+		handleUpdateItem({
+			...record,
+			category: categoryId,
+		})
+	}
+
+	const renderValueText = (text, record) => {
+		const isIncomeCategory = record.category.type === CategoryType.Income
+		return <TextValue incomeColor={isIncomeCategory}>{text}</TextValue>
+	}
+
+	const columns = [
 		{
 			title: t('date'),
 			dataIndex: 'date',
@@ -80,6 +94,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			dataIndex: 'category.name',
 			editable: true,
 			width: '19%',
+			renderEditingCell: record => renderCategorySelect(record),
 		},
 		{
 			title: t('note'),
@@ -101,9 +116,25 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		},
 	]
 
-	const renderValueText = (text, record) => {
-		const isIncomeCategory = record.category.type === CategoryType.Income
-		return <TextValue incomeColor={isIncomeCategory}>{text}</TextValue>
+	const renderCategoryOptions = () => {
+		return categories.map(category => (
+			<Select.Option key={category._id} value={category._id}>
+				{category.name}
+			</Select.Option>
+		))
+	}
+
+	const renderCategorySelect = record => {
+		const defaultValue = record.category._id
+		return (
+			<Select
+				style={{minWidth: '20rem'}}
+				value={defaultValue}
+				onChange={categoryId => handleUpdateCategory(categoryId, record)}
+			>
+				{renderCategoryOptions()}
+			</Select>
+		)
 	}
 
 	const renderContent = () => {
@@ -114,7 +145,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		return (
 			<Table
 				alternativeColor={true}
-				columns={getTableColumns()}
+				columns={columns}
 				data={data}
 				loading={status === 'fetching'}
 				handleUpdateData={handleUpdateItem}

@@ -12,6 +12,7 @@ interface Props {
 	record: []
 	title: string
 	handleSave: (object) => any
+	renderEditingCell?: (arg: object) => any
 }
 
 const Cell: React.FunctionComponent<Props> = ({
@@ -22,6 +23,7 @@ const Cell: React.FunctionComponent<Props> = ({
 	record,
 	title,
 	handleSave,
+	renderEditingCell,
 }) => {
 	const [editing, setEditing] = useState(false)
 	const form = useContext(EditableContext)
@@ -43,25 +45,27 @@ const Cell: React.FunctionComponent<Props> = ({
 		})
 	}
 
-	const renderEditingCell = () => {
+	const renderEditing = () => {
 		return (
-			<Form.Item>
-				{form.getFieldDecorator(dataIndex, {
-					rules: [
-						{
-							required: true,
-							message: `${title} is required.`,
-						},
-					],
-					initialValue: record[dataIndex],
-				})(
-					<Input
-						onPressEnter={handleInputSave}
-						onBlur={handleInputSave}
-						autoFocus={true}
-					/>,
-				)}
-			</Form.Item>
+			(renderEditingCell && renderEditingCell(record)) || (
+				<Form.Item>
+					{form.getFieldDecorator(dataIndex, {
+						rules: [
+							{
+								required: true,
+								message: `${title} is required.`,
+							},
+						],
+						initialValue: record[dataIndex],
+					})(
+						<Input
+							onPressEnter={handleInputSave}
+							onBlur={handleInputSave}
+							autoFocus={true}
+						/>,
+					)}
+				</Form.Item>
+			)
 		)
 	}
 
@@ -69,7 +73,7 @@ const Cell: React.FunctionComponent<Props> = ({
 		return <div onClick={toggleEdit}>{children}</div>
 	}
 
-	const renderCell = () => (editing ? renderEditingCell() : renderChilren())
+	const renderCell = () => (editing ? renderEditing() : renderChilren())
 
 	return (
 		<td style={{textAlign: 'center'}} {...restProps}>
