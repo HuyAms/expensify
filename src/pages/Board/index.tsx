@@ -113,7 +113,7 @@ const Board: React.FunctionComponent<Props> = props => {
 					categories={getAvailableCategories()}
 				/>
 			</CreateItemCard>
-			<ItemTable items={items} />
+			<ItemTable items={items} categories={categories.data} />
 		</div>
 	)
 }
