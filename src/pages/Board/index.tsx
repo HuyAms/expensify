@@ -45,21 +45,17 @@ const Board: React.FunctionComponent<Props> = props => {
 	)
 	const team = React.useContext(TeamContext)
 	const [t] = useTranslation(['board', 'common'])
-	const previousStatus = usePrevious(item.status)
+	// const previousStatus = usePrevious(item.status)
 
 	React.useEffect(() => {
 		getItems(team._id)
-		getCategories(team._id)
-
-		if (previousStatus === 'saving' && item.status === 'success') {
-			getItems(team._id)
-		}
-
-		return () => {
-			cancelGetItems()
-			cancelGetCategories()
-		}
+		return () => cancelGetItems()
 	}, [item.status])
+
+	React.useEffect(() => {
+		getCategories(team._id)
+		return () => cancelGetCategories()
+	}, [])
 
 	// Show notification after creating item
 	useModuleNotification(item)
