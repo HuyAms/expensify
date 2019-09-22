@@ -30,6 +30,8 @@ const ItemTable: React.FunctionComponent<Props> = ({
 	const team = React.useContext(TeamContext)
 	const {data, status, error} = items
 
+	const normalizedData = data && data.map(item => ({...item, key: item._id}))
+
 	const handleUpdateItem = ({
 		_id,
 		date,
@@ -161,7 +163,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			<Table
 				alternativeColor={true}
 				columns={columns}
-				data={data}
+				data={normalizedData}
 				loading={status === 'fetching'}
 				handleUpdateData={handleUpdateItem}
 			/>
