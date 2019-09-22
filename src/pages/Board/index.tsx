@@ -78,19 +78,6 @@ const Board: React.FunctionComponent<Props> = props => {
 	// Show notification after creating item
 	useModuleNotification(item)
 
-	// Get items after create new item successfully
-	const prevTeamStatus = usePrevious(item.status)
-	useEffect(() => {
-		if (prevTeamStatus === 'saving' && item.status === 'success') {
-			if (!query) {
-				return
-			}
-
-			const {sort, field} = query
-			getItems(team._id, {sort, field})
-		}
-	}, [item.status])
-
 	const onSelectCategoryChange = (value: CategoryType) => {
 		setSelectedCategoryType(value)
 	}

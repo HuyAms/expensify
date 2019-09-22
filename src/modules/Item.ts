@@ -21,7 +21,7 @@ import Item from '../models/Item'
 const moduleName = 'item'
 
 export const {moduleActions, moduleEpics: itemEpics} = useModuleEpic(moduleName)
-const {getAsync, postAsync} = moduleActions
+export const {getAsync, postAsync} = moduleActions
 
 export const createItem = (teamId: string, item: Item) => {
 	return postAsync.request({
