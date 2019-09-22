@@ -8,7 +8,7 @@ import ModelState from '../../models/bases/ModelState'
 import {TeamContext} from '../../contexts'
 import {getCategories, cancelGetCategories} from '../../modules/Categories'
 import {Category, CategoryType} from '../../models/Category'
-import {useModuleNotification} from '../../utils/hooks'
+import {useModuleNotification, usePrevious} from '../../utils/hooks'
 import {enumToValues} from '../../utils/utils'
 import {useTranslation} from 'react-i18next'
 import {createItem} from '../../modules/Item'
@@ -45,16 +45,22 @@ const Board: React.FunctionComponent<Props> = props => {
 	)
 	const team = React.useContext(TeamContext)
 	const [t] = useTranslation(['board', 'common'])
+	const prevStatus = usePrevious(item.status)
 
 	React.useEffect(() => {
 		getItems(team._id)
 		getCategories(team._id)
-
 		return () => {
 			cancelGetItems()
 			cancelGetCategories()
 		}
 	}, [])
+
+	React.useEffect(() => {
+		if (prevStatus === 'saving' && item.status === 'success') {
+			getItems(team._id)
+		}
+	}, [item.status])
 
 	// Show notification after creating item
 	useModuleNotification(item)
@@ -108,7 +114,7 @@ const Board: React.FunctionComponent<Props> = props => {
 					categories={getAvailableCategories()}
 				/>
 			</CreateItemCard>
-			<ItemTable items={items} />
+			<ItemTable items={items} categories={categories.data} />
 		</div>
 	)
 }

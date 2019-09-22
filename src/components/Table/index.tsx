@@ -13,6 +13,8 @@ interface Column {
 	title: string
 	dataIndex: string
 	editable?: boolean
+	required?: boolean
+	renderEditingCell?: (arg: object) => any
 }
 
 interface Props<T> {
@@ -69,7 +71,9 @@ const Table: React.FunctionComponent<Props<any>> = ({
 					editable: col.editable,
 					dataIndex: col.dataIndex,
 					title: col.title,
+					required: col.required,
 					handleSave,
+					renderEditingCell: col.renderEditingCell,
 				}),
 				align: 'center' as ColumnAlign,
 			}

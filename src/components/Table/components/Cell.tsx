@@ -6,22 +6,26 @@ import {EditableContext} from '../../../contexts'
 
 interface Props {
 	editable: boolean
+	required: boolean
 	restProps?: object
 	children?: any
 	dataIndex: number
 	record: []
 	title: string
 	handleSave: (object) => any
+	renderEditingCell?: (arg: object) => any
 }
 
 const Cell: React.FunctionComponent<Props> = ({
 	editable,
 	restProps,
+	required,
 	children,
 	dataIndex,
 	record,
 	title,
 	handleSave,
+	renderEditingCell,
 }) => {
 	const [editing, setEditing] = useState(false)
 	const form = useContext(EditableContext)
@@ -34,43 +38,58 @@ const Cell: React.FunctionComponent<Props> = ({
 				return
 			}
 			toggleEdit()
+
+			if (record[dataIndex] === values[dataIndex]) {
+				return
+			}
+
 			handleSave({...record, ...values})
 		})
 	}
 
-	const renderEditingCell = () => {
+	const renderEditing = () => {
 		return (
-			<Form.Item>
-				{form.getFieldDecorator(dataIndex, {
-					rules: [
-						{
-							required: true,
-							message: `${title} is required.`,
-						},
-					],
-					initialValue: record[dataIndex],
-				})(
-					<Input
-						onPressEnter={handleInputSave}
-						onBlur={handleInputSave}
-						autoFocus={true}
-					/>,
-				)}
-			</Form.Item>
+			(renderEditingCell && renderEditingCell(record)) || (
+				<Form.Item>
+					{form.getFieldDecorator(dataIndex, {
+						rules: [
+							{
+								required,
+								message: `${title} is required.`,
+							},
+						],
+						initialValue: record[dataIndex],
+					})(
+						<Input
+							onPressEnter={handleInputSave}
+							onBlur={handleInputSave}
+							autoFocus={true}
+						/>,
+					)}
+				</Form.Item>
+			)
 		)
 	}
 
 	const renderChilren = () => {
-		return <div onClick={toggleEdit}>{children}</div>
+		return (
+			<div onClick={toggleEdit} style={{minHeight: 16}}>
+				{children}
+			</div>
+		)
 	}
 
-	const renderCell = () => (editing ? renderEditingCell() : renderChilren())
+	const renderCell = () => (editing ? renderEditing() : renderChilren())
 
 	return (
 		<td style={{textAlign: 'center'}} {...restProps}>
 			{editable ? renderCell() : children}
 		</td>
 	)
+}
+
+Cell.defaultProps = {
+	required: true,
 }
 
 export default Cell
