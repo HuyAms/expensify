@@ -26,6 +26,7 @@ const {getAsync} = moduleActions
 export interface GetItemQuery {
 	sort?: Sort
 	field?: string
+	search?: string
 }
 export const getItems = (teamId: string, options?: GetItemQuery) =>
 	getAsync.request({path: `api/teams/${teamId}/items`, query: options})

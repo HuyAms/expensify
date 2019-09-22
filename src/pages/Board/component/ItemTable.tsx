@@ -10,16 +10,17 @@ import {TextValue} from './style'
 import {CategoryType} from '../../../models/Category'
 import {Sort} from '../../../models/Sort'
 import {GetItemQuery} from '../../../modules/Items'
+import {Icon, Input} from 'antd'
 
 interface Props {
 	items: ModelState<Item[]>
-	onTableChange: (sorter) => void
+	updateQuery: (query: GetItemQuery) => void
 	query: GetItemQuery
 }
 
 const ItemTable: React.FunctionComponent<Props> = ({
 	items,
-	onTableChange,
+	updateQuery,
 	query,
 }) => {
 	const [t] = useTranslation(['board', 'common'])
@@ -36,6 +37,24 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		return field === sortedField ? sortState : null
 	}
 
+	const onSearchChange = e => {
+		updateQuery({...query, search: e.target.value})
+	}
+
+	const getColumnSearchProps = dataIndex => ({
+		filterDropdown: () => (
+			<div style={{padding: 8}}>
+				<Input
+					allowClear={true}
+					placeholder={`Search ${dataIndex}`}
+					value={query && query.search}
+					onChange={onSearchChange}
+				/>
+			</div>
+		),
+		filterIcon: () => <Icon type="search" />,
+	})
+
 	const getTableColumns = () => [
 		{
 			title: t('date'),
@@ -51,6 +70,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			dataIndex: 'name',
 			editable: true,
 			width: '23%',
+			...getColumnSearchProps('name'),
 		},
 		{
 			title: t('price'),
@@ -99,7 +119,9 @@ const ItemTable: React.FunctionComponent<Props> = ({
 	}
 
 	const onChange = (_, __, sorter) => {
-		onTableChange(sorter)
+		const {field, order} = sorter
+		const sort = order === 'ascend' ? Sort.asc : Sort.desc
+		updateQuery({...query, sort, field})
 	}
 
 	const parseItemData = () => {

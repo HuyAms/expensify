@@ -67,8 +67,8 @@ const Board: React.FunctionComponent<Props> = props => {
 			return
 		}
 
-		const {sort, field} = query
-		getItems(team._id, {sort, field})
+		const {sort, field, search} = query
+		getItems(team._id, {sort, field, search})
 
 		return () => {
 			cancelGetItems()
@@ -113,12 +113,6 @@ const Board: React.FunctionComponent<Props> = props => {
 		createItem(team._id, item)
 	}
 
-	const onTableChange = sorter => {
-		const {field, order} = sorter
-		const sort = order === 'ascend' ? Sort.asc : Sort.desc
-		updateQuery({sort, field})
-	}
-
 	return (
 		<div>
 			<CreateItemCard
@@ -133,7 +127,7 @@ const Board: React.FunctionComponent<Props> = props => {
 					categories={getAvailableCategories()}
 				/>
 			</CreateItemCard>
-			<ItemTable query={query} onTableChange={onTableChange} items={items} />
+			<ItemTable query={query} updateQuery={updateQuery} items={items} />
 		</div>
 	)
 }
