@@ -10,3 +10,12 @@ export default interface Item {
 	creator: string
 	total: number
 }
+
+export interface ItemInput {
+	date: Date
+	name: string
+	note?: string
+	quantity: number
+	price: number
+	category: string
+}

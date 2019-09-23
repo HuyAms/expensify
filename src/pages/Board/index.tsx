@@ -18,7 +18,6 @@ import {useTranslation} from 'react-i18next'
 import {createItem} from '../../modules/Item'
 import ItemTable from './component/ItemTable'
 import {CreateItemCard} from './style'
-import {Sort} from '../../models/Sort'
 
 const {Option} = Select
 
@@ -52,10 +51,10 @@ const Board: React.FunctionComponent<Props> = props => {
 	const team = React.useContext(TeamContext)
 	const [t] = useTranslation(['board', 'common'])
 	const [query, updateQuery] = useQueryParams(null)
+	const prevStatus = usePrevious(item.status)
 
 	React.useEffect(() => {
 		getCategories(team._id)
-
 		return () => {
 			cancelGetCategories()
 		}
@@ -74,6 +73,12 @@ const Board: React.FunctionComponent<Props> = props => {
 			cancelGetItems()
 		}
 	}, [query])
+
+	React.useEffect(() => {
+		if (prevStatus === 'saving' && item.status === 'success') {
+			getItems(team._id)
+		}
+	}, [item.status])
 
 	// Show notification after creating item
 	useModuleNotification(item)
@@ -127,7 +132,12 @@ const Board: React.FunctionComponent<Props> = props => {
 					categories={getAvailableCategories()}
 				/>
 			</CreateItemCard>
-			<ItemTable query={query} updateQuery={updateQuery} items={items} />
+			<ItemTable
+				items={items}
+				query={query}
+				updateQuery={updateQuery}
+				categories={categories.data}
+			/>
 		</div>
 	)
 }

@@ -95,17 +95,19 @@ const CategorySettings: React.FunctionComponent<Props> = ({
 					? t('categories.expenseLabel')
 					: t('categories.incomeLabel'),
 			dataIndex: 'name',
-			width: '30%',
+			width: '45%',
 			editable: true,
 		},
 		{
 			title: t('categories.description'),
 			dataIndex: 'description',
+			width: '45%',
 			editable: true,
 		},
 		{
 			title: '',
 			dataIndex: 'operation',
+			width: '10%',
 			render: (text, record: Category) => {
 				const handleDeleteCategory = () => {
 					deleteCategory(team._id, record._id)

@@ -26,7 +26,7 @@ export const useModuleNotification = <T>(moduleState: ModelState<T>) => {
 
 	React.useEffect(() => {
 		if (prevTeamStatus === 'saving' && moduleState.status === 'success') {
-			openSuccessNotification('Created')
+			openSuccessNotification(t('success.generic'))
 		}
 
 		if (prevTeamStatus === 'saving' && moduleState.status === 'error') {
