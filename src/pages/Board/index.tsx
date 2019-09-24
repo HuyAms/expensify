@@ -78,11 +78,11 @@ const Board: React.FunctionComponent<Props> = props => {
 		}
 	}, [query])
 
-	React.useEffect(() => {
-		if (prevStatus === 'saving' && item.status === 'success') {
-			getItems(team._id)
-		}
-	}, [item.status])
+	// React.useEffect(() => {
+	// 	if (prevStatus === 'saving' && item.status === 'success') {
+	// 		getItems(team._id)
+	// 	}
+	// }, [item.status])
 
 	// Show notification after creating item
 	useModuleNotification(item)
@@ -123,7 +123,6 @@ const Board: React.FunctionComponent<Props> = props => {
 	}
 
 	const handleDeleteItem = (itemId: string) => {
-		console.log('DELETE ITEM: ', itemId)
 		deleteItem(team._id, itemId)
 	}
 

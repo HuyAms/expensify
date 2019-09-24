@@ -1,6 +1,9 @@
 import produce from 'immer'
 import {getType} from 'typesafe-actions'
-import {postAsync as postItemAsync} from './Item'
+import {
+	postAsync as postItemAsync,
+	deleteAsync as deleteItemAsync,
+} from './Item'
 import {
 	startFetching,
 	fetchingSuccess,
@@ -47,6 +50,11 @@ export const itemsReducer = (state = initialState, action: AnyAction) =>
 		switch (action.type) {
 			case getType(postItemAsync.success):
 				draft.data.unshift(action.payload.data)
+				break
+			case getType(deleteItemAsync.success):
+				draft.data = draft.data.filter(item => {
+					return item._id !== action.payload.data._id
+				})
 				break
 			case getType(getAsync.request):
 				startFetching(draft)
