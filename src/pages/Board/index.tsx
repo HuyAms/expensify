@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {Select} from 'antd'
 import CreateItemForm from './component/CreateItemForm'
 import {cancelGetItems, getItems, GetItemQuery} from '../../modules/Items'

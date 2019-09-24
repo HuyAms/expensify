@@ -16,7 +16,7 @@ interface Column {
 	dataIndex: string
 	editable?: boolean
 	required?: boolean
-	renderEditingCell?: (arg: object) => any
+	renderEditingCell?: (arg: any) => any
 }
 
 interface Props<T> {

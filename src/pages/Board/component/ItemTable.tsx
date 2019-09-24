@@ -1,7 +1,15 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
-import {Popconfirm, Icon, Input, Select, DatePicker} from 'antd'
+import {
+	Form,
+	Popconfirm,
+	Icon,
+	Input,
+	Select,
+	DatePicker,
+	InputNumber,
+} from 'antd'
 import Item, {ItemInput} from '../../../models/Item'
 import ModelState from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
@@ -71,23 +79,82 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		updateItem(team._id, item._id, item)
 	}
 
-	const handleUpdateCategory = (categoryId, record) => {
-		handleUpdateItem({
-			...record,
-			category: categoryId,
-		})
+	const renderDatePicker = ({
+		handleInputSave,
+		dataIndex,
+		record,
+		title,
+		toggleEdit,
+	}) => {
+		const onChange = value => {
+			toggleEdit()
+			handleUpdateItem({...record, date: value})
+		}
+
+		return <DatePicker value={moment(record[dataIndex])} onChange={onChange} />
 	}
 
-	const handleUpdateDate = (date, record) => {
-		handleUpdateItem({
-			...record,
-			date: date.toDate(),
-		})
+	const renderQuantityInput = ({
+		handleInputSave,
+		dataIndex,
+		record,
+		required,
+		title,
+		form,
+	}) => {
+		return (
+			<Form.Item>
+				{form.getFieldDecorator(dataIndex, {
+					rules: [
+						{
+							required,
+							message: `${title} is required.`,
+						},
+					],
+					initialValue: record[dataIndex],
+				})(
+					<InputNumber
+						precision={0}
+						min={1}
+						onPressEnter={handleInputSave}
+						onBlur={handleInputSave}
+						autoFocus={true}
+					/>,
+				)}
+			</Form.Item>
+		)
 	}
 
-	const renderDatePicker = record => {
-		const onChange = date => handleUpdateDate(date, record)
-		return <DatePicker value={moment(record.date)} onChange={onChange} />
+	const renderPriceInput = ({
+		handleInputSave,
+		dataIndex,
+		record,
+		required,
+		title,
+		form,
+	}) => {
+		return (
+			<Form.Item>
+				{form.getFieldDecorator(dataIndex, {
+					rules: [
+						{
+							required,
+							message: `${title} is required.`,
+						},
+					],
+					initialValue: record[dataIndex],
+				})(
+					<InputNumber
+						precision={0}
+						step={0.1}
+						min={0}
+						onPressEnter={handleInputSave}
+						onBlur={handleInputSave}
+						autoFocus={true}
+					/>,
+				)}
+			</Form.Item>
+		)
 	}
 
 	const renderCategoryOptions = () => {
@@ -98,13 +165,16 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		))
 	}
 
-	const renderCategorySelect = record => {
-		const defaultValue = record.category._id
-		const onChange = categoryId => handleUpdateCategory(categoryId, record)
+	const renderCategorySelect = ({dataIndex, record, toggleEdit}) => {
+		const onChange = (value: string) => {
+			toggleEdit()
+			handleUpdateItem({...record, category: value})
+		}
+
 		return (
 			<Select
+				value={record[dataIndex]._id}
 				style={{minWidth: '20rem'}}
-				value={defaultValue}
 				onChange={onChange}
 			>
 				{renderCategoryOptions()}
@@ -144,6 +214,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			render: renderValueText,
 			sorter: true,
 			sortOrder: getSortOrder('price'),
+			renderEditingCell: renderPriceInput,
 		},
 		{
 			title: t('quantity'),
@@ -153,6 +224,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			render: renderValueText,
 			sorter: true,
 			sortOrder: getSortOrder('quantity'),
+			renderEditingCell: renderQuantityInput,
 		},
 		{
 			title: t('total'),
@@ -164,10 +236,11 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		},
 		{
 			title: t('category'),
-			dataIndex: 'category.name',
+			dataIndex: 'category',
 			editable: true,
 			width: '19%',
 			renderEditingCell: renderCategorySelect,
+			render: record => record.name,
 		},
 		{
 			title: t('note'),
