@@ -78,12 +78,6 @@ const Board: React.FunctionComponent<Props> = props => {
 		}
 	}, [query])
 
-	// React.useEffect(() => {
-	// 	if (prevStatus === 'saving' && item.status === 'success') {
-	// 		getItems(team._id)
-	// 	}
-	// }, [item.status])
-
 	// Show notification after creating item
 	useModuleNotification(item)
 

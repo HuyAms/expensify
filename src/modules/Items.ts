@@ -3,6 +3,7 @@ import {getType} from 'typesafe-actions'
 import {
 	postAsync as postItemAsync,
 	deleteAsync as deleteItemAsync,
+	updateAsync as updateItemAsync,
 } from './Item'
 import {
 	startFetching,
@@ -52,9 +53,16 @@ export const itemsReducer = (state = initialState, action: AnyAction) =>
 				draft.data.unshift(action.payload.data)
 				break
 			case getType(deleteItemAsync.success):
-				draft.data = draft.data.filter(item => {
-					return item._id !== action.payload.data._id
-				})
+				const removedIndex = draft.data.findIndex(
+					item => item._id === action.payload.data._id,
+				)
+				draft.data.splice(removedIndex, 1)
+				break
+			case getType(updateItemAsync.success):
+				const updatedIndex = draft.data.findIndex(
+					item => item._id === action.payload.data._id,
+				)
+				draft.data[updatedIndex] = action.payload.data
 				break
 			case getType(getAsync.request):
 				startFetching(draft)
