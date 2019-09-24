@@ -1,9 +1,9 @@
 import React from 'react'
 import {Select} from 'antd'
+import {connect} from 'react-redux'
 import CreateItemForm from './component/CreateItemForm'
 import {cancelGetItems, getItems, GetItemQuery} from '../../modules/Items'
-import {connect} from 'react-redux'
-import Item from '../../models/Item'
+import Item, {ItemInput} from '../../models/Item'
 import ModelState from '../../models/bases/ModelState'
 import {TeamContext} from '../../contexts'
 import {getCategories, cancelGetCategories} from '../../modules/Categories'
@@ -15,7 +15,7 @@ import {
 } from '../../utils/hooks'
 import {enumToValues} from '../../utils/utils'
 import {useTranslation} from 'react-i18next'
-import {createItem} from '../../modules/Item'
+import {createItem, deleteItem, updateItem} from '../../modules/Item'
 import ItemTable from './component/ItemTable'
 import {CreateItemCard} from './style'
 
@@ -31,6 +31,8 @@ interface Props {
 	categories: ModelState<Category[]>
 	createItem: (teamId: string, item: Item) => any
 	push: (path: string) => any
+	deleteItem: (teamId: string, itemId: string) => any
+	updateItem: (teamId: string, itemId: string, item: ItemInput) => any
 }
 
 const Board: React.FunctionComponent<Props> = props => {
@@ -43,6 +45,8 @@ const Board: React.FunctionComponent<Props> = props => {
 		categories,
 		createItem,
 		items,
+		deleteItem,
+		updateItem,
 	} = props
 
 	const [selectedCategoryType, setSelectedCategoryType] = React.useState(
@@ -118,6 +122,15 @@ const Board: React.FunctionComponent<Props> = props => {
 		createItem(team._id, item)
 	}
 
+	const handleDeleteItem = (itemId: string) => {
+		console.log('DELETE ITEM: ', itemId)
+		deleteItem(team._id, itemId)
+	}
+
+	const handleUpdateItem = (itemId: string, itemUpdate: ItemInput) => {
+		updateItem(team._id, itemId, itemUpdate)
+	}
+
 	return (
 		<div>
 			<CreateItemCard
@@ -137,6 +150,8 @@ const Board: React.FunctionComponent<Props> = props => {
 				query={query}
 				updateQuery={updateQuery}
 				categories={categories.data}
+				onItemDelete={handleDeleteItem}
+				onItemUpdate={handleUpdateItem}
 			/>
 		</div>
 	)
@@ -156,6 +171,8 @@ const mapDispatchToProps = {
 	getCategories,
 	cancelGetCategories,
 	createItem,
+	deleteItem,
+	updateItem,
 }
 
 export default connect(

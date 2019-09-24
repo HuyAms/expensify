@@ -1,5 +1,4 @@
 import React from 'react'
-import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
 import {
 	Form,
@@ -20,15 +19,13 @@ import {TextValue} from './style'
 import {CategoryType, Category} from '../../../models/Category'
 import {Sort} from '../../../models/Sort'
 import {GetItemQuery} from '../../../modules/Items'
-import {deleteItem, updateItem} from '../../../modules/Item'
-import {TeamContext} from '../../../contexts'
 
 interface Props {
 	items: ModelState<Item[]>
 	categories: Category[]
-	deleteItem: (teamId: string, itemId: string) => any
-	updateItem: (teamId: string, itemId: string, item: ItemInput) => any
 	updateQuery: (query: GetItemQuery) => void
+	onItemDelete: (id: string) => void
+	onItemUpdate: (id: string, itemUpdate: ItemInput) => void
 	query: GetItemQuery
 }
 
@@ -37,11 +34,10 @@ const ItemTable: React.FunctionComponent<Props> = ({
 	updateQuery,
 	query,
 	categories,
-	deleteItem,
-	updateItem,
+	onItemDelete,
+	onItemUpdate,
 }) => {
 	const [t] = useTranslation(['board', 'common'])
-	const team = React.useContext(TeamContext)
 	const {data, status, error} = items
 
 	const getSortOrder = (sortedField: string) => {
@@ -76,7 +72,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 	const normalizedData = data && data.map(item => ({...item, key: item._id}))
 
 	const handleUpdateItem = item => {
-		updateItem(team._id, item._id, item)
+		onItemUpdate(item._id, item)
 	}
 
 	const renderDatePicker = ({
@@ -253,9 +249,9 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			title: '',
 			dataIndex: 'operation',
 			render: (text, record: Item) => {
-				const onItemDelete = () => deleteItem(team._id, record._id)
+				const onConfirm = () => onItemDelete(record._id)
 				return (
-					<Popconfirm title={t('deleteConfirmation')} onConfirm={onItemDelete}>
+					<Popconfirm title={t('deleteConfirmation')} onConfirm={onConfirm}>
 						<Icon type="delete" theme="twoTone" twoToneColor="red" />
 					</Popconfirm>
 				)
@@ -289,12 +285,4 @@ const ItemTable: React.FunctionComponent<Props> = ({
 	return <>{renderContent()}</>
 }
 
-const mapDispatchToProps = {
-	deleteItem,
-	updateItem,
-}
-
-export default connect(
-	null,
-	mapDispatchToProps,
-)(ItemTable)
+export default ItemTable
