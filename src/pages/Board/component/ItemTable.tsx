@@ -141,7 +141,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 					initialValue: record[dataIndex],
 				})(
 					<InputNumber
-						precision={0}
+						precision={2}
 						step={0.1}
 						min={0}
 						onPressEnter={handleInputSave}
