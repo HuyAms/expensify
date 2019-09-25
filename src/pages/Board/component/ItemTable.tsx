@@ -268,6 +268,10 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		updateQuery({...query, sort, field})
 	}
 
+	const onLoadMore = () => {
+		console.log('LOAD MORE')
+	}
+
 	const renderContent = () => {
 		if (status === 'error') {
 			return <ErrorText>{error}</ErrorText>
@@ -281,6 +285,8 @@ const ItemTable: React.FunctionComponent<Props> = ({
 				columns={columns}
 				data={normalizedData}
 				handleUpdateData={handleUpdateItem}
+				onLoadMore={onLoadMore}
+				hasMore={true}
 			/>
 		)
 	}

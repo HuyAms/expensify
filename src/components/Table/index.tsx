@@ -1,4 +1,5 @@
 import React from 'react'
+import {fromEvent} from 'rxjs'
 import classnames from 'classnames'
 import {Table as AntdTable} from 'antd'
 import {PaginationConfig} from 'antd/lib/pagination'
@@ -39,6 +40,8 @@ interface Props<T> {
 		sorter: SorterResult<T>,
 		extra: TableCurrentDataSource<T>,
 	) => void
+	onLoadMore?: () => void
+	hasMore?: boolean
 }
 
 const Table: React.FunctionComponent<Props<any>> = ({
@@ -52,6 +55,8 @@ const Table: React.FunctionComponent<Props<any>> = ({
 	scroll,
 	alternativeColor,
 	onChange,
+	hasMore,
+	onLoadMore,
 }) => {
 	const components = {
 		body: {
@@ -59,6 +64,24 @@ const Table: React.FunctionComponent<Props<any>> = ({
 			cell: Cell,
 		},
 	}
+
+	React.useEffect(() => {
+		const tableBody = document.querySelector('.ant-table-body')
+
+		const scrollObservable = fromEvent<Event>(tableBody, 'scroll')
+
+		const subscription = scrollObservable.subscribe((event: any) => {
+			const maxScroll = event.target.scrollHeight - event.target.clientHeight
+			const currentScroll = event.target.scrollTop
+			if (currentScroll === maxScroll && hasMore) {
+				onLoadMore()
+			}
+		})
+
+		return () => {
+			subscription.unsubscribe()
+		}
+	}, [])
 
 	const getScroll = () => {
 		const {width} = useWindowDimensions()
@@ -120,6 +143,7 @@ Table.defaultProps = {
 	pagination: false,
 	size: 'middle',
 	bordered: false,
-	scroll: {y: 600},
+	scroll: {y: 600, x: 800},
 	alternativeColor: false,
+	hasMore: false,
 }
