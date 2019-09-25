@@ -22,10 +22,12 @@ import App from '../models/App'
 import Item from '../models/Item'
 import {itemsReducer} from './Items'
 import {itemReducer} from './Item'
+import {paginationReducer, PaginationState} from './Pagination'
 
 export interface RootState {
 	authenticatedUser: AuthenticatedUserState
 	app: App
+	pagination: PaginationState
 	auth: ModelState<Auth>
 	teams: ModelState<Team[]>
 	team: ModelState<Team>
@@ -40,6 +42,7 @@ const rootReducer = (history: History) =>
 	combineReducers<RootState>({
 		authenticatedUser: authenticatedReducer,
 		app: appReducer,
+		pagination: paginationReducer,
 		auth: authReducer,
 		teams: teamsReducer,
 		team: teamReducer,
