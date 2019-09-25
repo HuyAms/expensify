@@ -201,14 +201,14 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			title: t('item'),
 			dataIndex: 'name',
 			editable: true,
-			width: '27%',
+			width: '20%',
 			...getColumnSearchProps('name'),
 		},
 		{
 			title: t('price'),
 			dataIndex: 'price',
 			editable: true,
-			width: '8%',
+			width: '10%',
 			render: renderValueText,
 			sorter: true,
 			sortOrder: getSortOrder('price'),
@@ -218,7 +218,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			title: t('quantity'),
 			dataIndex: 'quantity',
 			editable: true,
-			width: '8%',
+			width: '10%',
 			render: renderValueText,
 			sorter: true,
 			sortOrder: getSortOrder('quantity'),
@@ -227,7 +227,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		{
 			title: t('total'),
 			dataIndex: 'total',
-			width: '8%',
+			width: '10%',
 			render: renderValueText,
 			sorter: true,
 			sortOrder: getSortOrder('total'),
@@ -236,7 +236,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			title: t('category'),
 			dataIndex: 'category',
 			editable: true,
-			width: '19%',
+			width: '15%',
 			renderEditingCell: renderCategorySelect,
 			render: record => record.name,
 		},
@@ -250,6 +250,7 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		{
 			title: '',
 			dataIndex: 'operation',
+			width: '5%',
 			render: (text, record: Item) => {
 				const onConfirm = () => onItemDelete(record._id)
 				return (
