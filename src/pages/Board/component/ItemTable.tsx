@@ -181,7 +181,9 @@ const ItemTable: React.FunctionComponent<Props> = ({
 	const renderValueText = (text, record) => {
 		const isIncomeCategory =
 			record.category && record.category.type === CategoryType.Income
-		return <TextValue incomeColor={isIncomeCategory}>{text}</TextValue>
+		return (
+			<TextValue incomeColor={isIncomeCategory}>{text.toFixed(2)}</TextValue>
+		)
 	}
 
 	const columns = [
