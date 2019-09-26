@@ -1,7 +1,5 @@
 import React, {useState, useContext} from 'react'
 import {Form, Input} from 'antd'
-
-// Context
 import {EditableContext} from '../../../contexts'
 
 interface Props {
@@ -13,7 +11,7 @@ interface Props {
 	record: []
 	title: string
 	handleSave: (object) => any
-	renderEditingCell?: (arg: object) => any
+	renderEditingCell?: (arg) => any
 }
 
 const Cell: React.FunctionComponent<Props> = ({
@@ -37,6 +35,7 @@ const Cell: React.FunctionComponent<Props> = ({
 			if (error && error[e.currentTarget.id]) {
 				return
 			}
+
 			toggleEdit()
 
 			if (record[dataIndex] === values[dataIndex]) {
@@ -49,7 +48,16 @@ const Cell: React.FunctionComponent<Props> = ({
 
 	const renderEditing = () => {
 		return (
-			(renderEditingCell && renderEditingCell(record)) || (
+			(renderEditingCell &&
+				renderEditingCell({
+					record,
+					handleInputSave,
+					dataIndex,
+					required,
+					title,
+					toggleEdit,
+					form,
+				})) || (
 				<Form.Item>
 					{form.getFieldDecorator(dataIndex, {
 						rules: [

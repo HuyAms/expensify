@@ -20,13 +20,14 @@ interface Props {
 	createTeam: (name: string, description: string) => any
 	push: (path: string) => any
 	teams: ModelState<Team[]>
+	team: ModelState<Team>
 }
 
 const Home: React.FunctionComponent<Props> = props => {
 	const [formVisible, setFormVisible] = React.useState()
 	const formRef = React.useRef(null)
 
-	const {getMyTeams, teams, createTeam, cancelGetTeams, push} = props
+	const {getMyTeams, teams, createTeam, cancelGetTeams, push, team} = props
 	const [t] = useTranslation(['home', 'common'])
 
 	useEffect(() => {
@@ -35,12 +36,12 @@ const Home: React.FunctionComponent<Props> = props => {
 	}, [])
 
 	// Get teams after create new team successfully
-	const prevTeamStatus = usePrevious(teams.status)
+	const prevTeamStatus = usePrevious(team.status)
 	useEffect(() => {
-		if (prevTeamStatus === 'saving' && teams.status === 'success') {
+		if (prevTeamStatus === 'saving' && team.status === 'success') {
 			getMyTeams()
 		}
-	}, [teams.status])
+	}, [team.status])
 
 	const renderTeams = () => {
 		const {status, data, error} = teams
@@ -112,9 +113,10 @@ const Home: React.FunctionComponent<Props> = props => {
 	)
 }
 
-const mapStateToProps = ({teams}) => {
+const mapStateToProps = ({teams, team}) => {
 	return {
 		teams,
+		team,
 	}
 }
 

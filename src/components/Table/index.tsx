@@ -6,6 +6,8 @@ import {PaginationConfig} from 'antd/lib/pagination'
 // Components
 import Row from './components/Row'
 import Cell from './components/Cell'
+import {SorterResult, TableCurrentDataSource} from 'antd/lib/table'
+import {useWindowDimensions} from '../../utils/hooks'
 
 // Interfaces
 type ColumnAlign = 'left' | 'right' | 'center'
@@ -14,7 +16,7 @@ interface Column {
 	dataIndex: string
 	editable?: boolean
 	required?: boolean
-	renderEditingCell?: (arg: object) => any
+	renderEditingCell?: (arg) => any
 }
 
 interface Props<T> {
@@ -31,6 +33,12 @@ interface Props<T> {
 	}
 	rowClassName?: string
 	alternativeColor?: boolean
+	onChange?: (
+		pagination: PaginationConfig,
+		filters: Record<keyof T, string[]>,
+		sorter: SorterResult<T>,
+		extra: TableCurrentDataSource<T>,
+	) => void
 }
 
 const Table: React.FunctionComponent<Props<any>> = ({
@@ -43,12 +51,22 @@ const Table: React.FunctionComponent<Props<any>> = ({
 	handleUpdateData,
 	scroll,
 	alternativeColor,
+	onChange,
 }) => {
 	const components = {
 		body: {
 			row: Row,
 			cell: Cell,
 		},
+	}
+
+	const getScroll = () => {
+		const {width} = useWindowDimensions()
+		const tabPortWidth = 900
+
+		const x = width < tabPortWidth ? 900 : null
+
+		return {x, ...scroll}
 	}
 
 	const getRowClassName = () =>
@@ -89,7 +107,8 @@ const Table: React.FunctionComponent<Props<any>> = ({
 				pagination={pagination}
 				size={size}
 				loading={loading}
-				scroll={scroll}
+				scroll={getScroll()}
+				onChange={onChange}
 			/>
 		</div>
 	)

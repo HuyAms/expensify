@@ -1,7 +1,14 @@
 import React from 'react'
-import {connect} from 'react-redux'
 import {useTranslation} from 'react-i18next'
-import {Popconfirm, Icon, Select, DatePicker} from 'antd'
+import {
+	Form,
+	Popconfirm,
+	Icon,
+	Input,
+	Select,
+	DatePicker,
+	InputNumber,
+} from 'antd'
 import Item, {ItemInput} from '../../../models/Item'
 import ModelState from '../../../models/bases/ModelState'
 import ErrorText from '../../../components/ErrorText'
@@ -10,54 +17,140 @@ import moment from 'moment'
 import {DATE_FORMAT} from '../../../constant'
 import {TextValue} from './style'
 import {CategoryType, Category} from '../../../models/Category'
-import {deleteItem, updateItem} from '../../../modules/Item'
-import {TeamContext} from '../../../contexts'
+import {Sort} from '../../../models/Sort'
+import {GetItemQuery} from '../../../modules/Items'
 
 interface Props {
 	items: ModelState<Item[]>
 	categories: Category[]
-	deleteItem: (teamId: string, itemId: string) => any
-	updateItem: (teamId: string, itemId: string, item: ItemInput) => any
+	updateQuery: (query: GetItemQuery) => void
+	onItemDelete: (id: string) => void
+	onItemUpdate: (id: string, itemUpdate: ItemInput) => void
+	query: GetItemQuery
 }
 
 const ItemTable: React.FunctionComponent<Props> = ({
 	items,
+	updateQuery,
+	query,
 	categories,
-	deleteItem,
-	updateItem,
+	onItemDelete,
+	onItemUpdate,
 }) => {
 	const [t] = useTranslation(['board', 'common'])
-	const team = React.useContext(TeamContext)
 	const {data, status, error} = items
+
+	const getSortOrder = (sortedField: string) => {
+		if (!query) {
+			return
+		}
+
+		const {sort, field} = query
+
+		const sortState = sort === Sort.asc ? 'ascend' : 'descend'
+		return field === sortedField ? sortState : null
+	}
+
+	const onSearchChange = e => {
+		updateQuery({...query, search: e.target.value})
+	}
+
+	const getColumnSearchProps = dataIndex => ({
+		filterDropdown: () => (
+			<div style={{padding: 8}}>
+				<Input
+					allowClear={true}
+					placeholder={`Search ${dataIndex}`}
+					value={query && query.search}
+					onChange={onSearchChange}
+				/>
+			</div>
+		),
+		filterIcon: () => <Icon type="search" />,
+	})
 
 	const normalizedData = data && data.map(item => ({...item, key: item._id}))
 
 	const handleUpdateItem = item => {
-		updateItem(team._id, item._id, item)
+		onItemUpdate(item._id, item)
 	}
 
-	const handleUpdateCategory = (categoryId, record) => {
-		handleUpdateItem({
-			...record,
-			category: categoryId,
-		})
+	const renderDatePicker = ({
+		handleInputSave,
+		dataIndex,
+		record,
+		title,
+		toggleEdit,
+	}) => {
+		const onChange = value => {
+			toggleEdit()
+			handleUpdateItem({...record, date: value})
+		}
+
+		return <DatePicker value={moment(record[dataIndex])} onChange={onChange} />
 	}
 
-	const handleUpdateDate = (date, record) => {
-		handleUpdateItem({
-			...record,
-			date: date.toDate(),
-		})
+	const renderQuantityInput = ({
+		handleInputSave,
+		dataIndex,
+		record,
+		required,
+		title,
+		form,
+	}) => {
+		return (
+			<Form.Item>
+				{form.getFieldDecorator(dataIndex, {
+					rules: [
+						{
+							required,
+							message: `${title} is required.`,
+						},
+					],
+					initialValue: record[dataIndex],
+				})(
+					<InputNumber
+						precision={0}
+						min={1}
+						onPressEnter={handleInputSave}
+						onBlur={handleInputSave}
+						autoFocus={true}
+					/>,
+				)}
+			</Form.Item>
+		)
 	}
 
-	const renderDatePicker = record => {
-		const onChange = date => handleUpdateDate(date, record)
-		return <DatePicker value={moment(record.date)} onChange={onChange} />
-	}
-
-	const renderValueText = (text, record) => {
-		const isIncomeCategory = record.category.type === CategoryType.Income
-		return <TextValue incomeColor={isIncomeCategory}>{text}</TextValue>
+	const renderPriceInput = ({
+		handleInputSave,
+		dataIndex,
+		record,
+		required,
+		title,
+		form,
+	}) => {
+		return (
+			<Form.Item>
+				{form.getFieldDecorator(dataIndex, {
+					rules: [
+						{
+							required,
+							message: `${title} is required.`,
+						},
+					],
+					initialValue: record[dataIndex],
+				})(
+					<InputNumber
+						precision={2}
+						step={0.1}
+						min={0}
+						onPressEnter={handleInputSave}
+						onBlur={handleInputSave}
+						autoFocus={true}
+					/>,
+				)}
+			</Form.Item>
+		)
 	}
 
 	const renderCategoryOptions = () => {
@@ -68,17 +161,28 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		))
 	}
 
-	const renderCategorySelect = record => {
-		const defaultValue = record.category._id
-		const onChange = categoryId => handleUpdateCategory(categoryId, record)
+	const renderCategorySelect = ({dataIndex, record, toggleEdit}) => {
+		const onChange = (value: string) => {
+			toggleEdit()
+			handleUpdateItem({...record, category: value})
+		}
+
 		return (
 			<Select
+				value={record[dataIndex]._id}
 				style={{minWidth: '20rem'}}
-				value={defaultValue}
 				onChange={onChange}
 			>
 				{renderCategoryOptions()}
 			</Select>
+		)
+	}
+
+	const renderValueText = (text, record) => {
+		const isIncomeCategory =
+			record.category && record.category.type === CategoryType.Income
+		return (
+			<TextValue incomeColor={isIncomeCategory}>{text.toFixed(2)}</TextValue>
 		)
 	}
 
@@ -88,6 +192,8 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			dataIndex: 'date',
 			editable: true,
 			render: date => moment(date).format(DATE_FORMAT),
+			sorter: true,
+			sortOrder: getSortOrder('date'),
 			renderEditingCell: renderDatePicker,
 			width: '15%',
 		},
@@ -95,34 +201,44 @@ const ItemTable: React.FunctionComponent<Props> = ({
 			title: t('item'),
 			dataIndex: 'name',
 			editable: true,
-			width: '23%',
+			width: '20%',
+			...getColumnSearchProps('name'),
 		},
 		{
 			title: t('price'),
 			dataIndex: 'price',
 			editable: true,
-			width: '8%',
+			width: '10%',
 			render: renderValueText,
+			sorter: true,
+			sortOrder: getSortOrder('price'),
+			renderEditingCell: renderPriceInput,
 		},
 		{
 			title: t('quantity'),
 			dataIndex: 'quantity',
 			editable: true,
-			width: '8%',
+			width: '10%',
 			render: renderValueText,
+			sorter: true,
+			sortOrder: getSortOrder('quantity'),
+			renderEditingCell: renderQuantityInput,
 		},
 		{
 			title: t('total'),
 			dataIndex: 'total',
-			width: '8%',
+			width: '10%',
 			render: renderValueText,
+			sorter: true,
+			sortOrder: getSortOrder('total'),
 		},
 		{
 			title: t('category'),
-			dataIndex: 'category.name',
+			dataIndex: 'category',
 			editable: true,
-			width: '19%',
+			width: '15%',
 			renderEditingCell: renderCategorySelect,
+			render: record => record.name,
 		},
 		{
 			title: t('note'),
@@ -134,16 +250,23 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		{
 			title: '',
 			dataIndex: 'operation',
+			width: '5%',
 			render: (text, record: Item) => {
-				const onItemDelete = () => deleteItem(team._id, record._id)
+				const onConfirm = () => onItemDelete(record._id)
 				return (
-					<Popconfirm title={t('deleteConfirmation')} onConfirm={onItemDelete}>
+					<Popconfirm title={t('deleteConfirmation')} onConfirm={onConfirm}>
 						<Icon type="delete" theme="twoTone" twoToneColor="red" />
 					</Popconfirm>
 				)
 			},
 		},
 	]
+
+	const onChange = (_, __, sorter) => {
+		const {field, order} = sorter
+		const sort = order === 'ascend' ? Sort.asc : Sort.desc
+		updateQuery({...query, sort, field})
+	}
 
 	const renderContent = () => {
 		if (status === 'error') {
@@ -153,9 +276,10 @@ const ItemTable: React.FunctionComponent<Props> = ({
 		return (
 			<Table
 				alternativeColor={true}
+				loading={status === 'fetching'}
+				onChange={onChange}
 				columns={columns}
 				data={normalizedData}
-				loading={status === 'fetching'}
 				handleUpdateData={handleUpdateItem}
 			/>
 		)
@@ -164,12 +288,4 @@ const ItemTable: React.FunctionComponent<Props> = ({
 	return <>{renderContent()}</>
 }
 
-const mapDispatchToProps = {
-	deleteItem,
-	updateItem,
-}
-
-export default connect(
-	null,
-	mapDispatchToProps,
-)(ItemTable)
+export default ItemTable

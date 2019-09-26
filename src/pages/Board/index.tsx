@@ -1,24 +1,28 @@
 import React from 'react'
 import {Select} from 'antd'
-import CreateItemForm from './component/CreateItemForm'
-import {cancelGetItems, getItems} from '../../modules/Items'
 import {connect} from 'react-redux'
-import Item from '../../models/Item'
+import CreateItemForm from './component/CreateItemForm'
+import {cancelGetItems, getItems, GetItemQuery} from '../../modules/Items'
+import Item, {ItemInput} from '../../models/Item'
 import ModelState from '../../models/bases/ModelState'
 import {TeamContext} from '../../contexts'
 import {getCategories, cancelGetCategories} from '../../modules/Categories'
 import {Category, CategoryType} from '../../models/Category'
-import {useModuleNotification, usePrevious} from '../../utils/hooks'
+import {
+	useModuleNotification,
+	usePrevious,
+	useQueryParams,
+} from '../../utils/hooks'
 import {enumToValues} from '../../utils/utils'
 import {useTranslation} from 'react-i18next'
-import {createItem} from '../../modules/Item'
+import {createItem, deleteItem, updateItem} from '../../modules/Item'
 import ItemTable from './component/ItemTable'
 import {CreateItemCard} from './style'
 
 const {Option} = Select
 
 interface Props {
-	getItems: (teamId: string) => any
+	getItems: (teamId: string, options?: GetItemQuery) => any
 	getCategories: (teamId: string, type?: CategoryType) => any
 	cancelGetItems: () => any
 	cancelGetCategories: () => any
@@ -26,6 +30,9 @@ interface Props {
 	item: ModelState<Item>
 	categories: ModelState<Category[]>
 	createItem: (teamId: string, item: Item) => any
+	push: (path: string) => any
+	deleteItem: (teamId: string, itemId: string) => any
+	updateItem: (teamId: string, itemId: string, item: ItemInput) => any
 }
 
 const Board: React.FunctionComponent<Props> = props => {
@@ -38,6 +45,8 @@ const Board: React.FunctionComponent<Props> = props => {
 		categories,
 		createItem,
 		items,
+		deleteItem,
+		updateItem,
 	} = props
 
 	const [selectedCategoryType, setSelectedCategoryType] = React.useState(
@@ -45,22 +54,29 @@ const Board: React.FunctionComponent<Props> = props => {
 	)
 	const team = React.useContext(TeamContext)
 	const [t] = useTranslation(['board', 'common'])
+	const [query, updateQuery] = useQueryParams(null)
 	const prevStatus = usePrevious(item.status)
 
 	React.useEffect(() => {
-		getItems(team._id)
 		getCategories(team._id)
 		return () => {
-			cancelGetItems()
 			cancelGetCategories()
 		}
 	}, [])
 
+	// getItems when query changed
 	React.useEffect(() => {
-		if (prevStatus === 'saving' && item.status === 'success') {
-			getItems(team._id)
+		if (!query) {
+			return
 		}
-	}, [item.status])
+
+		const {sort, field, search} = query
+		getItems(team._id, {sort, field, search})
+
+		return () => {
+			cancelGetItems()
+		}
+	}, [query])
 
 	// Show notification after creating item
 	useModuleNotification(item)
@@ -100,6 +116,14 @@ const Board: React.FunctionComponent<Props> = props => {
 		createItem(team._id, item)
 	}
 
+	const handleDeleteItem = (itemId: string) => {
+		deleteItem(team._id, itemId)
+	}
+
+	const handleUpdateItem = (itemId: string, itemUpdate: ItemInput) => {
+		updateItem(team._id, itemId, itemUpdate)
+	}
+
 	return (
 		<div>
 			<CreateItemCard
@@ -114,7 +138,14 @@ const Board: React.FunctionComponent<Props> = props => {
 					categories={getAvailableCategories()}
 				/>
 			</CreateItemCard>
-			<ItemTable items={items} categories={categories.data} />
+			<ItemTable
+				items={items}
+				query={query}
+				updateQuery={updateQuery}
+				categories={categories.data}
+				onItemDelete={handleDeleteItem}
+				onItemUpdate={handleUpdateItem}
+			/>
 		</div>
 	)
 }
@@ -133,6 +164,8 @@ const mapDispatchToProps = {
 	getCategories,
 	cancelGetCategories,
 	createItem,
+	deleteItem,
+	updateItem,
 }
 
 export default connect(
