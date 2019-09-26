@@ -82,10 +82,10 @@ export const authReducer = (state = initialState, action: AnyAction) =>
 				startSaving(draft)
 				break
 			case getType(authAsync.success):
-				fetchingSuccess(draft, action.payload)
+				fetchingSuccess(draft, action.payload.data)
 				break
 			case getType(authAsync.failure):
-				endWithError(draft, action.payload)
+				endWithError(draft, action.payload.errorCode)
 				break
 			case getType(logOut):
 				resetData(draft)

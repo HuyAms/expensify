@@ -27,24 +27,16 @@ export const savingSuccess = <T>(state: ModelState<T>) => {
 	state.error = null
 }
 
-export const endWithError = <T>(
-	state: ModelState<T>,
-	errorResponse: ErrorResponse,
-) => {
+export const endWithError = <T>(state: ModelState<T>, errorCode: ErrorCode) => {
 	state.status = 'error'
-	state.error = parseError(errorResponse)
+	state.error = parseError(errorCode)
 }
 
 export const endCanceling = <T>(state: ModelState<T>) => {
 	state.status = 'idle'
 }
 
-export const fetchingSuccess = <T>(
-	state: ModelState<T>,
-	serverResponse: ServerResponse<T>,
-) => {
-	const {data} = serverResponse
-
+export const fetchingSuccess = <T>(state: ModelState<T>, data: T) => {
 	state.status = 'success'
 	state.error = null
 	state.data = data
@@ -72,40 +64,25 @@ export enum ErrorCode {
 	duplicatedTeamName = 302,
 }
 
-const parseError = (error: ErrorResponse): string => {
-	const {errorCode, status} = error
-
-	if (errorCode) {
-		switch (errorCode) {
-			case ErrorCode.passwordNotCorrect:
-				return 'error.passwordNotCorrect'
-			case ErrorCode.emailNotCorrect:
-				return 'error.emailNotCorrect'
-			case ErrorCode.emailNotUnique:
-				return 'error.emailNotUnique'
-			case ErrorCode.notActiveUser:
-				return 'error.notActiveUser'
-			case ErrorCode.notHasPermission:
-				return 'error.notHasPermission'
-			case ErrorCode.notATeamMember:
-				return 'error.notATeamMember'
-			case ErrorCode.categoryNameNotUnique:
-				return 'error.categoryNameNotUnique'
-			case ErrorCode.duplicatedTeamName:
-				return 'error.duplicatedTeamName'
-			default:
-				return 'error.unexpectedError'
-		}
-	} else {
-		switch (status) {
-			case 401:
-				return 'error.unauthorized'
-			case 403:
-				return 'error.forbidden'
-			case 404:
-				return 'error.notFound'
-			default:
-				return 'error.unexpectedError'
-		}
+const parseError = (errorCode: ErrorCode): string => {
+	switch (errorCode) {
+		case ErrorCode.passwordNotCorrect:
+			return 'error.passwordNotCorrect'
+		case ErrorCode.emailNotCorrect:
+			return 'error.emailNotCorrect'
+		case ErrorCode.emailNotUnique:
+			return 'error.emailNotUnique'
+		case ErrorCode.notActiveUser:
+			return 'error.notActiveUser'
+		case ErrorCode.notHasPermission:
+			return 'error.notHasPermission'
+		case ErrorCode.notATeamMember:
+			return 'error.notATeamMember'
+		case ErrorCode.categoryNameNotUnique:
+			return 'error.categoryNameNotUnique'
+		case ErrorCode.duplicatedTeamName:
+			return 'error.duplicatedTeamName'
+		default:
+			return 'error.unexpectedError'
 	}
 }

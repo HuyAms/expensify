@@ -40,10 +40,10 @@ export const categoriesReducer = (state = initialState, action: AnyAction) =>
 				startFetching(draft)
 				break
 			case getType(getAsync.success):
-				fetchingSuccess(draft, action.payload)
+				fetchingSuccess(draft, action.payload.data)
 				break
 			case getType(getAsync.failure):
-				endWithError(draft, action.payload)
+				endWithError(draft, action.payload.errorCode)
 				break
 			case getType(getAsync.cancel):
 				endCanceling(draft)
