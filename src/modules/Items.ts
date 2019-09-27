@@ -31,6 +31,8 @@ export interface GetItemQuery {
 	sort?: Sort
 	field?: string
 	search?: string
+	from?: Date
+	to?: Date
 }
 export const getItems = (teamId: string, options?: GetItemQuery) =>
 	getAsync.request({path: `api/teams/${teamId}/items`, query: options})
