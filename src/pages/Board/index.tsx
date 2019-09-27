@@ -1,5 +1,6 @@
 import React from 'react'
 import {Select} from 'antd'
+import moment from 'moment'
 import {connect} from 'react-redux'
 import CreateItemForm from './component/CreateItemForm'
 import {cancelGetItems, getItems, GetItemQuery} from '../../modules/Items'
@@ -17,9 +18,14 @@ import {enumToValues} from '../../utils/utils'
 import {useTranslation} from 'react-i18next'
 import {createItem, deleteItem, updateItem} from '../../modules/Item'
 import ItemTable from './component/ItemTable'
+import DateRangePicker from '../../components/DateRangePicker'
 import {CreateItemCard} from './style'
 
 const {Option} = Select
+const firstDayOfMonth = moment()
+	.startOf('month')
+	.toDate()
+const currentDate = moment().toDate()
 
 interface Props {
 	getItems: (teamId: string, options?: GetItemQuery) => any
@@ -56,6 +62,8 @@ const Board: React.FunctionComponent<Props> = props => {
 	const [t] = useTranslation(['board', 'common'])
 	const [query, updateQuery] = useQueryParams(null)
 	const prevStatus = usePrevious(item.status)
+	const startRange = query && query.from ? query.from : firstDayOfMonth
+	const endRange = query && query.to ? query.to : currentDate
 
 	React.useEffect(() => {
 		getCategories(team._id)
@@ -70,8 +78,8 @@ const Board: React.FunctionComponent<Props> = props => {
 			return
 		}
 
-		const {sort, field, search} = query
-		getItems(team._id, {sort, field, search})
+		const {sort, field, search, from, to} = query
+		getItems(team._id, {sort, field, search, from, to})
 
 		return () => {
 			cancelGetItems()
@@ -124,6 +132,17 @@ const Board: React.FunctionComponent<Props> = props => {
 		updateItem(team._id, itemId, itemUpdate)
 	}
 
+	const onDateRangeChange = (from, to) =>
+		updateQuery({
+			...query,
+			from: moment(from)
+				.utc()
+				.format(),
+			to: moment(to)
+				.utc()
+				.format(),
+		})
+
 	return (
 		<div>
 			<CreateItemCard
@@ -138,6 +157,11 @@ const Board: React.FunctionComponent<Props> = props => {
 					categories={getAvailableCategories()}
 				/>
 			</CreateItemCard>
+			<DateRangePicker
+				from={startRange}
+				to={endRange}
+				onChange={onDateRangeChange}
+			/>
 			<ItemTable
 				items={items}
 				query={query}
