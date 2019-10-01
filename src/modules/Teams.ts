@@ -16,7 +16,7 @@ import {AnyAction} from 'redux'
 // ------------------------------------
 
 const initialState: ModelState<Team[]> = {
-	data: null,
+	data: [],
 	status: 'idle',
 	error: null,
 }

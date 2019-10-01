@@ -73,6 +73,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 		const subscription = scrollObservable.subscribe((event: any) => {
 			const maxScroll = event.target.scrollHeight - event.target.clientHeight
 			const currentScroll = event.target.scrollTop
+
 			if (currentScroll === maxScroll && hasMore) {
 				onLoadMore()
 			}
@@ -81,7 +82,7 @@ const Table: React.FunctionComponent<Props<any>> = ({
 		return () => {
 			subscription.unsubscribe()
 		}
-	}, [])
+	}, [hasMore])
 
 	const getScroll = () => {
 		const {width} = useWindowDimensions()

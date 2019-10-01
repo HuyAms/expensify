@@ -8,7 +8,13 @@ import Pagination from '../models/Pagination'
 
 const moduleName = 'pagination'
 
-export const resetPagination = createAction(`@@${moduleName}/RESET_PAGIATION`)
+export const resetPagination = createAction(
+	`@@${moduleName}/RESET_PAGINATION`,
+	action => {
+		return (key: PaginationContext) => action({key})
+	},
+)
+
 export const setPagination = createAction(
 	`@@${moduleName}/SET_PAGINATION`,
 	action => {
@@ -21,13 +27,13 @@ export const setPagination = createAction(
 // Reducer
 // ------------------------------------
 
-enum PaginationContext {
+export enum PaginationContext {
 	items = 'items',
 }
 
 const initialPagination: Pagination = {
 	offset: 0,
-	limit: 20,
+	limit: 100,
 	total: 0,
 	hasMore: false,
 }
@@ -46,6 +52,7 @@ export const paginationReducer = (state = initialState, action) =>
 				draft[key] = pagination
 				break
 			case getType(resetPagination):
-				draft[key] = initialPagination
+				draft[action.payload.key] = initialPagination
+				break
 		}
 	})

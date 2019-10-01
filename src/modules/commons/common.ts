@@ -42,6 +42,12 @@ export const fetchingSuccess = <T>(state: ModelState<T>, data: T) => {
 	state.data = data
 }
 
+export const loadMoreSuccess = <T>(state: ModelState<T[]>, data: T[]) => {
+	state.status = 'success'
+	state.error = null
+	state.data.concat(data)
+}
+
 export const resetData = <T>(state: ModelState<T>) => {
 	state.status = 'idle'
 	state.error = null

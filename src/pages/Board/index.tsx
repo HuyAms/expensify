@@ -2,7 +2,12 @@ import React from 'react'
 import {Select} from 'antd'
 import {connect} from 'react-redux'
 import CreateItemForm from './component/CreateItemForm'
-import {cancelGetItems, getItems, GetItemQuery} from '../../modules/Items'
+import {
+	cancelGetItems,
+	getItems,
+	GetItemQuery,
+	loadMoreItems,
+} from '../../modules/Items'
 import Item, {ItemInput} from '../../models/Item'
 import ModelState from '../../models/bases/ModelState'
 import {TeamContext} from '../../contexts'
@@ -18,14 +23,18 @@ import {useTranslation} from 'react-i18next'
 import {createItem, deleteItem, updateItem} from '../../modules/Item'
 import ItemTable from './component/ItemTable'
 import {CreateItemCard} from './style'
+import {PaginationContext} from '../../modules/Pagination'
+import Pagination from '../../models/Pagination'
 
 const {Option} = Select
 
 interface Props {
 	getItems: (teamId: string, options?: GetItemQuery) => any
+	loadMoreItems: (teamId: string, options?: GetItemQuery) => any
 	getCategories: (teamId: string, type?: CategoryType) => any
 	cancelGetItems: () => any
 	cancelGetCategories: () => any
+	itemsPagination: Pagination
 	items: ModelState<Item[]>
 	item: ModelState<Item>
 	categories: ModelState<Category[]>
@@ -38,6 +47,7 @@ interface Props {
 const Board: React.FunctionComponent<Props> = props => {
 	const {
 		getItems,
+		loadMoreItems,
 		cancelGetItems,
 		getCategories,
 		cancelGetCategories,
@@ -45,6 +55,7 @@ const Board: React.FunctionComponent<Props> = props => {
 		categories,
 		createItem,
 		items,
+		itemsPagination,
 		deleteItem,
 		updateItem,
 	} = props
@@ -55,7 +66,6 @@ const Board: React.FunctionComponent<Props> = props => {
 	const team = React.useContext(TeamContext)
 	const [t] = useTranslation(['board', 'common'])
 	const [query, updateQuery] = useQueryParams(null)
-	const prevStatus = usePrevious(item.status)
 
 	React.useEffect(() => {
 		getCategories(team._id)
@@ -124,6 +134,10 @@ const Board: React.FunctionComponent<Props> = props => {
 		updateItem(team._id, itemId, itemUpdate)
 	}
 
+	const handleLoadMoreItems = () => {
+		loadMoreItems(team._id, query)
+	}
+
 	return (
 		<div>
 			<CreateItemCard
@@ -141,6 +155,8 @@ const Board: React.FunctionComponent<Props> = props => {
 			<ItemTable
 				items={items}
 				query={query}
+				onLoadMore={handleLoadMoreItems}
+				itemsPagination={itemsPagination}
 				updateQuery={updateQuery}
 				categories={categories.data}
 				onItemDelete={handleDeleteItem}
@@ -150,11 +166,14 @@ const Board: React.FunctionComponent<Props> = props => {
 	)
 }
 
-const mapStateToProps = ({item, items, categories}) => {
+const mapStateToProps = ({item, items, categories, pagination}) => {
+	const itemsPagination = pagination[PaginationContext.items]
+
 	return {
 		items,
 		item,
 		categories,
+		itemsPagination,
 	}
 }
 
@@ -166,6 +185,7 @@ const mapDispatchToProps = {
 	createItem,
 	deleteItem,
 	updateItem,
+	loadMoreItems,
 }
 
 export default connect(

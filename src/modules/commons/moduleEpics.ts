@@ -8,7 +8,7 @@ import {
 	catchError,
 	tap,
 } from 'rxjs/operators'
-import {of, from} from 'rxjs'
+import {of, from, concat, EMPTY} from 'rxjs'
 import {createAsyncAction, isActionOf} from 'typesafe-actions'
 import {
 	cancel,
@@ -19,8 +19,13 @@ import {
 } from '../../services/api'
 import {RootState} from '../reducers'
 import {ErrorResponse} from './common'
+import {PaginationContext, resetPagination, setPagination} from '../Pagination'
 
-const useModuleEpic = <T>(moduleName: string) => {
+const useModuleEpic = <T>(
+	moduleName: string,
+	paginationContext?: PaginationContext,
+	paginationLimit?: number,
+) => {
 	// ------------------------------------
 	// Actions
 	// ------------------------------------
@@ -30,7 +35,14 @@ const useModuleEpic = <T>(moduleName: string) => {
 		`@@${moduleName}/GET_SUCCESS`,
 		`@@${moduleName}/GET_FAILURE`,
 		`@@${moduleName}/GET_CANCEL`,
-	)<{path: string; query?: object}, T, Error, void>()
+	)<{path: string; query?: object; reset?: boolean}, T, Error, void>()
+
+	const loadMoreAsync = createAsyncAction(
+		`@@${moduleName}/LOAD_MORE_REQUEST`,
+		`@@${moduleName}/LOAD_MORE_SUCCESS`,
+		`@@${moduleName}/LOAD_MORE_FAILURE`,
+		`@@${moduleName}/LOAD_MORE_CANCEL`,
+	)<{path: string; query?: object; reset?: boolean}, T, Error, void>()
 
 	const postAsync = createAsyncAction(
 		`@@${moduleName}/POST_REQUEST`,
@@ -58,21 +70,103 @@ const useModuleEpic = <T>(moduleName: string) => {
 		postAsync,
 		deleteAsync,
 		updateAsync,
+		loadMoreAsync,
 	}
 
 	// ------------------------------------
 	// Epics
 	// ------------------------------------
 
-	const getModelEpic: Epic<Action, Action, RootState> = action$ => {
+	const getModelEpic: Epic<Action, Action, RootState> = (action$, state$) => {
 		return action$.pipe(
 			filter(isActionOf(getAsync.request)),
 			switchMap(action => {
-				const {path, query} = action.payload
-				return from(getRequest(path, query)).pipe(
-					map(res => getAsync.success(res)),
+				const {path} = action.payload
+				let {query} = action.payload
+				const currentPagination = state$.value.pagination[paginationContext]
+
+				const resetPagination$ = currentPagination
+					? of(resetPagination(paginationContext))
+					: EMPTY
+
+				if (currentPagination) {
+					const {offset} = currentPagination
+					let {limit} = currentPagination
+
+					limit = paginationLimit || limit
+
+					query = {...query, offset, limit: paginationLimit || limit}
+				}
+
+				const ajax$ = from(getRequest(path, query)).pipe(
+					switchMap(res => {
+						if (currentPagination) {
+							const {records, total} = res.data
+							const {offset} = currentPagination
+							let {limit} = currentPagination
+							limit = paginationLimit || limit
+
+							return of(
+								getAsync.success(res),
+								setPagination(paginationContext, {
+									hasMore: records.length === limit,
+									offset: offset + records.length,
+									limit,
+									total,
+								}),
+							)
+						} else {
+							return of(getAsync.success(res))
+						}
+					}),
 					catchError(error => of(getAsync.failure(error.response.data))),
 					takeUntil(action$.pipe(filter(isActionOf(getAsync.cancel)))),
+				)
+
+				return concat(resetPagination$, ajax$)
+			}),
+		)
+	}
+
+	const loadMoreModelEpic: Epic<Action, Action, RootState> = (
+		action$,
+		state$,
+	) => {
+		return action$.pipe(
+			filter(isActionOf(loadMoreAsync.request)),
+			switchMap(action => {
+				const currentPagination = state$.value.pagination[paginationContext]
+
+				if (!currentPagination) {
+					throw new Error('Pagination context not found')
+				}
+
+				const {path} = action.payload
+				let {query} = action.payload
+
+				const {offset} = currentPagination
+				let {limit} = currentPagination
+
+				limit = paginationLimit || limit
+
+				query = {...query, offset, limit: paginationLimit || limit}
+
+				return from(getRequest(path, query)).pipe(
+					switchMap(res => {
+						const {records, total} = res.data
+
+						return of(
+							loadMoreAsync.success(res),
+							setPagination(paginationContext, {
+								hasMore: records.length === limit,
+								offset: offset + records.length,
+								limit,
+								total,
+							}),
+						)
+					}),
+					catchError(error => of(loadMoreAsync.failure(error.response.data))),
+					takeUntil(action$.pipe(filter(isActionOf(loadMoreAsync.cancel)))),
 				)
 			}),
 		)
@@ -137,6 +231,7 @@ const useModuleEpic = <T>(moduleName: string) => {
 
 	const moduleEpics = [
 		getModelEpic,
+		loadMoreModelEpic,
 		postModelEpic,
 		updateModelEpic,
 		deleteModelEpic,

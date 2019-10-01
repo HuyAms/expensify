@@ -28,7 +28,7 @@ export const cancelGetCategories = () => getAsync.cancel()
 // ------------------------------------
 
 const initialState: ModelState<Category[]> = {
-	data: null,
+	data: [],
 	status: 'idle',
 	error: null,
 }
