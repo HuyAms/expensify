@@ -7,8 +7,10 @@ import {
 	takeUntil,
 	catchError,
 	tap,
+	withLatestFrom,
+	pluck,
 } from 'rxjs/operators'
-import {of, from, concat, EMPTY} from 'rxjs'
+import {of, from} from 'rxjs'
 import {createAsyncAction, isActionOf} from 'typesafe-actions'
 import {
 	cancel,
@@ -80,38 +82,28 @@ const useModuleEpic = <T>(
 	const getModelEpic: Epic<Action, Action, RootState> = (action$, state$) => {
 		return action$.pipe(
 			filter(isActionOf(getAsync.request)),
-			switchMap(action => {
+			withLatestFrom(state$.pipe(pluck('pagination', paginationContext))),
+			switchMap(([action, pagination]) => {
 				const {path} = action.payload
 				let {query} = action.payload
-				const currentPagination = state$.value.pagination[paginationContext]
 
-				const resetPagination$ = currentPagination
-					? of(resetPagination(paginationContext))
-					: EMPTY
-
-				if (currentPagination) {
-					const {offset} = currentPagination
-					let {limit} = currentPagination
-
-					limit = paginationLimit || limit
-
-					query = {...query, offset, limit: paginationLimit || limit}
+				if (pagination) {
+					query = {...query, offset: pagination.offset, limit: paginationLimit}
 				}
 
-				const ajax$ = from(getRequest(path, query)).pipe(
+				return from(getRequest(path, query)).pipe(
 					switchMap(res => {
-						if (currentPagination) {
+						if (pagination) {
 							const {records, total} = res.data
-							const {offset} = currentPagination
-							let {limit} = currentPagination
-							limit = paginationLimit || limit
+							const {offset} = pagination
 
 							return of(
+								resetPagination(paginationContext),
 								getAsync.success(res),
 								setPagination(paginationContext, {
-									hasMore: records.length === limit,
+									hasMore: records.length === paginationLimit,
 									offset: offset + records.length,
-									limit,
+									limit: paginationLimit,
 									total,
 								}),
 							)
@@ -122,8 +114,6 @@ const useModuleEpic = <T>(
 					catchError(error => of(getAsync.failure(error.response.data))),
 					takeUntil(action$.pipe(filter(isActionOf(getAsync.cancel)))),
 				)
-
-				return concat(resetPagination$, ajax$)
 			}),
 		)
 	}
@@ -134,22 +124,18 @@ const useModuleEpic = <T>(
 	) => {
 		return action$.pipe(
 			filter(isActionOf(loadMoreAsync.request)),
-			switchMap(action => {
-				const currentPagination = state$.value.pagination[paginationContext]
-
-				if (!currentPagination) {
+			withLatestFrom(state$.pipe(pluck('pagination', paginationContext))),
+			switchMap(([action, pagination]) => {
+				if (!pagination) {
 					throw new Error('Pagination context not found')
 				}
 
 				const {path} = action.payload
-				let {query} = action.payload
-
-				const {offset} = currentPagination
-				let {limit} = currentPagination
-
-				limit = paginationLimit || limit
-
-				query = {...query, offset, limit: paginationLimit || limit}
+				const query = {
+					...action.payload.query,
+					offset: pagination.offset,
+					limit: paginationLimit,
+				}
 
 				return from(getRequest(path, query)).pipe(
 					switchMap(res => {
@@ -158,9 +144,9 @@ const useModuleEpic = <T>(
 						return of(
 							loadMoreAsync.success(res),
 							setPagination(paginationContext, {
-								hasMore: records.length === limit,
-								offset: offset + records.length,
-								limit,
+								hasMore: records.length === paginationLimit,
+								offset: pagination.offset + records.length,
+								limit: paginationLimit,
 								total,
 							}),
 						)
