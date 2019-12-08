@@ -1,11 +1,13 @@
-language: node_js
-cache:
-  directories:
-  - "node_modules"
-install:
-- npm install
+sudo: required
+services:
+- docker
+
+before_install:
+- docker build -t dinhhuyams/expensify -f Dockerfile.dev .
+
 script:
-- npm run test
+- docker run dinhhuyams/expensify npm run test
+
 notifications:
   slack: kentsclub:BhLd5K8FoIAM7v4K0BrcKZUW
   email: false
