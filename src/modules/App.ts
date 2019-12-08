@@ -4,38 +4,18 @@ import App from '../models/App'
 import {Epic} from 'redux-observable'
 import {Action} from 'redux'
 import {RootState} from './reducers'
-import {filter, switchMap, tap, ignoreElements} from 'rxjs/operators'
+import {filter, switchMap, tap, ignoreElements, map} from 'rxjs/operators'
 import {of} from 'rxjs'
-
-// ------------------------------------
-// Const
-// ------------------------------------
-const moduleName = 'app'
-
-// ------------------------------------
-// Actions
-// ------------------------------------
-
-export const initialize = createAction(`@@${moduleName}/INITIALIZE`)
-export const tearDown = createAction(`@@${moduleName}/TEAR_DOWN`)
-export const changeLanguage = createAction(
-	`@@${moduleName}/CHANGE_LANGUAGE`,
-	action => {
-		return (language: string) => action({language})
-	},
-)
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 
-export type AppState = App
-
-const initialState: AppState = {
-	language: undefined,
+const initialState: App = {
+	language: null,
 }
 
-const app = (state = initialState, action) =>
+export const appReducer = (state = initialState, action) =>
 	produce(state, draft => {
 		switch (action.type) {
 			case getType(changeLanguage):
@@ -44,7 +24,20 @@ const app = (state = initialState, action) =>
 		}
 	})
 
-export const reducer = app
+// ------------------------------------
+// Actions
+// ------------------------------------
+
+const moduleName = 'app'
+
+export const initialize = createAction(`@@${moduleName}/INITIALIZE`)
+export const tearDown = createAction(`@@${moduleName}/TEAR_DOWN`)
+export const changeLanguage = createAction(
+	`@@${moduleName}/CHANGE_LANGUAGE`,
+	action => {
+		return (language: string) => action(language)
+	},
+)
 
 // ------------------------------------
 // Epics
@@ -80,7 +73,7 @@ const changeLanguageEpic: Epic<Action, Action, RootState> = (
 	return action$.pipe(
 		filter(isActionOf(changeLanguage)),
 		tap(action => {
-			const {language} = action.payload
+			const language = action.payload
 			i18n.changeLanguage(language)
 		}),
 		ignoreElements(),

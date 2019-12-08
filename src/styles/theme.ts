@@ -3,15 +3,13 @@ import {css, DefaultTheme} from 'styled-components'
 export const colors = {
 	white: '#fff',
 	black: '#191919',
-	lightGray: '#858181',
-	bisque: '#ffe4c4',
-	aliceblue: '#f0f8ff',
+	lightGray: '#f2f1f1',
+	green: '#008000',
 }
 
 export const appColors = {
-	primary: colors.bisque,
-	secondary: colors.aliceblue,
 	text: colors.black,
+	textIncome: colors.green,
 }
 
 export const fontStack = css`-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
@@ -22,7 +20,7 @@ export const fontSizes = {
 	xs: '1.2rem',
 	sm: '1.4rem',
 	md: '1.6rem',
-	lg: '1.8rem',
+	lg: '2rem',
 	xl: '2.4rem',
 }
 

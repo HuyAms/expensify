@@ -1,4 +1,5 @@
-import * as React from 'react'
+import React from 'react'
+import faker from 'faker'
 import {render} from './utils/testUtils'
 import {App} from './App'
 
@@ -6,9 +7,14 @@ describe('<App/>', () => {
 	const renderApp = () => {
 		const mockInitialize = jest.fn()
 		const mockTearDown = jest.fn()
+		const isAuthenticated = faker.random.boolean()
 
 		const utils = render(
-			<App initialize={mockInitialize} tearDown={mockTearDown} />,
+			<App
+				isAuthenticated={isAuthenticated}
+				initialize={mockInitialize}
+				tearDown={mockTearDown}
+			/>,
 		)
 
 		return {...utils, mockInitialize, mockTearDown}

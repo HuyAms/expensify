@@ -1,19 +1,24 @@
 import {createGlobalStyle} from 'styled-components'
 import {media} from './utils'
+import {overrideAntd} from './vendor/antd'
 
 export const GlobalStyle = createGlobalStyle`
 
+#root {
+	height: 100%;
+}
+
 :root {
 	font-size: 62.5%;
-		
+
 	${media.tabLand} {
 		font-size: 56.25%;
 	}
-		
+
 	${media.tabPort} {
 		font-size: 50%;
 	}
-		
+
 	${media.bigDesktop} {
 		font-size: 75%;
 	}
@@ -25,8 +30,6 @@ export const GlobalStyle = createGlobalStyle`
 		line-height: 1.7;
 		color: ${props => props.theme.appColors.text} ;
 		font-size: ${props => props.theme.fontSizes.md} ;
-		
-		padding: ${props => props.theme.space[2]}
 	}
 
 	h1 {
@@ -35,7 +38,12 @@ export const GlobalStyle = createGlobalStyle`
 	}
 
 	h2 {
-		text-transform: uppercase;
 		font-size: ${props => props.theme.fontSizes.lg};
 	}
+
+	h3 {
+		font-size: ${props => props.theme.fontSizes.md};
+	}
+	
+	${overrideAntd}
 `

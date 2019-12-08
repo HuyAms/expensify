@@ -1,0 +1,53 @@
+{
+	"appName": "Expensify",
+	"en": "English",
+	"nav": {
+		"home": "Home",
+		"board": "Board",
+		"report": "Report",
+		"settings": "Settings",
+		"about": "About",
+		"logout": "Log out"
+	},
+	"success": {
+		"generic": "Success"
+	},
+	"error": {
+		"unauthorized": "Unauthorized",
+		"forbidden": "You do not have permission to perform this action",
+		"notFound": "We can't find the resource you're looking for",
+		"pageNotFound": "404 - Are you looking for this cute panda?",
+		"unexpectedError": "Something went wrong",
+		"notATeamMember": "Oops. You are not a member of my team",
+		"missingFirstName": "Please enter your first name",
+		"missingLastName": "Please enter your last name",
+		"missingPassword": "Please enter your password",
+		"missingConfirmPassword": "Please confirm your password",
+		"invalidPassword": "Password must be at least 6 characters",
+		"confirmNotMatchPassword": "Two passwords that you enter are inconsistent!",
+		"missingEmail": "Please enter your email",
+		"invalidEmail": "Email is not valid",
+		"passwordNotCorrect": "Password is not correct",
+		"emailNotCorrect": "Email is not correct",
+		"emailNotUnique": "This email has already been used",
+		"notActiveUser": "Please check your email to activate this account",
+		"notHasPermission": "You do not have permission to perform this action",
+		"categoryNameNotUnique": "This category has been created",
+		"duplicatedTeamName": "This team has been created",
+		"missingTeamName": "Please enter your team name",
+		"missingQuantity": "Quantity is required",
+		"missingPrice": "Price is required",
+		"missingDate": "Date is required",
+		"missingItemName": "Item name is required",
+		"missingCategoryName": "Please enter category name"
+	},
+	"button": {
+		"create": "Create",
+		"cancel": "Cancel",
+		"addNew": "Add new"
+	},
+	"categoryType": {
+		"expense": "Expense",
+		"income": "Income"
+	}
+}

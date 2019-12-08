@@ -1,0 +1,10 @@
+{
+	"item": "Item",
+	"note": "Note",
+	"quantity": "Quantity",
+	"category": "Category",
+	"price": "Price",
+	"total": "Total",
+	"date": "Date",
+	"deleteConfirmation": "Are you sure to delete this item?"
+}
