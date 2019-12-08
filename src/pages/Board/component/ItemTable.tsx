@@ -19,10 +19,13 @@ import {TextValue} from './style'
 import {CategoryType, Category} from '../../../models/Category'
 import {Sort} from '../../../models/Sort'
 import {GetItemQuery} from '../../../modules/Items'
+import Pagination from '../../../models/Pagination'
 
 interface Props {
 	items: ModelState<Item[]>
+	itemsPagination: Pagination
 	categories: Category[]
+	onLoadMore: () => void
 	updateQuery: (query: GetItemQuery) => void
 	onItemDelete: (id: string) => void
 	onItemUpdate: (id: string, itemUpdate: ItemInput) => void
@@ -31,11 +34,13 @@ interface Props {
 
 const ItemTable: React.FunctionComponent<Props> = ({
 	items,
+	itemsPagination,
 	updateQuery,
 	query,
 	categories,
 	onItemDelete,
 	onItemUpdate,
+	onLoadMore,
 }) => {
 	const [t] = useTranslation(['board', 'common'])
 	const {data, status, error} = items
@@ -281,6 +286,8 @@ const ItemTable: React.FunctionComponent<Props> = ({
 				columns={columns}
 				data={normalizedData}
 				handleUpdateData={handleUpdateItem}
+				onLoadMore={onLoadMore}
+				hasMore={itemsPagination.hasMore}
 			/>
 		)
 	}

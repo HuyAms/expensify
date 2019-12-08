@@ -53,7 +53,7 @@ export const itemReducer = (state = initialState, action: AnyAction) =>
 				startFetching(draft)
 				break
 			case getType(getAsync.success):
-				fetchingSuccess(draft, action.payload)
+				fetchingSuccess(draft, action.payload.data)
 				break
 			case getType(postAsync.request):
 			case getType(updateAsync.request):
@@ -69,7 +69,7 @@ export const itemReducer = (state = initialState, action: AnyAction) =>
 			case getType(postAsync.failure):
 			case getType(updateAsync.failure):
 			case getType(deleteAsync.failure):
-				endWithError(draft, action.payload)
+				endWithError(draft, action.payload.errorCode)
 				break
 			case getType(getAsync.cancel):
 				endCanceling(draft)

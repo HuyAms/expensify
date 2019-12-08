@@ -60,7 +60,7 @@ export const categoryReducer = (state = initialState, action: AnyAction) =>
 			case getType(postAsync.failure):
 			case getType(updateAsync.failure):
 			case getType(deleteAsync.failure):
-				endWithError(draft, action.payload)
+				endWithError(draft, action.payload.errorCode)
 				break
 			case getType(postAsync.cancel):
 			case getType(updateAsync.cancel):

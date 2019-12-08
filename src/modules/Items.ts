@@ -1,15 +1,16 @@
 import produce from 'immer'
 import {getType} from 'typesafe-actions'
 import {
-	postAsync as postItemAsync,
 	deleteAsync as deleteItemAsync,
+	postAsync as postItemAsync,
 	updateAsync as updateItemAsync,
 } from './Item'
 import {
-	startFetching,
-	fetchingSuccess,
-	endWithError,
 	endCanceling,
+	endWithError,
+	fetchingSuccess,
+	loadMoreSuccess,
+	startFetching,
 } from './commons/common'
 import useModuleEpic from './commons/moduleEpics'
 
@@ -17,12 +18,14 @@ import ModelState from '../models/bases/ModelState'
 import {AnyAction} from 'redux'
 import Item from '../models/Item'
 import {Sort} from '../models/Sort'
+import {PaginationContext} from './Pagination'
 
 const moduleName = 'items'
 export const {moduleActions, moduleEpics: itemsEpics} = useModuleEpic(
 	moduleName,
+	PaginationContext.items,
 )
-const {getAsync} = moduleActions
+const {getAsync, loadMoreAsync} = moduleActions
 
 // ------------------------------------
 // Actions
@@ -32,8 +35,13 @@ export interface GetItemQuery {
 	field?: string
 	search?: string
 }
+
 export const getItems = (teamId: string, options?: GetItemQuery) =>
 	getAsync.request({path: `api/teams/${teamId}/items`, query: options})
+
+export const loadMoreItems = (teamId: string, options?: GetItemQuery) =>
+	loadMoreAsync.request({path: `api/teams/${teamId}/items`, query: options})
+
 export const cancelGetItems = () => getAsync.cancel()
 
 // ------------------------------------
@@ -41,7 +49,7 @@ export const cancelGetItems = () => getAsync.cancel()
 // ------------------------------------
 
 const initialState: ModelState<Item[]> = {
-	data: null,
+	data: [],
 	status: 'idle',
 	error: null,
 }
@@ -66,14 +74,21 @@ export const itemsReducer = (state = initialState, action: AnyAction) =>
 				break
 			case getType(getAsync.request):
 				startFetching(draft)
+			case getType(loadMoreAsync.request):
+				draft.status = 'fetching'
 				break
 			case getType(getAsync.success):
-				fetchingSuccess(draft, action.payload)
+				fetchingSuccess(draft, action.payload.data.records)
+				break
+			case getType(loadMoreAsync.success):
+				loadMoreSuccess(draft, action.payload.data.records)
 				break
 			case getType(getAsync.failure):
-				endWithError(draft, action.payload)
+			case getType(loadMoreAsync.failure):
+				endWithError(draft, action.payload.errorCode)
 				break
 			case getType(getAsync.cancel):
+			case getType(loadMoreAsync.cancel):
 				endCanceling(draft)
 				break
 		}
