@@ -67,5 +67,6 @@ module.exports = {
 		new Dotenv({
 			path: path.resolve(__dirname, '../../src/.env'),
 		}),
+		new webpack.EnvironmentPlugin(['API_ENDPOINT']),
 	],
 }
