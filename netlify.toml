@@ -6,3 +6,6 @@ command = "npm run build"
   from = "/*"
   to = "/index.html"
   status = 200
+
+[context.deploy-preview.environment]
+  API_ENDPOINT = "https://awesome-expensify-qa.herokuapp.com/"
