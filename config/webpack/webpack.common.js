@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
@@ -67,5 +68,6 @@ module.exports = {
 		new Dotenv({
 			path: path.resolve(__dirname, '../../src/.env'),
 		}),
+		new webpack.EnvironmentPlugin(['API_ENDPOINT']),
 	],
 }
