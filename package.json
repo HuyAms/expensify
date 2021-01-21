@@ -119,7 +119,7 @@
 		"i18next": "15.0.9",
 		"i18next-browser-languagedetector": "3.0.1",
 		"i18next-xhr-backend": "2.0.1",
-		"immer": "2.1.5",
+		"immer": "8.0.1",
 		"moment": "2.24.0",
 		"polished": "3.4.1",
 		"query-string": "6.4.2",
