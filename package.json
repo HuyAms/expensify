@@ -120,7 +120,7 @@
 		"i18next-browser-languagedetector": "3.0.1",
 		"i18next-xhr-backend": "2.0.1",
 		"immer": "2.1.5",
-		"moment": "2.24.0",
+		"moment": "2.29.2",
 		"polished": "3.4.1",
 		"query-string": "6.4.2",
 		"randomcolor": "0.5.4",
